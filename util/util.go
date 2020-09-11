@@ -1,6 +1,7 @@
 package util
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
 )
@@ -18,6 +19,6 @@ func Runwithcolor(args []string)  {
 	cmd.ExtraFiles = []*os.File{w}
 
 	if err := cmd.Run(); err != nil {
-		panic(err)
+		fmt.Println(err)
 	}
 }

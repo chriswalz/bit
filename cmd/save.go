@@ -18,8 +18,9 @@ package cmd
 import (
 	"fmt"
 	"github.com/chriswalz/bit/util"
-
 	"github.com/spf13/cobra"
+	"os/exec"
+	"strings"
 )
 
 // saveCmd represents the save command
@@ -34,22 +35,33 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("save called")
+		util.Runwithcolor([]string{"add", "."})
+		// if ahead of master
+		if isAheadOfCurrent() {
+			util.Runwithcolor([]string{"commit", "--amend", "--no-edit"}) // this should be amend at times
+		} else {
+			if len(args) > 0 {
+				util.Runwithcolor([]string{"commit", "-m " + args[0]}) // this should be amend at times
+			} else {
+				// error ?
+				util.Runwithcolor([]string{"commit", "-m " + "another commit"}) // this should be amend at times
+			}
+		}
+
 	},
+	Args: cobra.MaximumNArgs(1),
 }
 
 func init() {
 	rootCmd.AddCommand(saveCmd)
-
-	util.Runwithcolor([]string{"add", "."})
-	util.Runwithcolor([]string{"commit", "-m test"})
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
 	// saveCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
 	// saveCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+}
+
+func isAheadOfCurrent() bool {
+	msg, err := exec.Command("git", "status", "-sb").CombinedOutput()
+	if err != nil {
+		fmt.Println(err)
+	}
+	return strings.Contains(string(msg), "ahead")
 }
