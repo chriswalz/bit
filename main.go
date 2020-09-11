@@ -16,21 +16,34 @@ limitations under the License.
 package main
 
 import (
-	"fmt"
 	bitcmd "github.com/chriswalz/bit/cmd"
-	"log"
 	"os"
 	"os/exec"
 )
 
 func main() {
 	argsWithoutProg := os.Args[1:]
-	log.Println(argsWithoutProg)
-	cmd := exec.Command("git", argsWithoutProg...)
-	msg, err := cmd.CombinedOutput()
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(string(msg))
+	runwithcolor(argsWithoutProg)
+	//bitcli()
+}
+
+func bitcli()  {
 	bitcmd.Execute()
+}
+
+func runwithcolor(args []string)  {
+	_, w, err := os.Pipe()
+	if err != nil {
+		panic(err)
+	}
+
+	cmd := exec.Command("git", args...)
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.ExtraFiles = []*os.File{w}
+
+	if err := cmd.Run(); err != nil {
+		panic(err)
+	}
 }
