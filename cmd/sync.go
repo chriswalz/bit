@@ -31,8 +31,11 @@ sync local-branch
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("sync called")
+		save("")
 		util.Runwithcolor([]string{"pull", "-r"})
-		util.Runwithcolor([]string{"pull", "-r", "origin", "master"})
+		if len(args) > 0 {
+			util.Runwithcolor(append([]string{"pull", "-r"}, args...))
+		}
 		util.Runwithcolor([]string{"push"})
 	},
 	//Args: cobra.MaximumNArgs(1),

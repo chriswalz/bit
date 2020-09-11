@@ -35,19 +35,11 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("save called")
-		util.Runwithcolor([]string{"add", "."})
+		msg := ""
 		if len(args) > 0 {
-			util.Runwithcolor([]string{"commit", "-m " + args[0]})
-		} else {
-			// if ahead of master
-			if isAheadOfCurrent() {
-				util.Runwithcolor([]string{"commit", "--amend", "--no-edit"}) // this should be amend at times
-			} else {
-				util.Runwithcolor([]string{"commit", "-m " + "another commit"}) // this should be amend at times
-			}
+			msg = strings.Join(args, " ")
 		}
-
-
+		save(msg)
 	},
 	Args: cobra.MaximumNArgs(1),
 }
@@ -56,6 +48,20 @@ func init() {
 	rootCmd.AddCommand(saveCmd)
 	// saveCmd.PersistentFlags().String("foo", "", "A help for foo")
 	// saveCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+}
+
+func save(msg string) {
+	util.Runwithcolor([]string{"add", "."})
+	if msg == "" {
+		// if ahead of master
+		if isAheadOfCurrent() {
+			util.Runwithcolor([]string{"commit", "--amend", "--no-edit"}) // this should be amend at times
+		} else {
+			util.Runwithcolor([]string{"commit", "-m " + "another commit"}) // this should be amend at times
+		}
+	} else {
+		util.Runwithcolor([]string{"commit", "-m " + msg})
+	}
 }
 
 func isAheadOfCurrent() bool {
