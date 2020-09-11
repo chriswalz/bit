@@ -17,6 +17,7 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/chriswalz/bit/util"
 
 	"github.com/spf13/cobra"
 )
@@ -38,6 +39,9 @@ to quickly create a Cobra application.`,
 
 func init() {
 	rootCmd.AddCommand(saveCmd)
+
+	util.Runwithcolor([]string{"add", "."})
+	util.Runwithcolor([]string{"commit", "-m test"})
 
 	// Here you will define your flags and configuration settings.
 

@@ -17,33 +17,30 @@ package main
 
 import (
 	bitcmd "github.com/chriswalz/bit/cmd"
+	"github.com/chriswalz/bit/util"
 	"os"
-	"os/exec"
 )
+
+func Find(slice []string, val string) (bool) {
+	for _, item := range slice {
+		if item == val {
+			return true
+		}
+	}
+	return false
+}
 
 func main() {
 	argsWithoutProg := os.Args[1:]
-	runwithcolor(argsWithoutProg)
-	//bitcli()
+	bitcliCmds := []string{"save", "sync"}
+	if Find(bitcliCmds, argsWithoutProg[0]) {
+		bitcli()
+	} else {
+		util.Runwithcolor(argsWithoutProg)
+	}
 }
 
 func bitcli()  {
 	bitcmd.Execute()
 }
 
-func runwithcolor(args []string)  {
-	_, w, err := os.Pipe()
-	if err != nil {
-		panic(err)
-	}
-
-	cmd := exec.Command("git", args...)
-	cmd.Stdin = os.Stdin
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	cmd.ExtraFiles = []*os.File{w}
-
-	if err := cmd.Run(); err != nil {
-		panic(err)
-	}
-}
