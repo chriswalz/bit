@@ -36,17 +36,17 @@ to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("save called")
 		util.Runwithcolor([]string{"add", "."})
-		// if ahead of master
-		if isAheadOfCurrent() {
-			util.Runwithcolor([]string{"commit", "--amend", "--no-edit"}) // this should be amend at times
+		if len(args) > 0 {
+			util.Runwithcolor([]string{"commit", "-m " + args[0]})
 		} else {
-			if len(args) > 0 {
-				util.Runwithcolor([]string{"commit", "-m " + args[0]}) // this should be amend at times
+			// if ahead of master
+			if isAheadOfCurrent() {
+				util.Runwithcolor([]string{"commit", "--amend", "--no-edit"}) // this should be amend at times
 			} else {
-				// error ?
 				util.Runwithcolor([]string{"commit", "-m " + "another commit"}) // this should be amend at times
 			}
 		}
+
 
 	},
 	Args: cobra.MaximumNArgs(1),
