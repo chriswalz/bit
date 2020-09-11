@@ -34,15 +34,15 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("save called")
 		msg := ""
 		if len(args) > 0 {
 			msg = strings.Join(args, " ")
 		}
 		save(msg)
 	},
-	Args: cobra.MaximumNArgs(1),
+	//Args: cobra.MaximumNArgs(1),
 }
+// add comment
 
 func init() {
 	rootCmd.AddCommand(saveCmd)
@@ -51,13 +51,20 @@ func init() {
 }
 
 func save(msg string) {
+	// if nothing to commit
+	// do nothing
+
 	util.Runwithcolor([]string{"add", "."})
 	if msg == "" {
 		// if ahead of master
-		if isAheadOfCurrent() {
-			util.Runwithcolor([]string{"commit", "--amend", "--no-edit"}) // this should be amend at times
+		if isAheadOfCurrent() || !cloudBranchExists(){
+			util.Runwithcolor([]string{"commit", "--amend", "--no-edit"}) // amend if already ahead
 		} else {
-			util.Runwithcolor([]string{"commit", "-m " + "another commit"}) // this should be amend at times
+			fmt.Println("Please provide a description of your commit (what you're saving)")
+			var resp string
+			fmt.Scanln(&resp)
+			fmt.Println("resp:", resp)
+			util.Runwithcolor([]string{"commit", "-m " + resp})
 		}
 	} else {
 		util.Runwithcolor([]string{"commit", "-m " + msg})
@@ -67,7 +74,7 @@ func save(msg string) {
 func isAheadOfCurrent() bool {
 	msg, err := exec.Command("git", "status", "-sb").CombinedOutput()
 	if err != nil {
-		fmt.Println(err)
+		//fmt.Println(err)
 	}
 	return strings.Contains(string(msg), "ahead")
 }

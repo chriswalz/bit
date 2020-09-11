@@ -53,7 +53,8 @@ git co -b new-branch
 
 
 - bit undo ???????
-
+- bit sync origin master
+- bit prepare-for master
 
 
 
