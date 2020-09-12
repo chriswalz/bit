@@ -18,6 +18,11 @@ sync local-branch
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("sync")
+		// if nothing to commit
+		// do nothing
+		//if !isBehindCurrent() && !isAheadOfCurrent() {
+		//	return
+		//}
 		save("")
 		if cloudBranchExists() {
 			util.Runwithcolor([]string{"pull", "-r"})
