@@ -36,6 +36,8 @@ to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		msg := ""
 		if len(args) > 0 {
+			fmt.Println(len(args))
+			fmt.Println(args)
 			msg = strings.Join(args, " ")
 		}
 		save(msg)
@@ -52,7 +54,7 @@ func init() {
 
 func save(msg string) {
 	// if nothing to commit
-	// do nothing
+	// do nothing asd
 
 	util.Runwithcolor([]string{"add", "."})
 	if msg == "" {
