@@ -1,24 +1,11 @@
-/*
-Copyright © 2020 NAME HERE <EMAIL ADDRESS>
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-*/
 package cmd
 
 import (
+	"bufio"
 	"fmt"
 	"github.com/chriswalz/bit/util"
 	"github.com/spf13/cobra"
+	"os"
 	"os/exec"
 	"strings"
 )
@@ -36,6 +23,8 @@ to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		msg := ""
 		if len(args) > 0 {
+			fmt.Println("length", len(args))
+			fmt.Println(args)
 			msg = strings.Join(args, " ")
 		}
 		save(msg)
@@ -51,6 +40,9 @@ func init() {
 }
 
 func save(msg string) {
+	// if nothing to commit
+	// do nothing asd
+
 	util.Runwithcolor([]string{"add", "."})
 	if msg == "" {
 		// if ahead of master
@@ -58,8 +50,9 @@ func save(msg string) {
 			util.Runwithcolor([]string{"commit", "--amend", "--no-edit"}) // amend if already ahead
 		} else {
 			fmt.Println("Please provide a description of your commit (what you're saving)")
-			var resp string
-			fmt.Scanln(&resp)
+			scanner := bufio.NewScanner(os.Stdin)
+			scanner.Scan()
+			resp := scanner.Text()
 			util.Runwithcolor([]string{"commit", "-m " + resp})
 		}
 	} else {
