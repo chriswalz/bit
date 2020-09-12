@@ -55,6 +55,12 @@ git co -b new-branch
 - bit undo ???????
 - bit sync origin master
 - bit prepare-for master
+- either bit switch or bit version
+
+
+https://blog.carbonfive.com/always-squash-and-rebase-your-git-commits/
+
+gitless 
 
 
 
