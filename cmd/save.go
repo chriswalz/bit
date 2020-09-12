@@ -68,7 +68,6 @@ func save(msg string) {
 			scanner := bufio.NewScanner(os.Stdin)
 			scanner.Scan()
 			resp := scanner.Text()
-			fmt.Println(resp)
 			util.Runwithcolor([]string{"commit", "-m " + resp})
 		}
 	} else {
