@@ -16,9 +16,11 @@ limitations under the License.
 package cmd
 
 import (
+	"bufio"
 	"fmt"
 	"github.com/chriswalz/bit/util"
 	"github.com/spf13/cobra"
+	"os"
 	"os/exec"
 	"strings"
 )
@@ -36,7 +38,7 @@ to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		msg := ""
 		if len(args) > 0 {
-			fmt.Println(len(args))
+			fmt.Println("length", len(args))
 			fmt.Println(args)
 			msg = strings.Join(args, " ")
 		}
@@ -63,9 +65,10 @@ func save(msg string) {
 			util.Runwithcolor([]string{"commit", "--amend", "--no-edit"}) // amend if already ahead
 		} else {
 			fmt.Println("Please provide a description of your commit (what you're saving)")
-			var resp string
-			fmt.Scanln(&resp)
-			fmt.Println("resp:", resp)
+			scanner := bufio.NewScanner(os.Stdin)
+			scanner.Scan()
+			resp := scanner.Text()
+			fmt.Println(resp)
 			util.Runwithcolor([]string{"commit", "-m " + resp})
 		}
 	} else {
