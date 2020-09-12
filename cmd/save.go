@@ -23,8 +23,6 @@ to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		msg := ""
 		if len(args) > 0 {
-			fmt.Println("length", len(args))
-			fmt.Println(args)
 			msg = strings.Join(args, " ")
 		}
 		save(msg)
@@ -49,15 +47,20 @@ func save(msg string) {
 		if isAheadOfCurrent() || !cloudBranchExists(){
 			util.Runwithcolor([]string{"commit", "--amend", "--no-edit"}) // amend if already ahead
 		} else {
-			fmt.Println("Please provide a description of your commit (what you're saving)")
-			scanner := bufio.NewScanner(os.Stdin)
-			scanner.Scan()
-			resp := scanner.Text()
+			resp := promptUser("Please provide a description of your commit (what you're saving)")
 			util.Runwithcolor([]string{"commit", "-m " + resp})
 		}
 	} else {
 		util.Runwithcolor([]string{"commit", "-m " + msg})
 	}
+}
+
+func promptUser(prompt string) string {
+	fmt.Println(prompt)
+	scanner := bufio.NewScanner(os.Stdin)
+	scanner.Scan()
+	resp := scanner.Text()
+	return resp
 }
 
 func isAheadOfCurrent() bool {

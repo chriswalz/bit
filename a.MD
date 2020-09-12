@@ -62,6 +62,3 @@ https://blog.carbonfive.com/always-squash-and-rebase-your-git-commits/
 
 gitless 
 
-
-
-
