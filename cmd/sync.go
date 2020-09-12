@@ -17,6 +17,7 @@ sync origin master
 sync local-branch
 `,
 	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("sync")
 		save("")
 		if cloudBranchExists() {
 			util.Runwithcolor([]string{"pull", "-r"})

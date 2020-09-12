@@ -21,6 +21,7 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("save")
 		msg := ""
 		if len(args) > 0 {
 			msg = strings.Join(args, " ")
@@ -47,6 +48,7 @@ func save(msg string) {
 		if isAheadOfCurrent() || !cloudBranchExists(){
 			util.Runwithcolor([]string{"commit", "--amend", "--no-edit"}) // amend if already ahead
 		} else {
+			util.Runwithcolor([]string{"status", "-sb "})
 			resp := promptUser("Please provide a description of your commit (what you're saving)")
 			util.Runwithcolor([]string{"commit", "-m " + resp})
 		}
