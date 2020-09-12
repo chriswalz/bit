@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"github.com/chriswalz/bit/util"
 	"github.com/spf13/cobra"
 	"os/exec"
@@ -19,16 +18,17 @@ For creating a new branch it's the same command! You'll simply be prompted to co
 	Run: func(cmd *cobra.Command, args []string) {
 		util.Runwithcolor([]string{"fetch"})
 		if !localOrRemoteBranchExists(args[0]) {
-			//fmt.Println(strings.Contains(err.Error(), "did not"))
-			fmt.Println("Branch does not exist. Do you want to create it? Y/n")
-			var resp string
-			fmt.Scanln(&resp)
-			if resp == "YES" || resp == "Y" || resp == "yes" || resp == "y" {
+			resp := promptUser("Branch does not exist. Do you want to create it? Y/n")
+			if isYes(resp) {
 				util.Runwithcolor([]string{"checkout", "-b", args[0]})
 			}
 		}
 	},
 	Args: cobra.ExactArgs(1),
+}
+
+func isYes(resp string) bool {
+	return resp == "YES" || resp == "Y" || resp == "yes" || resp == "y"
 }
 
 func init() {
