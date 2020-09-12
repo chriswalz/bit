@@ -16,6 +16,7 @@ limitations under the License.
 package main
 
 import (
+	"fmt"
 	bitcmd "github.com/chriswalz/bit/cmd"
 	"github.com/chriswalz/bit/util"
 	"os"
@@ -32,11 +33,14 @@ func Find(slice []string, val string) (bool) {
 
 func main() {
 	argsWithoutProg := os.Args[1:]
-	bitcliCmds := []string{"save", "sync", "version"}
+	bitcliCmds := []string{"save", "sync", "version", "switch"}
 	if Find(bitcliCmds, argsWithoutProg[0]) {
 		bitcli()
 	} else {
-		util.Runwithcolor(argsWithoutProg)
+		err := util.Runwithcolor(argsWithoutProg)
+		if err != nil {
+			fmt.Println("DEBUG: CMD may not be allow listed")
+		}
 	}
 }
 

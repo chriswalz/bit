@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"github.com/chriswalz/bit/util"
 	"github.com/spf13/cobra"
 	"os/exec"
@@ -17,8 +16,6 @@ var switchCmd = &cobra.Command{
 For creating a new branch it's the same command! You'll simply be prompted to confirm that you want to create a new branch
 `,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("switch")
-		fmt.Println(args, "a")
 		util.Runwithcolor([]string{"fetch"})
 		if !localOrRemoteBranchExists(args[0]) {
 			resp := promptUser("Branch does not exist. Do you want to create it? Y/n")
