@@ -20,9 +20,9 @@ sync local-branch
 		fmt.Println("sync")
 		// if possibly squashed
 		// do nothing
-		//if !isBehindCurrent() && !isAheadOfCurrent() {
-		//	return
-		//}
+		if !isBehindCurrent() && !isAheadOfCurrent() {
+			return
+		}
 		save("")
 		if cloudBranchExists() {
 			util.Runwithcolor([]string{"pull", "-r"})
