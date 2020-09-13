@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"github.com/chriswalz/bit/util"
 	"github.com/spf13/cobra"
 )
@@ -15,13 +14,14 @@ sync origin master
 sync local-branch
 `,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("sync")
 		util.Runwithcolor([]string{"fetch"})
 		// if possibly squashed
 		if util.IsDiverged() {
+			util.Runwithcolor([]string{"status", "-sb"})
 			resp := util.PromptUser("Force (destructive) push to origin/" + util.CurrentBranch() + "? Y/n")
 			if util.IsYes(resp) {
-				fmt.Println("[implement force push]")
+				//fmt.Println("[implement force push]")
+				util.Runwithcolor([]string{"push", "-f"})
 			}
 
 			return
