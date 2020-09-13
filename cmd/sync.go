@@ -18,7 +18,7 @@ sync local-branch
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("sync")
-		// if nothing to commit
+		// if possibly squashed
 		// do nothing
 		//if !isBehindCurrent() && !isAheadOfCurrent() {
 		//	return

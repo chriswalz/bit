@@ -33,8 +33,10 @@ func Find(slice []string, val string) (bool) {
 
 func main() {
 	argsWithoutProg := os.Args[1:]
-	bitcliCmds := []string{"save", "sync", "version", "switch"}
-	if Find(bitcliCmds, argsWithoutProg[0]) {
+	bitcliCmds := []string{"save", "sync", "version", "switch", "help"}
+	if len(argsWithoutProg) == 0 {
+		bitcli()
+	} else if Find(bitcliCmds, argsWithoutProg[0]) {
 		bitcli()
 	} else {
 		err := util.Runwithcolor(argsWithoutProg)
