@@ -1,12 +1,9 @@
 package cmd
 
 import (
-	"bufio"
 	"fmt"
 	"github.com/chriswalz/bit/util"
 	"github.com/spf13/cobra"
-	"os"
-	"os/exec"
 	"strings"
 )
 
@@ -16,7 +13,7 @@ var saveCmd = &cobra.Command{
 	Short: "Save your changes to your current branch",
 	Long: `E.g. bit save; bit save "commit message"`,
 	Run: func(cmd *cobra.Command, args []string) {
-		if nothingToCommit() {
+		if util.NothingToCommit() {
 			fmt.Println("nothing to save or commit")
 			return
 		}
@@ -42,46 +39,14 @@ func save(msg string) {
 	util.Runwithcolor([]string{"add", "."})
 	if msg == "" {
 		// if ahead of master
-		if isAheadOfCurrent() || !cloudBranchExists(){
+		if util.IsAheadOfCurrent() || !util.CloudBranchExists(){
 			util.Runwithcolor([]string{"commit", "--amend", "--no-edit"}) // amend if already ahead
 		} else {
 			util.Runwithcolor([]string{"status", "-sb"})
-			resp := promptUser("Please provide a description of your commit (what you're saving)")
+			resp := util.PromptUser("Please provide a description of your commit (what you're saving)")
 			util.Runwithcolor([]string{"commit", "-m " + resp})
 		}
 	} else {
 		util.Runwithcolor([]string{"commit", "-m " + msg})
 	}
-}
-
-func promptUser(prompt string) string {
-	fmt.Println(prompt)
-	scanner := bufio.NewScanner(os.Stdin)
-	scanner.Scan()
-	resp := scanner.Text()
-	return resp
-}
-
-func isAheadOfCurrent() bool {
-	msg, err := exec.Command("git", "status", "-sb").CombinedOutput()
-	if err != nil {
-		//fmt.Println(err)
-	}
-	return strings.Contains(string(msg), "ahead")
-}
-
-func isBehindCurrent() bool {
-	msg, err := exec.Command("git", "status", "-sb").CombinedOutput()
-	if err != nil {
-		//fmt.Println(err)
-	}
-	return strings.Contains(string(msg), "behind")
-}
-
-func nothingToCommit() bool {
-	msg, err := exec.Command("git", "status").CombinedOutput()
-	if err != nil {
-		//fmt.Println(err)
-	}
-	return strings.Contains(string(msg), "nothing to commit")
 }
