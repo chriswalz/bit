@@ -19,7 +19,7 @@ sync local-branch
 		util.Runwithcolor([]string{"fetch"})
 		// if possibly squashed
 		// do nothing
-		if !util.IsDiverged() {
+		if util.IsDiverged() {
 			util.PromptUser("Force (destructive) push to origin/" + util.CurrentBranch() + "? Y/n")
 
 			return
