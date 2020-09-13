@@ -77,7 +77,7 @@ func IsDiverged() bool {
 	if err != nil {
 		//fmt.Println(err)
 	}
-	return strings.Contains(string(msg), "have diverged.")
+	return strings.Contains(string(msg), "have diverged")
 }
 
 func PromptUser(prompt string) string {
