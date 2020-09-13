@@ -80,6 +80,7 @@ func IsDiverged() bool {
 	return strings.Contains(string(msg), "have diverged")
 }
 
+// fixme when writing input the user cant backspace in the normal fashion
 func PromptUser(prompt string) string {
 	fmt.Println(prompt)
 	scanner := bufio.NewScanner(os.Stdin)
