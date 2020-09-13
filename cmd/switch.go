@@ -19,7 +19,7 @@ For creating a new branch it's the same command! You'll simply be prompted to co
 		util.Runwithcolor([]string{"fetch"})
 		if !localOrRemoteBranchExists(args[0]) {
 			resp := promptUser("Branch does not exist. Do you want to create it? Y/n")
-			if isYes(resp) {
+			if util.IsYes(resp) {
 				util.Runwithcolor([]string{"checkout", "-b", args[0]})
 			}
 		}
@@ -27,9 +27,7 @@ For creating a new branch it's the same command! You'll simply be prompted to co
 	Args: cobra.ExactArgs(1),
 }
 
-func isYes(resp string) bool {
-	return resp == "YES" || resp == "Y" || resp == "yes" || resp == "y"
-}
+
 
 func init() {
 	rootCmd.AddCommand(switchCmd)
