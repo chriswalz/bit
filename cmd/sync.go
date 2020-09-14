@@ -27,7 +27,9 @@ sync local-branch
 			return
 		}
 		save("")
-		if util.CloudBranchExists() {
+		if util.IsAheadOfCurrent() {
+			util.Runwithcolor([]string{"push"})
+		} else if util.CloudBranchExists() {
 			util.Runwithcolor([]string{"pull", "-r"})
 			if len(args) > 0 {
 				util.Runwithcolor(append([]string{"pull", "-r"}, args...))
