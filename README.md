@@ -33,6 +33,36 @@ You have access to ALL git commands as well. 90% of the time the above commands 
 
 `bit commit -m "I can still use git commands"`, `bit pull -r origin master`
 
+## workflow example
+`bit switch example-branch`
+Branch does not exist. Do you want to create it? Y/n
+
+yes
+
+Switched to a new branch 'example-branch'
+
+[Makes some changes]
+
+`bit save "add important feature"`
+
+[fix an error for important feature]
+
+`bit save`
+
+[push changes to origin]
+
+`bit sync`
+
+[two days later confirm your branch is in sync with origin]
+
+`bit sync`
+
+
+
+
+
+ 
+
 
 ## Principles 
 
