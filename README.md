@@ -1,11 +1,73 @@
 # bit
-Git if it was made in 2020
+
+Bit is a simple version control system built on top of git. Bit is super easy to learn and will vastly simplify your development workflow. 
+
+At times you may still want/need to use git. When the times arrive 
+
+## Installation
 
 
-## principles 
+curl -sf https://gobinaries.com/chriswalz/bit | sh
 
-Bit should have principles of the cloud
-Bit should have principles of Google Docs
-Bit should be simple to use
-Bit should work around development workflows of 2020
+note: git must be installed 
+
+## Usage 
+
+Create a new commit
+
+`bit save [commit message]`
+
+Save your changes to the current branch [amends current commit]
+
+`bit save` 
+
+Synchronize yours changes to origin branch 
+
+`bit sync`
+
+Switch branches
+
+`bit switch [branch-name]`
+
+You have access to ALL git commands as well. 90% of the time the above commands will have you covered. 
+
+`bit commit -m "I can still use git commands"`, `bit pull -r origin master`
+
+## workflow example
+`bit switch example-branch`
+Branch does not exist. Do you want to create it? Y/n
+
+yes
+
+Switched to a new branch 'example-branch'
+
+[Makes some changes]
+
+`bit save "add important feature"`
+
+[fix an error for important feature]
+
+`bit save`
+
+[push changes to origin]
+
+`bit sync`
+
+[two days later confirm your branch is in sync with origin]
+
+`bit sync`
+
+
+
+
+
+ 
+
+
+## Principles 
+
+Think in the age of the cloud
+Development workflows have changed in the 15 years since Gits creation 
+Favor simplicity over complexity 
+Bit should have happy defaults
 Bit must be fully compatible with Git
