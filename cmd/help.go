@@ -15,12 +15,6 @@ For creating a new branch it's the same command! You'll simply be prompted to co
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		util.Runwithcolor([]string{"fetch"})
-		if !localOrRemoteBranchExists(args[0]) {
-			resp := util.PromptUser("Branch does not exist. Do you want to create it? Y/n")
-			if util.IsYes(resp) {
-				util.Runwithcolor([]string{"checkout", "-b", args[0]})
-			}
-		}
 	},
 	Args: cobra.ExactArgs(1),
 }

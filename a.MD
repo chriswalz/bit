@@ -61,4 +61,6 @@ git co -b new-branch
 https://blog.carbonfive.com/always-squash-and-rebase-your-git-commits/
 
 gitless 
+branches are parallel universes. Staged changes should never be shared between them
+commit/save tracked files by default 
 

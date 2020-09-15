@@ -26,17 +26,24 @@ sync local-branch
 
 			return
 		}
+		if !util.CloudBranchExists() {
+			util.Runwithcolor([]string{"push", "--set-upstream", "origin", util.CurrentBranch()})
+			save("")
+			util.Runwithcolor([]string{"push"})
+			return
+		}
 		save("")
+		if !util.CloudBranchExists() {
+			util.Runwithcolor([]string{"push", "--set-upstream", "origin", util.CurrentBranch()})
+		}
 		if util.IsAheadOfCurrent() {
 			util.Runwithcolor([]string{"push"})
-		} else if util.CloudBranchExists() {
+		} else {
 			util.Runwithcolor([]string{"pull", "-r"})
 			if len(args) > 0 {
 				util.Runwithcolor(append([]string{"pull", "-r"}, args...))
 			}
 			util.Runwithcolor([]string{"push"})
-		} else {
-			util.Runwithcolor([]string{"push", "--set-upstream", "origin", util.CurrentBranch()})
 		}
 
 	},

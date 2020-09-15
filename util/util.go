@@ -88,3 +88,19 @@ func PromptUser(prompt string) string {
 	resp := scanner.Text()
 	return resp
 }
+
+func StashableChanges() bool {
+	msg, err := exec.Command("git", "status").CombinedOutput()
+	if err != nil {
+		//fmt.Println(err)
+	}
+	return strings.Contains(string(msg), "Changes to be committed:") || strings.Contains(string(msg), "Changes not staged for commit:")
+}
+
+func StashList() []string {
+	msg, err := exec.Command("git", "stash", "list").CombinedOutput()
+	if err != nil {
+		//fmt.Println(err)
+	}
+	return strings.Split(string(msg), "\n")
+}
