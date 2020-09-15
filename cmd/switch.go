@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"github.com/chriswalz/bit/util"
 	"github.com/spf13/cobra"
 	"os/exec"
@@ -35,11 +34,6 @@ For creating a new branch it's the same command! You'll simply be prompted to co
 		for _, stashLine := range stashList {
 			if strings.Contains(stashLine, util.CurrentBranch() + "-automaticBitStash") {
 				stashId := strings.Split(stashLine, ":")[0]
-				err := util.Runwithcolor([]string{"stash", "apply", stashId})
-				if err != nil {
-					fmt.Println(err)
-					return
-				}
 				util.Runwithcolor([]string{"stash", "pop", stashId})
 
 			}
