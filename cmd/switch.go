@@ -35,6 +35,7 @@ For creating a new branch it's the same command! You'll simply be prompted to co
 			if strings.Contains(stashLine, util.CurrentBranch() + "-automaticBitStash") {
 				stashId := strings.Split(stashLine, ":")[0]
 				util.Runwithcolor([]string{"stash", "pop", stashId})
+				return
 
 			}
 		}
