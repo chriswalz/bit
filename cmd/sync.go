@@ -20,10 +20,8 @@ sync local-branch
 			util.Runwithcolor([]string{"status", "-sb"})
 			resp := util.PromptUser("Force (destructive) push to origin/" + util.CurrentBranch() + "? Y/n")
 			if util.IsYes(resp) {
-				//fmt.Println("[implement force push]")
 				util.Runwithcolor([]string{"push", "-f"})
 			}
-
 			return
 		}
 		if !util.CloudBranchExists() {
