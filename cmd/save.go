@@ -36,17 +36,16 @@ func init() {
 func save(msg string) {
 
 
-	util.Runwithcolor([]string{"add", "."})
 	if msg == "" {
-		// if ahead of master
+		//if ahead of master
 		if util.IsAheadOfCurrent() || !util.CloudBranchExists(){
-			util.Runwithcolor([]string{"commit", "--amend", "--no-edit"}) // amend if already ahead
+			util.Runwithcolor([]string{"commit", "-a", "--amend", "--no-edit"}) // amend if already ahead
 		} else {
 			util.Runwithcolor([]string{"status", "-sb"})
 			resp := util.PromptUser("Please provide a description of your commit (what you're saving)")
-			util.Runwithcolor([]string{"commit", "-m " + resp})
+			util.Runwithcolor([]string{"commit", "-a", "-m " + resp})
 		}
 	} else {
-		util.Runwithcolor([]string{"commit", "-m " + msg})
+		util.Runwithcolor([]string{"commit", "-a", "-m " + msg})
 	}
 }
