@@ -13,10 +13,6 @@ var saveCmd = &cobra.Command{
 	Short: "Save your changes to your current branch",
 	Long: `E.g. bit save; bit save "commit message"`,
 	Run: func(cmd *cobra.Command, args []string) {
-		if util.NothingToCommit() {
-			fmt.Println("nothing to save or commit")
-			return
-		}
 		msg := ""
 		if len(args) > 0 {
 			msg = strings.Join(args, " ")
@@ -34,7 +30,10 @@ func init() {
 }
 
 func save(msg string) {
-
+	if util.NothingToCommit() {
+		fmt.Println("nothing to save or commit")
+		return
+	}
 
 	if msg == "" {
 		//if ahead of master
