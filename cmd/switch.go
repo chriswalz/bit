@@ -3,10 +3,10 @@ package cmd
 import (
 	"fmt"
 	"github.com/chriswalz/bit/util"
+	"github.com/manifoldco/promptui"
 	"github.com/spf13/cobra"
 	"os/exec"
 	"strings"
-	"github.com/manifoldco/promptui"
 )
 
 // switchCmd represents the switch command
@@ -40,7 +40,7 @@ For creating a new branch it's the same command! You'll simply be prompted to co
 			}
 
 			branchName = strings.TrimSpace(result)
-			fmt.Println(branchName+branchName)
+			fmt.Println(branchName + branchName)
 		}
 
 		if util.StashableChanges() {
@@ -49,17 +49,25 @@ For creating a new branch it's the same command! You'll simply be prompted to co
 		util.Runwithcolor([]string{"pull", "--ff-only"})
 		branchExists := checkoutBranch(branchName)
 		if !branchExists {
-			resp := util.PromptUser("Branch does not exist. Do you want to create it? Y/n")
-			if util.IsYes(resp) {
-				util.Runwithcolor([]string{"checkout", "-b", branchName})
+			prompt := promptui.Prompt{
+				Label:     "Branch does not exist. Do you want to create it? Y/n",
+				IsConfirm: true,
+			}
+
+			_, err := prompt.Run()
+
+			if err != nil {
+				fmt.Printf("Cancelling...")
+				util.Runwithcolor([]string{"stash", "pop"})
 				return
 			}
-			util.Runwithcolor([]string{"stash", "pop"})
+
+			util.Runwithcolor([]string{"checkout", "-b", branchName})
 			return
 		}
 		stashList := util.StashList()
 		for _, stashLine := range stashList {
-			if strings.Contains(stashLine, util.CurrentBranch() + "-automaticBitStash") {
+			if strings.Contains(stashLine, util.CurrentBranch()+"-automaticBitStash") {
 				stashId := strings.Split(stashLine, ":")[0]
 				util.Runwithcolor([]string{"stash", "pop", stashId})
 				return
@@ -69,8 +77,6 @@ For creating a new branch it's the same command! You'll simply be prompted to co
 		util.Runwithcolor([]string{"pull", "--ff-only"})
 	},
 }
-
-
 
 func init() {
 	rootCmd.AddCommand(switchCmd)
