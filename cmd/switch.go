@@ -50,7 +50,7 @@ For creating a new branch it's the same command! You'll simply be prompted to co
 		branchExists := checkoutBranch(branchName)
 		if !branchExists {
 			prompt := promptui.Prompt{
-				Label:     "Branch does not exist. Do you want to create it? Y/n",
+				Label:     "Branch does not exist. Do you want to create it?",
 				IsConfirm: true,
 			}
 
