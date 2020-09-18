@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"github.com/chriswalz/bit/util"
 	"github.com/spf13/cobra"
 )
@@ -15,6 +16,18 @@ sync local-branch
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		util.Runwithcolor([]string{"fetch"})
+
+		// squash specific branch into current branch?
+		if len(args) == 1 {
+			branch := args[0]
+			if branch == "master" {
+				fmt.Println("Not supported")
+				return
+			}
+			util.Runwithcolor([]string{"pull", "--ff-only"})
+			util.Runwithcolor([]string{"merge", "--squash", branch})
+
+		}
 		// if possibly squashed
 		if util.IsDiverged() {
 			util.Runwithcolor([]string{"status", "-sb"})

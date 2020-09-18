@@ -20,6 +20,7 @@ For creating a new branch it's the same command! You'll simply be prompted to co
 		if util.StashableChanges() {
 			util.Runwithcolor([]string{"stash", "save", util.CurrentBranch() + "-automaticBitStash"})
 		}
+		util.Runwithcolor([]string{"pull", "--ff-only"})
 		branchExists := checkoutBranch(args[0])
 		if !branchExists {
 			resp := util.PromptUser("Branch does not exist. Do you want to create it? Y/n")
