@@ -104,3 +104,11 @@ func StashList() []string {
 	}
 	return strings.Split(string(msg), "\n")
 }
+
+func BranchList() []string {
+	msg, err := exec.Command("git", "branch", "--all").CombinedOutput()
+	if err != nil {
+		//fmt.Println(err)
+	}
+	return strings.Split(string(msg), "\n")
+}
