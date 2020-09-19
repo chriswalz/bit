@@ -7,9 +7,13 @@ At times you may still want/need to use git. When the times arrive
 ## Installation
 
 
-curl -sf https://gobinaries.com/chriswalz/bit | sh
+`curl -sf https://gobinaries.com/chriswalz/bit | sh`
 
-note: git must be installed 
+Verify installation with:
+
+`bit`
+
+Dependencies: Git
 
 ## Usage 
 
@@ -60,8 +64,13 @@ Switched to a new branch 'example-branch'
 
 
 
+## Features
 
- 
+- Automatic fetching & fast forwarding to keep your branches up to date and prevent merge conflicts
+- Every branch is a completely independent line. Changes in your working directory are saved and in the branch that you switch saved changes are retrieved.
+- Simplify your entire rebase workflow with a single command `bit sync [branch-name]` 
+- 
+- Last but not least bit is **fully compatible** with git. All features of git are available if need be.  
 
 
 ## Principles 

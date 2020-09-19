@@ -15,7 +15,7 @@ var cfgFile string
 var rootCmd = &cobra.Command{
 	Use:   "bit",
 	Short: "Bit is Git with a simple interface. Plus you can still use all the old git commands",
-	Long: `v2.2`,
+	Long: `v0.2.4`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	//	Run: func(cmd *cobra.Command, args []string) { },

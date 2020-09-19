@@ -11,7 +11,7 @@ import (
 var saveCmd = &cobra.Command{
 	Use:   "save",
 	Short: "Save your changes to your current branch",
-	Long: `E.g. bit save; bit save "commit message"`,
+	Long:  `E.g. bit save; bit save "commit message"`,
 	Run: func(cmd *cobra.Command, args []string) {
 		msg := ""
 		if len(args) > 0 {
@@ -21,6 +21,7 @@ var saveCmd = &cobra.Command{
 	},
 	//Args: cobra.MaximumNArgs(1),
 }
+
 // add comment
 
 func init() {
@@ -37,11 +38,11 @@ func save(msg string) {
 
 	if msg == "" {
 		//if ahead of master
-		if util.IsAheadOfCurrent() || !util.CloudBranchExists(){
+		if util.IsAheadOfCurrent() || !util.CloudBranchExists() {
 			util.Runwithcolor([]string{"commit", "-a", "--amend", "--no-edit"}) // amend if already ahead
 		} else {
 			util.Runwithcolor([]string{"status", "-sb"})
-			resp := util.PromptUser("Please provide a description of your commit (what you're saving)")
+			resp := util.PromptUser("Please provide a description of your changes")
 			util.Runwithcolor([]string{"commit", "-a", "-m " + resp})
 		}
 	} else {

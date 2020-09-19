@@ -9,7 +9,7 @@ import (
 // syncCmd represents the sync command
 var syncCmd = &cobra.Command{
 	Use:   "sync",
-	Short: "Catches up to another branch (Rebasing) and updates cloud branch with your changes",
+	Short: "Synchronizes local changes with changes on origin or specified branch",
 	Long: `sync
 sync origin master
 sync local-branch

@@ -64,3 +64,5 @@ gitless
 branches are parallel universes. Staged changes should never be shared between them
 commit/save tracked files by default 
 
+https://spderosso.github.io/oopsla16.pdf
+
