@@ -6,6 +6,7 @@ import (
 	"github.com/chriswalz/bit/util"
 	"github.com/manifoldco/promptui"
 	"github.com/spf13/cobra"
+	"os"
 	"os/exec"
 	"strings"
 )
@@ -94,10 +95,54 @@ func completer(d prompt.Document) []prompt.Suggest {
 }
 
 func selectBranchPrompt() string {
+	//p := NewPrompt()
 	// select a branch
 	fmt.Println("Input a branch.")
-	result := prompt.Input("> ", completer)
+	result := prompt.Input("Branch: ", completer,
+		prompt.OptionTitle("sql-prompt"),
+		prompt.OptionHistory([]string{""}),
+		prompt.OptionPrefixTextColor(prompt.Yellow),
+		prompt.OptionPreviewSuggestionTextColor(prompt.Yellow),
+		prompt.OptionSelectedSuggestionBGColor(prompt.Yellow),
+		prompt.OptionSuggestionBGColor(prompt.Yellow),
+		prompt.OptionAddKeyBind(prompt.KeyBind{
+			Key: prompt.ControlC,
+			Fn: func(b *prompt.Buffer) { os.Exit(0) },
+		}),
+	)
+	//result := p.Input()
 
 	branchName := strings.TrimSpace(result)
 	return branchName
+}
+
+var LivePrefixState struct {
+	LivePrefix string
+	IsEnable   bool
+}
+
+func executor(in string) {
+	fmt.Println("Your input: " + in)
+	if in == "" {
+		LivePrefixState.IsEnable = false
+		LivePrefixState.LivePrefix = in
+		return
+	}
+	LivePrefixState.LivePrefix = in + "> "
+	LivePrefixState.IsEnable = true
+}
+
+func changeLivePrefix() (string, bool) {
+	return LivePrefixState.LivePrefix, LivePrefixState.IsEnable
+}
+
+func NewPrompt() *prompt.Prompt {
+	p := prompt.New(
+		executor,
+		completer,
+		prompt.OptionPrefix("Branch: "),
+		prompt.OptionLivePrefix(changeLivePrefix),
+		prompt.OptionTitle("live-prefix-example"),
+	)
+	return p
 }
