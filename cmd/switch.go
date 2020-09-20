@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/c-bata/go-prompt"
 	"github.com/chriswalz/bit/util"
 	"github.com/manifoldco/promptui"
 	"github.com/spf13/cobra"
@@ -26,21 +27,7 @@ For creating a new branch it's the same command! You'll simply be prompted to co
 			branchName = args[0]
 		}
 		if len(args) == 0 {
-			// select a branch
-			prompt := promptui.Select{
-				Label: "Select branch",
-				Items: util.BranchList(),
-			}
-
-			_, result, err := prompt.Run()
-
-			if err != nil {
-				fmt.Printf("Cancelled – %v\n", err)
-				return
-			}
-
-			branchName = strings.TrimSpace(result)
-			fmt.Println(branchName + branchName)
+			selectBranchPrompt()
 		}
 
 		if util.StashableChanges() {
@@ -90,4 +77,27 @@ func checkoutBranch(branch string) bool {
 		//fmt.Println(err)
 	}
 	return !strings.Contains(string(msg), "did not match any file")
+}
+
+
+func completer(d prompt.Document) []prompt.Suggest {
+	list := util.BranchList()
+	var suggestions []prompt.Suggest
+	for _, branch := range list {
+		suggestions = append(suggestions, prompt.Suggest{
+			Text:        branch,
+			Description: "",
+		})
+	}
+
+	return prompt.FilterHasPrefix(suggestions, d.GetWordBeforeCursor(), true)
+}
+
+func selectBranchPrompt()  {
+	// select a branch
+	fmt.Println("Input a branch.")
+	result := prompt.Input("> ", completer)
+
+	branchName := strings.TrimSpace(result)
+	fmt.Println(branchName + branchName)
 }

@@ -110,5 +110,9 @@ func BranchList() []string {
 	if err != nil {
 		//fmt.Println(err)
 	}
-	return strings.Split(string(msg), "\n")
+	list := strings.Split(string(msg), "\n")
+	for i := 0; i < len(list); i++ {
+		list[i] = strings.TrimSpace(list[i])
+	}
+	return list
 }
