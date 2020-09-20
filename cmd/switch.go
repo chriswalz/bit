@@ -29,6 +29,9 @@ For creating a new branch it's the same command! You'll simply be prompted to co
 		}
 		if len(args) == 0 {
 			branchName = selectBranchPrompt()
+			if strings.Contains(branchName, "*") {
+				return
+			}
 		}
 
 		if util.StashableChanges() {
@@ -105,6 +108,9 @@ func selectBranchPrompt() string {
 		prompt.OptionPreviewSuggestionTextColor(prompt.Yellow),
 		prompt.OptionSelectedSuggestionBGColor(prompt.Yellow),
 		prompt.OptionSuggestionBGColor(prompt.Yellow),
+		prompt.OptionSelectedSuggestionTextColor(prompt.Brown),
+		prompt.OptionShowCompletionAtStart(),
+		prompt.OptionSwitchKeyBindMode(prompt.CommonKeyBind),
 		prompt.OptionAddKeyBind(prompt.KeyBind{
 			Key: prompt.ControlC,
 			Fn: func(b *prompt.Buffer) { os.Exit(0) },
