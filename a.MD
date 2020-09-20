@@ -70,5 +70,11 @@ https://opensource.com/article/20/4/git-extras
 https://devhints.io/git-extras
 
 
-git-info, git-summary
+git-info, git-summary, git-effort
 
+git-feature
+
+git-release
+
+
+--force-with-lease
