@@ -27,7 +27,7 @@ For creating a new branch it's the same command! You'll simply be prompted to co
 			branchName = args[0]
 		}
 		if len(args) == 0 {
-			selectBranchPrompt()
+			branchName = selectBranchPrompt()
 		}
 
 		if util.StashableChanges() {
@@ -93,11 +93,11 @@ func completer(d prompt.Document) []prompt.Suggest {
 	return prompt.FilterHasPrefix(suggestions, d.GetWordBeforeCursor(), true)
 }
 
-func selectBranchPrompt()  {
+func selectBranchPrompt() string {
 	// select a branch
 	fmt.Println("Input a branch.")
 	result := prompt.Input("> ", completer)
 
 	branchName := strings.TrimSpace(result)
-	fmt.Println(branchName + branchName)
+	return branchName
 }
