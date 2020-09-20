@@ -66,3 +66,9 @@ commit/save tracked files by default
 
 https://spderosso.github.io/oopsla16.pdf
 
+https://opensource.com/article/20/4/git-extras
+https://devhints.io/git-extras
+
+
+git-info, git-summary
+

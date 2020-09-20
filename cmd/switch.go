@@ -35,7 +35,7 @@ For creating a new branch it's the same command! You'll simply be prompted to co
 			_, result, err := prompt.Run()
 
 			if err != nil {
-				fmt.Printf("Prompt failed %v\n", err)
+				fmt.Printf("Cancelled – %v\n", err)
 				return
 			}
 

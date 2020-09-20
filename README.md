@@ -79,3 +79,7 @@ Switched to a new branch 'example-branch'
 1. Favor simplicity over complexity 
 1. Bit should have happy defaults
 1. Bit must be fully compatible with Git
+
+## Inspiration
+
+Thanks to [Gitless](https://gitless.com/), [git-extras](https://github.com/tj/git-extras), researchers in the field and of course the developers of git itself! 
