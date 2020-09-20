@@ -100,20 +100,22 @@ func completer(d prompt.Document) []prompt.Suggest {
 func selectBranchPrompt() string {
 	//p := NewPrompt()
 	// select a branch
-	fmt.Println("Input a branch.")
-	result := prompt.Input("Branch: ", completer,
+	result := prompt.Input("Select a branch: ", completer,
 		prompt.OptionTitle("sql-prompt"),
 		prompt.OptionHistory([]string{""}),
 		prompt.OptionPrefixTextColor(prompt.Yellow),
 		prompt.OptionPreviewSuggestionTextColor(prompt.Yellow),
 		prompt.OptionSelectedSuggestionBGColor(prompt.Yellow),
 		prompt.OptionSuggestionBGColor(prompt.Yellow),
-		prompt.OptionSelectedSuggestionTextColor(prompt.Brown),
+		prompt.OptionSelectedSuggestionTextColor(prompt.Purple),
 		prompt.OptionShowCompletionAtStart(),
+		prompt.OptionCompletionOnDown(),
 		prompt.OptionSwitchKeyBindMode(prompt.CommonKeyBind),
 		prompt.OptionAddKeyBind(prompt.KeyBind{
 			Key: prompt.ControlC,
-			Fn: func(b *prompt.Buffer) { os.Exit(0) },
+			Fn: func(b *prompt.Buffer) {
+				os.Exit(0)
+			},
 		}),
 	)
 	//result := p.Input()
