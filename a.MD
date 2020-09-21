@@ -78,3 +78,9 @@ git-release
 
 
 --force-with-lease
+
+
+git for-each-ref --sort=-committerdate refs/heads/ refs/remotes --format='%(authordate:short) %(authorname) %(color:red)%(objectname:short) %(color:yellow)%(refname:short)%(color:reset) (%(color:green)%(committerdate:relative)%(color:reset))'
+--> use git merge-base to see if merged already
+
+git difftool --tool=vimdiff --no-prompt

@@ -89,8 +89,8 @@ func completer(d prompt.Document) []prompt.Suggest {
 	var suggestions []prompt.Suggest
 	for _, branch := range list {
 		suggestions = append(suggestions, prompt.Suggest{
-			Text:        branch,
-			Description: "",
+			Text:        branch.Name,
+			Description: branch.RelativeDate + " " + branch.Author,
 		})
 	}
 

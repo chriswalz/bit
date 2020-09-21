@@ -105,14 +105,29 @@ func StashList() []string {
 	return strings.Split(string(msg), "\n")
 }
 
-func BranchList() []string {
-	msg, err := exec.Command("git", "branch", "--all").CombinedOutput()
+func BranchList() []Branch {
+	//str := "git for-each-ref --sort=-committerdate refs/heads/ refs/remotes --format='%(authordate:short) %(authorname) %(color:red)%(objectname:short) %(color:yellow)%(refname:short)%(color:reset) (%(color:green)%(committerdate:relative)%(color:reset))'"
+	msg, err := exec.Command("git", "for-each-ref", "--sort=-committerdate", "refs/heads/", "refs/remotes", "--format='%(authordate:short) %(authorname) %(color:red)%(objectname:short) %(color:yellow)%(refname:short)%(color:reset) (%(color:green)%(committerdate:relative)%(color:reset))'").CombinedOutput()
 	if err != nil {
 		//fmt.Println(err)
 	}
 	list := strings.Split(string(msg), "\n")
-	for i := 0; i < len(list); i++ {
-		list[i] = strings.TrimSpace(list[i])
+	var branches []Branch
+	for i := 0; i < len(list)-1; i++ {
+		cols := strings.Split(list[i], " ")
+		fmt.Println("adf", list[i])
+		b := Branch{
+			Author:       cols[1],
+			Name:         cols[3],
+			RelativeDate: list[i][strings.Index(list[i], "("):],
+		}
+		branches = append(branches, b)
 	}
-	return list
+	return branches
+}
+
+type Branch struct {
+	Author string
+	Name string
+	RelativeDate string
 }
