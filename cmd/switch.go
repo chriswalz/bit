@@ -6,7 +6,6 @@ import (
 	"github.com/chriswalz/bit/util"
 	"github.com/manifoldco/promptui"
 	"github.com/spf13/cobra"
-	"os"
 	"os/exec"
 	"strings"
 )
@@ -28,7 +27,7 @@ For creating a new branch it's the same command! You'll simply be prompted to co
 			branchName = args[0]
 		}
 		if len(args) == 0 {
-			branchName = selectBranchPrompt()
+			branchName = util.SuggestionPrompt("bit switch ", branchCompleter(util.BranchList()))
 			if strings.Contains(branchName, "*") {
 				return
 			}
@@ -84,7 +83,7 @@ func checkoutBranch(branch string) bool {
 }
 
 
-func completer(branches []util.Branch) func(d prompt.Document) []prompt.Suggest {
+func branchCompleter(branches []util.Branch) func(d prompt.Document) []prompt.Suggest {
 	return func(d prompt.Document) []prompt.Suggest {
 		var suggestions []prompt.Suggest
 		for _, branch := range branches {
@@ -98,29 +97,3 @@ func completer(branches []util.Branch) func(d prompt.Document) []prompt.Suggest 
 	}
 }
 
-func selectBranchPrompt() string {
-	//p := NewPrompt()
-	// select a branch
-	result := prompt.Input("Select a branch: ", completer(util.BranchList()),
-		prompt.OptionTitle("sql-prompt"),
-		prompt.OptionHistory([]string{""}),
-		prompt.OptionPrefixTextColor(prompt.Yellow),
-		prompt.OptionPreviewSuggestionTextColor(prompt.Yellow),
-		prompt.OptionSelectedSuggestionBGColor(prompt.Yellow),
-		prompt.OptionSuggestionBGColor(prompt.Yellow),
-		prompt.OptionSelectedSuggestionTextColor(prompt.Purple),
-		prompt.OptionShowCompletionAtStart(),
-		prompt.OptionCompletionOnDown(),
-		prompt.OptionSwitchKeyBindMode(prompt.CommonKeyBind),
-		prompt.OptionAddKeyBind(prompt.KeyBind{
-			Key: prompt.ControlC,
-			Fn: func(b *prompt.Buffer) {
-				os.Exit(1)
-			},
-		}),
-	)
-	//result := p.Input()
-
-	branchName := strings.TrimSpace(result)
-	return branchName
-}

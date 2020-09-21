@@ -3,6 +3,8 @@ package util
 import (
 	"bufio"
 	"fmt"
+	"github.com/c-bata/go-prompt"
+	"log"
 	"os"
 	"os/exec"
 	"strings"
@@ -106,14 +108,14 @@ func StashList() []string {
 }
 
 func BranchList() []Branch {
-	msg, err := exec.Command("git", "for-each-ref", "--sort=-committerdate", "refs/heads/", "refs/remotes", "--format='%(authordate:short) %(authorname) %(color:red)%(objectname:short) %(color:yellow)%(refname:short)%(color:reset) (%(color:green)%(committerdate:relative)%(color:reset))'").CombinedOutput()
+	msg, err := exec.Command("git", "for-each-ref", "--sort=-committerdate", "refs/heads/", "refs/remotes", "--format='%(authordate:short); %(authorname); %(color:red)%(objectname:short); %(color:yellow)%(refname:short)%(color:reset); (%(color:green)%(committerdate:relative)%(color:reset))'").CombinedOutput()
 	if err != nil {
 		//fmt.Println(err)
 	}
 	list := strings.Split(string(msg), "\n")
 	var branches []Branch
 	for i := 0; i < len(list)-1; i++ {
-		cols := strings.Split(list[i], " ")
+		cols := strings.Split(list[i], "; ")
 		b := Branch{
 			Author:       cols[1],
 			Name:         cols[3],
@@ -128,4 +130,34 @@ type Branch struct {
 	Author string
 	Name string
 	RelativeDate string
+}
+
+func SuggestionPrompt(prefix string, completer func(d prompt.Document) []prompt.Suggest) string {
+	result := prompt.Input(prefix, completer,
+		prompt.OptionTitle(""),
+		prompt.OptionHistory([]string{""}),
+		prompt.OptionPrefixTextColor(prompt.Yellow),
+		prompt.OptionPreviewSuggestionTextColor(prompt.Yellow),
+		prompt.OptionSelectedSuggestionBGColor(prompt.Yellow),
+		prompt.OptionSuggestionBGColor(prompt.Yellow),
+		prompt.OptionSelectedSuggestionTextColor(prompt.Purple),
+		prompt.OptionShowCompletionAtStart(),
+		prompt.OptionCompletionOnDown(),
+		prompt.OptionSwitchKeyBindMode(prompt.CommonKeyBind),
+		prompt.OptionAddKeyBind(prompt.KeyBind{
+			Key: prompt.ControlC,
+			Fn: func(b *prompt.Buffer) {
+				err := os.Stdin.Close()
+				log.Println(err)
+				err = os.Stdin.Close()
+				log.Println(err)
+				os.Exit(1)
+			},
+		}),
+	)
+	branchName := strings.TrimSpace(result)
+	if strings.HasPrefix(result, "origin/") {
+		branchName = branchName[7:]
+	}
+	return branchName
 }
