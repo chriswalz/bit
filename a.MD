@@ -84,3 +84,5 @@ git for-each-ref --sort=-committerdate refs/heads/ refs/remotes --format='%(auth
 --> use git merge-base to see if merged already
 
 git difftool --tool=vimdiff --no-prompt
+
+https://wiki.diasporafoundation.org/Git_workflow

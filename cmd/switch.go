@@ -115,7 +115,7 @@ func selectBranchPrompt() string {
 		prompt.OptionAddKeyBind(prompt.KeyBind{
 			Key: prompt.ControlC,
 			Fn: func(b *prompt.Buffer) {
-				os.Exit(0)
+				os.Exit(1)
 			},
 		}),
 	)
