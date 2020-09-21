@@ -106,7 +106,6 @@ func StashList() []string {
 }
 
 func BranchList() []Branch {
-	//str := "git for-each-ref --sort=-committerdate refs/heads/ refs/remotes --format='%(authordate:short) %(authorname) %(color:red)%(objectname:short) %(color:yellow)%(refname:short)%(color:reset) (%(color:green)%(committerdate:relative)%(color:reset))'"
 	msg, err := exec.Command("git", "for-each-ref", "--sort=-committerdate", "refs/heads/", "refs/remotes", "--format='%(authordate:short) %(authorname) %(color:red)%(objectname:short) %(color:yellow)%(refname:short)%(color:reset) (%(color:green)%(committerdate:relative)%(color:reset))'").CombinedOutput()
 	if err != nil {
 		//fmt.Println(err)
@@ -115,7 +114,6 @@ func BranchList() []Branch {
 	var branches []Branch
 	for i := 0; i < len(list)-1; i++ {
 		cols := strings.Split(list[i], " ")
-		fmt.Println("adf", list[i])
 		b := Branch{
 			Author:       cols[1],
 			Name:         cols[3],

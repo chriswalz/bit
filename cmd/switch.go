@@ -84,23 +84,24 @@ func checkoutBranch(branch string) bool {
 }
 
 
-func completer(d prompt.Document) []prompt.Suggest {
-	list := util.BranchList()
-	var suggestions []prompt.Suggest
-	for _, branch := range list {
-		suggestions = append(suggestions, prompt.Suggest{
-			Text:        branch.Name,
-			Description: branch.RelativeDate + " " + branch.Author,
-		})
-	}
+func completer(branches []util.Branch) func(d prompt.Document) []prompt.Suggest {
+	return func(d prompt.Document) []prompt.Suggest {
+		var suggestions []prompt.Suggest
+		for _, branch := range branches {
+			suggestions = append(suggestions, prompt.Suggest{
+				Text:        branch.Name,
+				Description: branch.RelativeDate + " " + branch.Author,
+			})
+		}
 
-	return prompt.FilterHasPrefix(suggestions, d.GetWordBeforeCursor(), true)
+		return prompt.FilterHasPrefix(suggestions, d.GetWordBeforeCursor(), true)
+	}
 }
 
 func selectBranchPrompt() string {
 	//p := NewPrompt()
 	// select a branch
-	result := prompt.Input("Select a branch: ", completer,
+	result := prompt.Input("Select a branch: ", completer(util.BranchList()),
 		prompt.OptionTitle("sql-prompt"),
 		prompt.OptionHistory([]string{""}),
 		prompt.OptionPrefixTextColor(prompt.Yellow),
@@ -122,35 +123,4 @@ func selectBranchPrompt() string {
 
 	branchName := strings.TrimSpace(result)
 	return branchName
-}
-
-var LivePrefixState struct {
-	LivePrefix string
-	IsEnable   bool
-}
-
-func executor(in string) {
-	fmt.Println("Your input: " + in)
-	if in == "" {
-		LivePrefixState.IsEnable = false
-		LivePrefixState.LivePrefix = in
-		return
-	}
-	LivePrefixState.LivePrefix = in + "> "
-	LivePrefixState.IsEnable = true
-}
-
-func changeLivePrefix() (string, bool) {
-	return LivePrefixState.LivePrefix, LivePrefixState.IsEnable
-}
-
-func NewPrompt() *prompt.Prompt {
-	p := prompt.New(
-		executor,
-		completer,
-		prompt.OptionPrefix("Branch: "),
-		prompt.OptionLivePrefix(changeLivePrefix),
-		prompt.OptionTitle("live-prefix-example"),
-	)
-	return p
 }
