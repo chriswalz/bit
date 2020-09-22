@@ -16,25 +16,27 @@ var cfgFile string
 var rootCmd = &cobra.Command{
 	Use:   "bit",
 	Short: "Bit is Git with a simple interface. Plus you can still use all the old git commands",
-	Long: `v0.3.3`,
+	Long:  `v0.3.3`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	Run: func(cmd *cobra.Command, args []string) {
 		gitCmds := util.AllGitSubCommands()
 		bitCmds := cmd.Commands()
 		bitCmdMap := map[string]*cobra.Command{}
-		for _, bitCmd := range bitCmds{
+		for _, bitCmd := range bitCmds {
 			bitCmdMap[bitCmd.Name()] = bitCmd
 		}
 		completerSuggestionMap := map[string][]prompt.Suggest{
-			"": []prompt.Suggest{},
-			"root": util.CobraCommandToSuggestions(append(gitCmds, bitCmds...)),
-			"branch": util.BranchListSuggestions(),
+			"":         {},
+			"root":     util.CobraCommandToSuggestions(append(gitCmds, bitCmds...)),
+			"checkout": util.BranchListSuggestions(),
+			"switch":   util.BranchListSuggestions(),
+			"add": util.GitAddSuggestions(),
 		}
 		resp := util.SuggestionPrompt("bit ", rootCommandCompleter(completerSuggestionMap))
 		subCommand := resp
 		if strings.Index(resp, " ") > 0 {
-			subCommand = subCommand[0: strings.Index(resp, " ")]
+			subCommand = subCommand[0:strings.Index(resp, " ")]
 		}
 		if bitCmdMap[subCommand] == nil {
 			parsedArgs, err := parseCommandLine(resp)
@@ -74,17 +76,16 @@ func rootCommandCompleter(suggestionMap map[string][]prompt.Suggest) func(d prom
 			split := strings.Split(d.Text, " ")
 			prev := split[0]
 			curr := split[1]
-			if suggestionMap[prev] != nil {
-				suggestions = suggestionMap[prev]
-			}
 			if strings.HasPrefix(curr, "--") {
 				suggestions = util.FlagSuggestions(prev, "--")
-			} else {
+			} else if strings.HasPrefix(curr, "-") {
 				suggestions = util.FlagSuggestions(prev, "-")
+			} else if suggestionMap[prev] != nil {
+				suggestions = suggestionMap[prev]
 			}
 
 		}
-		return prompt.FilterHasPrefix(suggestions, d.GetWordBeforeCursor(), true)
+		return prompt.FilterContains(suggestions, d.GetWordBeforeCursor(), true)
 	}
 }
 
@@ -108,13 +109,13 @@ func parseCommandLine(command string) ([]string, error) {
 			continue
 		}
 
-		if (escapeNext) {
+		if escapeNext {
 			current += string(c)
 			escapeNext = false
 			continue
 		}
 
-		if (c == '\\') {
+		if c == '\\' {
 			escapeNext = true
 			continue
 		}

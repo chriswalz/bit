@@ -28,7 +28,6 @@ func Runwithcolor(args []string) error {
 	return err
 }
 
-
 func CloudBranchExists() bool {
 	msg, err := exec.Command("git", "pull").CombinedOutput()
 	if err != nil {
@@ -127,7 +126,6 @@ func BranchList() []Branch {
 	return branches
 }
 
-
 func BranchListSuggestions() []prompt.Suggest {
 	branches := BranchList()
 	var suggestions []prompt.Suggest
@@ -135,6 +133,46 @@ func BranchListSuggestions() []prompt.Suggest {
 		suggestions = append(suggestions, prompt.Suggest{
 			Text:        branch.Name,
 			Description: branch.RelativeDate + " " + branch.Author,
+		})
+	}
+	return suggestions
+}
+
+func FileChangesList() []FileChange {
+	msg, err := exec.Command("git", "status", "--porcelain=v2").CombinedOutput()
+	if err != nil {
+		//fmt.Println(err)
+	}
+	list := strings.Split(string(msg), "\n")
+	statusMap := map[string]string{
+		".M": "Not Staged",
+		"M.": "Added",
+		"MM": "Partially Added",
+		"?": "Untracked",
+	}
+	var changes []FileChange
+	for i := 0; i < len(list)-1; i++ {
+		cols := strings.Fields(strings.TrimSpace(list[i]))
+		b := FileChange{
+			Name:   cols[len(cols)-1],
+			Status: statusMap[cols[1]],
+		}
+		changes = append(changes, b)
+	}
+	return changes
+}
+
+func GitAddSuggestions() []prompt.Suggest {
+	fileChanges := FileChangesList()
+	var suggestions []prompt.Suggest
+	suggestions = append(suggestions, prompt.Suggest{
+		Text:        "-u",
+		Description: "Add modified and deleted files and exclude untracked files.",
+	})
+	for _, fc := range fileChanges {
+		suggestions = append(suggestions, prompt.Suggest{
+			Text:        fc.Name,
+			Description: "Status: " + fc.Status,
 		})
 	}
 	return suggestions
@@ -152,9 +190,14 @@ func CobraCommandToSuggestions(cmds []*cobra.Command) []prompt.Suggest {
 }
 
 type Branch struct {
-	Author string
-	Name string
+	Author       string
+	Name         string
 	RelativeDate string
+}
+
+type FileChange struct {
+	Name   string
+	Status string
 }
 
 func SuggestionPrompt(prefix string, completer func(d prompt.Document) []prompt.Suggest) string {
@@ -199,8 +242,8 @@ func AllGitSubCommands() (cc []*cobra.Command) {
 		}
 		split := strings.Split(strings.TrimSpace(command), "   ")
 		c := cobra.Command{
-			Use: split[0],
-			Short: split[len(split) - 1],
+			Use:   split[0],
+			Short: strings.TrimSpace(split[len(split)-1]),
 		}
 		cc = append(cc, &c)
 	}
@@ -214,12 +257,18 @@ func FlagSuggestions(gitSubCmd string, flagtype string) []prompt.Suggest {
 	//	//fmt.Println(err)
 	//}
 	//op := strings.Split(string(msg), "OPTIONS")
-	if gitSubCmd != "commit" && gitSubCmd != "push" {
+	if gitSubCmd != "commit" && gitSubCmd != "push" && gitSubCmd != "status" {
 		return []prompt.Suggest{}
 	}
 	str := commitFlagsStr
 	if gitSubCmd == "push" {
 		str = pushFlagsStr
+	} else if gitSubCmd == "status" {
+		str = statusFlagsStr
+	} else if gitSubCmd == "commit" {
+		str = commitFlagsStr
+	} else {
+		return []prompt.Suggest{}
 	}
 	list := strings.Split(str, ".\n\n")
 
@@ -236,13 +285,13 @@ func FlagSuggestions(gitSubCmd string, flagtype string) []prompt.Suggest {
 		for _, flag := range flags {
 			if strings.HasPrefix(flag, "--") && flagtype == "--" {
 				suggestions = append(suggestions, prompt.Suggest{
-					Text: flag,
+					Text:        flag,
 					Description: desc,
 				})
 			}
 			if !strings.HasPrefix(flag, "--") && flagtype == "-" {
 				suggestions = append(suggestions, prompt.Suggest{
-					Text: flag,
+					Text:        flag,
 					Description: desc,
 				})
 			}
@@ -432,7 +481,7 @@ Do not interpret any more arguments as options.
 When pathspec is given on the command line, commit the contents of the files that match the pathspec without recording the changes already added to the index. The contents of these files are also staged for the next commit on top of what have been staged before.
 `
 
-var pushFlagsStr =`
+var pushFlagsStr = `
 --all
 Push all branches (i.e. refs under refs/heads/); cannot be used with other <refspec>.
 
@@ -558,3 +607,80 @@ Use IPv4 addresses only, ignoring IPv6 addresses.
 --ipv6
 Use IPv6 addresses only, ignoring IPv4 addresses.
 `
+
+var statusFlagsStr = `-s
+--short
+Give the output in the short-format.
+
+-b
+--branch
+Show the branch and tracking info even in short-format.
+
+--show-stash
+Show the number of entries currently stashed away.
+
+--porcelain[=<version>]
+Give the output in an easy-to-parse format for scripts. This is similar to the short output, but will remain stable across Git versions and regardless of user configuration. See below for details.
+
+The version parameter is used to specify the format version. This is optional and defaults to the original version v1 format.
+
+--long
+Give the output in the long-format. This is the default.
+
+-v
+--verbose
+In addition to the names of files that have been changed, also show the textual changes that are staged to be committed (i.e., like the output of git diff --cached). If -v is specified twice, then also show the changes in the working tree that have not yet been staged (i.e., like the output of git diff).
+
+-u[<mode>]
+--untracked-files[=<mode>]
+Show untracked files.
+
+The mode parameter is used to specify the handling of untracked files. It is optional: it defaults to all, and if specified, it must be stuck to the option (e.g. -uno, but not -u no).
+
+The possible options are:
+
+no - Show no untracked files.
+
+normal - Shows untracked files and directories.
+
+all - Also shows individual files in untracked directories.
+
+When -u option is not used, untracked files and directories are shown (i.e. the same as specifying normal), to help you avoid forgetting to add newly created files. Because it takes extra work to find untracked files in the filesystem, this mode may take some time in a large working tree. Consider enabling untracked cache and split index if supported (see git update-index --untracked-cache and git update-index --split-index), Otherwise you can use no to have git status return more quickly without showing untracked files.
+
+The default can be changed using the status.showUntrackedFiles configuration variable documented in git-config[1].
+
+--ignore-submodules[=<when>]
+Ignore changes to submodules when looking for changes. <when> can be either "none", "untracked", "dirty" or "all", which is the default. Using "none" will consider the submodule modified when it either contains untracked or modified files or its HEAD differs from the commit recorded in the superproject and can be used to override any settings of the ignore option in git-config[1] or gitmodules[5]. When "untracked" is used submodules are not considered dirty when they only contain untracked content (but they are still scanned for modified content). Using "dirty" ignores all changes to the work tree of submodules, only changes to the commits stored in the superproject are shown (this was the behavior before 1.7.0). Using "all" hides all changes to submodules (and suppresses the output of submodule summaries when the config option status.submoduleSummary is set).
+
+--ignored[=<mode>]
+Show ignored files as well.
+
+The mode parameter is used to specify the handling of ignored files. It is optional: it defaults to traditional.
+
+The possible options are:
+
+traditional - Shows ignored files and directories, unless --untracked-files=all is specified, in which case individual files in ignored directories are displayed.
+
+no - Show no ignored files.
+
+matching - Shows ignored files and directories matching an ignore pattern.
+
+When matching mode is specified, paths that explicitly match an ignored pattern are shown. If a directory matches an ignore pattern, then it is shown, but not paths contained in the ignored directory. If a directory does not match an ignore pattern, but all contents are ignored, then the directory is not shown, but all contents are shown.
+
+-z
+Terminate entries with NUL, instead of LF. This implies the --porcelain=v1 output format if no other format is given.
+
+--column[=<options>]
+--no-column
+Display untracked files in columns. See configuration variable column.status for option syntax.--column and --no-column without options are equivalent to always and never respectively.
+
+--ahead-behind
+--no-ahead-behind
+Display or do not display detailed ahead/behind counts for the branch relative to its upstream branch. Defaults to true.
+
+--renames
+--no-renames
+Turn on/off rename detection regardless of user configuration. See also git-diff[1] --no-renames.
+
+--find-renames[=<n>]
+Turn on rename detection, optionally setting the similarity threshold. See also git-diff[1] --find-renames.`
