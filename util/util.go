@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"github.com/c-bata/go-prompt"
+	"github.com/spf13/cobra"
 	"log"
 	"os"
 	"os/exec"
@@ -160,4 +161,25 @@ func SuggestionPrompt(prefix string, completer func(d prompt.Document) []prompt.
 		branchName = branchName[7:]
 	}
 	return branchName
+}
+
+func AllGitSubCommands() (cc []*cobra.Command) {
+	msg, err := exec.Command("git", "help", "-a").CombinedOutput()
+	if err != nil {
+		fmt.Println(err)
+	}
+	commands := strings.Split(strings.Split(strings.Split(string(msg), "Main Porcelain Commands")[1], "Ancillary Commands")[0], "\n")
+	for _, command := range commands {
+		if command == "" {
+			continue
+		}
+		split := strings.Split(strings.TrimSpace(command), "   ")
+		c := cobra.Command{
+			Use: split[0],
+			Short: split[len(split) - 1],
+		}
+		cc = append(cc, &c)
+	}
+
+	return cc
 }
