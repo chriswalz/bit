@@ -27,7 +27,7 @@ For creating a new branch it's the same command! You'll simply be prompted to co
 			branchName = args[0]
 		}
 		if len(args) == 0 {
-			branchName = util.SuggestionPrompt("bit switch ", branchCompleter(util.BranchList()))
+			branchName = util.SuggestionPrompt("bit switch ", branchCompleter(util.BranchListSuggestions()))
 			if strings.Contains(branchName, "*") {
 				return
 			}
@@ -82,18 +82,9 @@ func checkoutBranch(branch string) bool {
 	return !strings.Contains(string(msg), "did not match any file")
 }
 
-
-func branchCompleter(branches []util.Branch) func(d prompt.Document) []prompt.Suggest {
+func branchCompleter(branches []prompt.Suggest) func(d prompt.Document) []prompt.Suggest {
 	return func(d prompt.Document) []prompt.Suggest {
-		var suggestions []prompt.Suggest
-		for _, branch := range branches {
-			suggestions = append(suggestions, prompt.Suggest{
-				Text:        branch.Name,
-				Description: branch.RelativeDate + " " + branch.Author,
-			})
-		}
-
-		return prompt.FilterHasPrefix(suggestions, d.GetWordBeforeCursor(), true)
+		return prompt.FilterHasPrefix(branches, d.GetWordBeforeCursor(), true)
 	}
 }
 

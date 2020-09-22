@@ -26,7 +26,12 @@ var rootCmd = &cobra.Command{
 		for _, bitCmd := range bitCmds{
 			bitCmdMap[bitCmd.Name()] = bitCmd
 		}
-		resp := util.SuggestionPrompt("bit ", rootCommandCompleter(append(gitCmds, bitCmds...)))
+		completerSuggestionMap := map[string][]prompt.Suggest{
+			"": []prompt.Suggest{},
+			"root": util.CobraCommandToSuggestions(append(gitCmds, bitCmds...)),
+			"branch": util.BranchListSuggestions(),
+		}
+		resp := util.SuggestionPrompt("bit ", rootCommandCompleter(completerSuggestionMap))
 		subCommand := resp
 		if strings.Index(resp, " ") > 0 {
 			subCommand = subCommand[0: strings.Index(resp, " ")]
@@ -57,17 +62,28 @@ func Execute() {
 	}
 }
 
-func rootCommandCompleter(cmds []*cobra.Command) func(d prompt.Document) []prompt.Suggest {
+func rootCommandCompleter(suggestionMap map[string][]prompt.Suggest) func(d prompt.Document) []prompt.Suggest {
 	return func(d prompt.Document) []prompt.Suggest {
-		_ = d.GetWordBeforeCursor()
+		//fmt.Println(d.GetWordBeforeCursor())
+		// only 1 command
 		var suggestions []prompt.Suggest
-		for _, branch := range cmds {
-			suggestions = append(suggestions, prompt.Suggest{
-				Text:        branch.Name(),
-				Description: branch.Short,
-			})
-		}
+		if len(d.GetWordBeforeCursor()) == len(d.Text) {
+			//fmt.Println("same")
+			suggestions = suggestionMap["root"]
+		} else {
+			split := strings.Split(d.Text, " ")
+			prev := split[0]
+			curr := split[1]
+			if suggestionMap[prev] != nil {
+				suggestions = suggestionMap[prev]
+			}
+			if strings.HasPrefix(curr, "--") {
+				suggestions = util.FlagSuggestions(prev, "--")
+			} else {
+				suggestions = util.FlagSuggestions(prev, "-")
+			}
 
+		}
 		return prompt.FilterHasPrefix(suggestions, d.GetWordBeforeCursor(), true)
 	}
 }
