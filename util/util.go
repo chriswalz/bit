@@ -320,7 +320,7 @@ func RunScriptWithString(path string, script string, args ...string) {
 	}
 	f.WriteString(script)
 	defer f.Close()
-	out, err := exec.Command(path,  args...).Output()
+	out, err := exec.Command(path,  "'0.3.4'").Output()
 	if err != nil {
 		log.Fatal(err)
 	}
