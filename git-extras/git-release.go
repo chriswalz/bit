@@ -1,82 +1,135 @@
 package git_extras
 
-const GitRelase =`
+const GitRelease =`
 #!/usr/bin/env bash
+set -e
 
-GREEN="$(tput setaf 2)"
-NORMAL="$(tput sgr0)"
-if [ "$1" = "--color" ] || [ "$2" = "--color" ] || \
-     [ "$1" = "-c" ] || [ "$2" = "-c" ] ; then
-  COLOR_TITLE="$GREEN"
+hook() {
+  local hook=.git/hooks/$1.sh
+  # compat without extname
+  if test ! -f $hook; then
+    hook=.git/hooks/$1
+  fi
+
+  if test -f $hook; then
+    echo "... $1"
+    shift
+    if test -x $hook; then
+      $hook "$@"
+    else
+      . $hook "$@"
+    fi
+  fi
+}
+
+exit_with_msg() {
+    >&2 echo "$1"
+    exit 1
+}
+
+if test $# -gt 0; then
+  remote=''
+
+  # check for flags
+  while test $# != 0
+  do
+    case "$1" in
+    -c) need_changelog=true;;
+    -r) remote=$2; shift ;;
+    -m) msg=$2; shift ;;
+    -s)
+      test -n "$keyid" &&
+          exit_with_msg "Please use '-s' OR '-u'"
+      sign=true
+      ;;
+    -u)
+      test -n "$sign" &&
+          exit_with_msg "Please use '-s' OR '-u'"
+      keyid=$2
+      shift
+      ;;
+    --semver)
+      test -z "$2" &&
+          exit_with_msg "major/minor/patch required for --semver option"
+      semver=$2
+      shift
+      ;;
+    --no-empty-commit) no_empty_commit=true;;
+    --) shift; hook_args="$hook_args $*"; break;;
+    *) test -z "$version" && version=$1 ;;
+    esac
+
+    shift
+
+  done
+
+  if [ -n "$semver" ]; then
+    if [ -z "$(git tag)" ]; then
+      echo "there is no tag in the git repo" 1>&2
+      exit 1
+    fi
+
+    latest_tag=$(git describe --tags "$(git rev-list --tags --max-count=1)")
+
+    if [[ ! "$latest_tag" =~ \
+        ^([^0-9]*)([1-9][0-9]+|[0-9])\.([1-9][0-9]+|[0-9])\.([1-9][0-9]+|[0-9])(.*) ]]; then
+      echo "the latest tag doesn't match semver format requirement" 1>&2
+      exit 1
+    fi
+
+    case "$semver" in
+    major ) version="${BASH_REMATCH[2]}" ;;
+    minor ) version="${BASH_REMATCH[3]}" ;;
+    patch ) version="${BASH_REMATCH[4]}" ;;
+    *     ) echo "invalid semver argument given: $semver" 1>&2
+            exit 1
+            ;;
+    esac
+
+    (( ++version ))
+
+    case "$semver" in
+    major ) version="${BASH_REMATCH[1]}$version.0.0${BASH_REMATCH[5]}" ;;
+    minor ) version="${BASH_REMATCH[1]}${BASH_REMATCH[2]}.$version.0${BASH_REMATCH[5]}" ;;
+    patch ) version="${BASH_REMATCH[1]}${BASH_REMATCH[2]}.${BASH_REMATCH[3]}.$version${BASH_REMATCH[5]}" ;;
+    esac
+  fi
+
+  hook_args="$version"
+
+  if [ -z "$msg" ]; then
+    msg="Release ${version}"
+  fi
+
+  # shellcheck disable=SC2086
+  hook pre-release $hook_args \
+    || exit_with_msg "pre-release hook failed! Cancelling release."
+  echo "... releasing $version"
+  if [ "$need_changelog" = true ]; then
+    git-changelog -t "$version"
+  fi
+
+  if [ "$no_empty_commit" = true ]; then
+    git commit -a -m "$msg" || true
+  else
+    git commit -a -m "$msg" --allow-empty
+  fi
+
+  declare -a sign_args
+  if [ "$sign" == true ]; then
+    sign_args=("-s")
+  fi
+
+  if [ -n "$keyid" ]; then
+    sign_args=("-u" "$keyid")
+  fi
+
+  # shellcheck disable=SC2086
+  git tag "${sign_args[@]}" $version -a -m "$msg" \
+    && git push $remote --tags \
+    && git push $remote \
+    && hook post-release $hook_args \
+    && echo "... complete"
 else
-  COLOR_TITLE="$NORMAL"
-fi
-
-HIDE_CONFIG=
-if [ "$1" != "--no-config" ] && [ "$2" != "--no-config" ]; then
-  HIDE_CONFIG=1
-fi
-
-get_config() {
-  cmd_get_config="$(git config --get-all git-extras.info.config-grep)"
-  if [ -z "$cmd_get_config" ]; then
-    git config --list
-  else
-    eval "$cmd_get_config"
-  fi
-}
-
-most_recent_commit() {
-  cmd_get_log="$(git config --get-all git-extras.info.log)"
-  if [ -z "$cmd_get_log" ]; then
-    git log --max-count=1 --pretty=short
-  else
-    eval "$cmd_get_log"
-  fi
-}
-
-submodules() {
-  # short sha1
-  git submodule status | sed 's/\([^abcdef0-9]\{,2\}\)\([abcdef0-9]\{7\}\)\([abcdef0-9]\{33\}\)\(.*\)/\1\2\4/'
-}
-
-local_branches() {
-  git branch
-}
-
-remote_branches() {
-  git branch -r
-}
-
-remote_urls() {
-  git remote -v
-}
-
-echon() {
-  echo "$@"
-  echo
-}
-
-echo
-echon "${COLOR_TITLE}## Remote URLs:${NORMAL}"
-echon "$(remote_urls)"
-
-echon "${COLOR_TITLE}## Remote Branches:${NORMAL}"
-echon "$(remote_branches)"
-
-echon "${COLOR_TITLE}## Local Branches:${NORMAL}"
-echon "$(local_branches)"
-
-SUBMODULES_LOG=$(submodules)
-if [ ! -z "$SUBMODULES_LOG" ]; then
-  echon "${COLOR_TITLE}## Submodule(s):${NORMAL}"
-  echon "$SUBMODULES_LOG"
-fi
-
-echon "${COLOR_TITLE}## Most Recent Commit:${NORMAL}"
-echon "$(most_recent_commit)"
-
-if [ ! -z "$HIDE_CONFIG" ]; then
-  echon "${COLOR_TITLE}## Configuration (.git/config):${NORMAL}"
-  echon "$(get_config)"
+  echo "tag required" 1>&2 && exit 1
 fi`

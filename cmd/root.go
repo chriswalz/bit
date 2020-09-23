@@ -50,7 +50,12 @@ var rootCmd = &cobra.Command{
 			}
 			return
 		}
-		cmd.SetArgs([]string{resp})
+		parsedArgs, err := parseCommandLine(resp)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		cmd.SetArgs(parsedArgs)
 		cmd.Execute()
 	},
 }

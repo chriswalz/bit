@@ -313,7 +313,7 @@ func FlagSuggestions(gitSubCmd string, flagtype string) []prompt.Suggest {
 	return suggestions
 }
 
-func RunScriptWithString(path string, script string) {
+func RunScriptWithString(path string, script string, args ...string) {
 	f, err := os.OpenFile(path, os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		log.Fatal(err)
