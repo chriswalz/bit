@@ -1,6 +1,6 @@
+package git_extras
 
-#!/usr/bin/env bash
-
+const GitInfo = `#!/usr/bin/env bash
 GREEN="$(tput setaf 2)"
 NORMAL="$(tput sgr0)"
 if [ "$1" = "--color" ] || [ "$2" = "--color" ] || \
@@ -78,3 +78,4 @@ if [ ! -z "$HIDE_CONFIG" ]; then
   echon "${COLOR_TITLE}## Configuration (.git/config):${NORMAL}"
   echon "$(get_config)"
 fi
+`

@@ -1,5 +1,7 @@
+package git_extras
 
-cd "$(git root)" || { echo "Can't cd to top level directory";exit 1; }
+const GitSummary =
+`cd "$(git root)" || { echo "Can't cd to top level directory";exit 1; }
 
 SUMMARY_BY_LINE=
 DEDUP_BY_EMAIL=
@@ -188,4 +190,4 @@ else
     # shellcheck disable=SC2086
     git shortlog -n -s $commit | format_authors
   fi
-fi
+fi`

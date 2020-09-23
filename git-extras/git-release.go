@@ -1,4 +1,6 @@
+package git_extras
 
+const GitRelase =`
 #!/usr/bin/env bash
 
 GREEN="$(tput setaf 2)"
@@ -77,4 +79,4 @@ echon "$(most_recent_commit)"
 if [ ! -z "$HIDE_CONFIG" ]; then
   echon "${COLOR_TITLE}## Configuration (.git/config):${NORMAL}"
   echon "$(get_config)"
-fi
+fi`

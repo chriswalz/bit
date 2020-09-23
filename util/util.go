@@ -313,6 +313,20 @@ func FlagSuggestions(gitSubCmd string, flagtype string) []prompt.Suggest {
 	return suggestions
 }
 
+func RunScriptWithString(path string, script string) {
+	f, err := os.OpenFile(path, os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
+	f.WriteString(script)
+	defer f.Close()
+	out, err := exec.Command("/bin/sh", path).Output()
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(string(out))
+}
+
 var commitFlagsStr = `-a
 --all
 Tell the command to automatically stage files that have been modified and deleted, but new files you have not told Git about are not affected.

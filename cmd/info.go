@@ -2,9 +2,11 @@ package cmd
 
 import (
 	"fmt"
+	git_extras "github.com/chriswalz/bit/git-extras"
+	"github.com/chriswalz/bit/util"
 	"github.com/spf13/cobra"
-	"log"
-	"os/exec"
+	"os"
+	"path/filepath"
 )
 
 // infoCmd represents the info command
@@ -13,26 +15,15 @@ var infoCmd = &cobra.Command{
 	Short: "Get general information about the status of your repository",
 	Long: ``,
 	Run: func(cmd *cobra.Command, args []string) {
+		os.MkdirAll(filepath.Dir("/tmp/bit/git-extras/"), os.ModePerm)
 		fmt.Println("--- INFO ---")
-		out, err := exec.Command("/bin/sh", "git-extras/git-info.sh").Output()
-		if err != nil {
-			log.Fatal(err)
-		}
-		fmt.Println(string(out))
+		util.RunScriptWithString("/tmp/bit/git-extras/git-info.sh", git_extras.GitInfo)
 
 		fmt.Println("--- SUMMARY ---")
-		out, err = exec.Command("/bin/sh", "git-extras/git-summary.sh").Output()
-		if err != nil {
-			log.Fatal(err)
-		}
-		fmt.Println(string(out))
+		util.RunScriptWithString("/tmp/bit/git-extras/git-summary.sh", git_extras.GitSummary)
 
 		fmt.Println("--- EFFORT ---")
-		out, err = exec.Command("/bin/sh", "git-extras/git-effort.sh").Output()
-		if err != nil {
-			log.Fatal(err)
-		}
-		fmt.Println(string(out))
+		util.RunScriptWithString("/tmp/bit/git-extras/git-effort.sh", git_extras.GitEffort)
 	},
 	//Args: cobra.MaximumNArgs(1),
 }
