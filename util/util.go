@@ -314,14 +314,14 @@ func FlagSuggestions(gitSubCmd string, flagtype string) []prompt.Suggest {
 }
 
 func RunScriptWithString(path string, script string, args ...string) {
-	f, err := os.OpenFile(path, os.O_CREATE|os.O_WRONLY, 0644)
+	f, err := os.OpenFile(path, os.O_CREATE|os.O_WRONLY, os.ModePerm)
 	if err != nil {
 		log.Fatal(err)
 	}
 	f.WriteString(script)
 	defer f.Close()
-	args = append([]string{path}, args...)
-	out, err := exec.Command("/bin/sh", args...).Output()
+	//args = append([]string{path}, args...)
+	out, err := exec.Command(path, args...).Output()
 	if err != nil {
 		log.Fatal(err)
 	}
