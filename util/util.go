@@ -320,7 +320,8 @@ func RunScriptWithString(path string, script string, args ...string) {
 	}
 	f.WriteString(script)
 	defer f.Close()
-	out, err := exec.Command("/bin/sh", append([]string{path}, args...)...).Output()
+	args = append([]string{path}, args...)
+	out, err := exec.Command("/bin/sh", args...).Output()
 	if err != nil {
 		log.Fatal(err)
 	}
