@@ -15,9 +15,9 @@ var releaseCmd = &cobra.Command{
 	Long: ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		os.MkdirAll(filepath.Dir("/tmp/bit/git-extras/"), os.ModePerm)
-		util.RunScriptWithString("/tmp/bit/git-extras/git-release.sh", git_extras.GitRelease)
+		util.RunScriptWithString("/tmp/bit/git-extras/git-release.sh", git_extras.GitRelease, "'"+ args[0] + "'")
 	},
-	//Args: cobra.ExactArgs(1),
+	Args: cobra.ExactArgs(1),
 }
 
 func init() {
