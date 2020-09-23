@@ -86,3 +86,7 @@ git for-each-ref --sort=-committerdate refs/heads/ refs/remotes --format='%(auth
 git difftool --tool=vimdiff --no-prompt
 
 https://wiki.diasporafoundation.org/Git_workflow
+
+tests
+command completion
+bash history

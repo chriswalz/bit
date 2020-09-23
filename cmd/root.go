@@ -31,7 +31,7 @@ var rootCmd = &cobra.Command{
 			"root":     util.CobraCommandToSuggestions(append(gitCmds, bitCmds...)),
 			"checkout": util.BranchListSuggestions(),
 			"switch":   util.BranchListSuggestions(),
-			"add": util.GitAddSuggestions(),
+			"add":      util.GitAddSuggestions(),
 		}
 		resp := util.SuggestionPrompt("bit ", rootCommandCompleter(completerSuggestionMap))
 		subCommand := resp

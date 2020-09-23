@@ -126,6 +126,15 @@ func BranchList() []Branch {
 	return branches
 }
 
+func AddCommandToShellHistory(cmd string, args []string)  {
+	// not possible??
+	msg, err := exec.Command("/bin/bash", "-c", "history").CombinedOutput()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(msg)
+}
+
 func BranchListSuggestions() []prompt.Suggest {
 	branches := BranchList()
 	var suggestions []prompt.Suggest
@@ -209,6 +218,8 @@ func SuggestionPrompt(prefix string, completer func(d prompt.Document) []prompt.
 		prompt.OptionSelectedSuggestionBGColor(prompt.Yellow),
 		prompt.OptionSuggestionBGColor(prompt.Yellow),
 		prompt.OptionSelectedSuggestionTextColor(prompt.Purple),
+		prompt.OptionDescriptionBGColor(prompt.Black),
+		prompt.OptionDescriptionTextColor(prompt.White),
 		prompt.OptionShowCompletionAtStart(),
 		prompt.OptionCompletionOnDown(),
 		prompt.OptionSwitchKeyBindMode(prompt.CommonKeyBind),
