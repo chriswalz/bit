@@ -1,7 +1,6 @@
 package git_extras
 
-const GitRelease =`
-#!/usr/bin/env bash
+const GitRelease =`#!/usr/bin/env bash
 set -e
 
 hook() {
