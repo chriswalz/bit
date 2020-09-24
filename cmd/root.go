@@ -32,6 +32,10 @@ var rootCmd = &cobra.Command{
 			"checkout": util.BranchListSuggestions(),
 			"switch":   util.BranchListSuggestions(),
 			"add":      util.GitAddSuggestions(),
+			"release": {
+				{Text: "bump", Description: "Increment SemVer from tags and release"},
+				{Text: "<version>", Description: "Name of release version e.g. v0.1.2"},
+						},
 		}
 		resp := util.SuggestionPrompt("bit ", rootCommandCompleter(completerSuggestionMap))
 		subCommand := resp

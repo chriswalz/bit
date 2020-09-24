@@ -90,3 +90,6 @@ https://wiki.diasporafoundation.org/Git_workflow
 tests
 command completion
 bash history
+git-effort failing 
+bit release bump
+man page parsing + flag suggestions for all commands 

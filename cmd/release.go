@@ -14,8 +14,12 @@ var releaseCmd = &cobra.Command{
 	Short: "Generate a production release",
 	Long: ``,
 	Run: func(cmd *cobra.Command, args []string) {
+		arg := args[0]
+		if arg == "bump" {
+			arg = util.GenBumpedSemVersion()
+		}
 		os.MkdirAll(filepath.Dir("/tmp/bit/git-extras/"), os.ModePerm)
-		util.RunScriptWithString("/tmp/bit/git-extras/git-release.sh", git_extras.GitRelease, args[0])
+		util.RunScriptWithString("/tmp/bit/git-extras/git-release.sh", git_extras.GitRelease, arg)
 	},
 	Args: cobra.ExactArgs(1),
 }
