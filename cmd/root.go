@@ -48,7 +48,7 @@ var rootCmd = &cobra.Command{
 				fmt.Println(err)
 				return
 			}
-			err = util.Runwithcolor(parsedArgs)
+			err = util.Runwithcolor("git",parsedArgs)
 			if err != nil {
 				fmt.Println("DEBUG: CMD may not be allow listed")
 			}

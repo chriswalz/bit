@@ -39,13 +39,13 @@ func save(msg string) {
 	if msg == "" {
 		//if ahead of master
 		if util.IsAheadOfCurrent() || !util.CloudBranchExists() {
-			util.Runwithcolor([]string{"commit", "-a", "--amend", "--no-edit"}) // amend if already ahead
+			util.Runwithcolor("git",[]string{"commit", "-a", "--amend", "--no-edit"}) // amend if already ahead
 		} else {
-			util.Runwithcolor([]string{"status", "-sb"})
+			util.Runwithcolor("git",[]string{"status", "-sb"})
 			resp := util.PromptUser("Please provide a description of your changes")
-			util.Runwithcolor([]string{"commit", "-a", "-m " + resp})
+			util.Runwithcolor("git",[]string{"commit", "-a", "-m " + resp})
 		}
 	} else {
-		util.Runwithcolor([]string{"commit", "-a", "-m " + msg})
+		util.Runwithcolor("git",[]string{"commit", "-a", "-m " + msg})
 	}
 }

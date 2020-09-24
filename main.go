@@ -39,7 +39,7 @@ func main() {
 	} else if Find(bitcliCmds, argsWithoutProg[0]) {
 		bitcli()
 	} else {
-		err := util.Runwithcolor(argsWithoutProg)
+		err := util.Runwithcolor("git",argsWithoutProg)
 		if err != nil {
 			fmt.Println("DEBUG: CMD may not be allow listed")
 		}

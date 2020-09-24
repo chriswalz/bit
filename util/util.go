@@ -11,20 +11,19 @@ import (
 	"strings"
 )
 
-func Runwithcolor(args []string) error {
+func Runwithcolor(cmdName string, args []string) error {
 	_, w, err := os.Pipe()
 	if err != nil {
 		panic(err)
 	}
 
-	cmd := exec.Command("git", args...)
+	cmd := exec.Command(cmdName, args...)
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	cmd.ExtraFiles = []*os.File{w}
 
 	err = cmd.Run()
-	//fmt.Println(err)
 	return err
 }
 
@@ -347,11 +346,7 @@ func RunScriptWithString(path string, script string, args ...string) {
 	}
 	f.WriteString(script)
 	defer f.Close()
-	out, err := exec.Command(path, args...).CombinedOutput()
-	if err != nil {
-		log.Fatal(string(out), err)
-	}
-	fmt.Println(string(out))
+	Runwithcolor(path, args)
 }
 
 const addFlagsStr = `-n
