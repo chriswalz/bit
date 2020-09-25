@@ -1,7 +1,8 @@
 package git_extras
 
 const GitSummary =
-`cd "$(git root)" || { echo "Can't cd to top level directory";exit 1; }
+`#!/usr/bin/env bash
+cd "$(git root)" || { echo "Can't cd to top level directory";exit 1; }
 
 SUMMARY_BY_LINE=
 DEDUP_BY_EMAIL=

@@ -346,7 +346,10 @@ func RunScriptWithString(path string, script string, args ...string) {
 	}
 	f.WriteString(script)
 	defer f.Close()
-	Runwithcolor(path, args)
+	err = Runwithcolor(path, args)
+	if err != nil {
+		fmt.Println(err)
+	}
 }
 
 const addFlagsStr = `-n
