@@ -1,4 +1,4 @@
-
+[![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Bit%20-%20a%20modern%20git%20cli%20&url=https://github.com/chriswalz/bit&hashtags=bit,git,cli,developers)
 <p align="center">
 <img
     src="https://user-images.githubusercontent.com/6971318/94226426-96309480-fec5-11ea-929f-34551c5356dd.png"
