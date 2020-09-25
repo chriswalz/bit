@@ -1,3 +1,21 @@
+
+<p align="center">
+<img
+    src="https://user-images.githubusercontent.com/6971318/94226426-96309480-fec5-11ea-929f-34551c5356dd.png"
+    width="800px" border="0" alt="croc">
+<br>
+<a href="https://github.com/chriswalz/bit/tags"><img src="https://img.shields.io/badge/version-v0.3.4-brightgreen.svg?style=flat-square" alt="Version"></a>
+</p>
+
+`bit` is a modernized CLI built on top of git that provides command and --flag suggestions automatic fetch and fast-forwarding along with other niceties:
+
+- command and **flag suggestions** to help you navigate the plethora of options git provides you
+- autocompletion for files and branch names when using `bit add` or `bit checkout`
+- automatic fetch and **branch fast-forwarding** reducing the likelihood of merge conflicts 
+- suggestions **work with git aliases**
+- new commands like `bit sync` that vastly simplify your workflow 
+- commands from git-extras such as *git-release* & *git-info*
+
 # bit
 
 Bit is an experimental simple version control system built on top of git. Bit is super easy to learn and will vastly simplify your development workflow. 
