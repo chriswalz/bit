@@ -2,7 +2,7 @@
 
 Bit is an experimental simple version control system built on top of git. Bit is super easy to learn and will vastly simplify your development workflow. 
 
-At times, you may still want/need to use a git command. You can simply run the git command or run it via bit (e.g. bit rebase -i SHA-HASH) 
+At times, you may still want/need to use a git command. You can simply run the git command or run it via bit (e.g. bit rebase -i <SHA>) of course you can call git as well 
 
 ## Installation
 
