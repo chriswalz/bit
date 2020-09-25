@@ -273,7 +273,7 @@ func AllGitSubCommands() (cc []*cobra.Command) {
 	return cc
 }
 
-func FlagSuggestions(gitSubCmd string, flagtype string) []prompt.Suggest {
+func FlagSuggestionsForCommand(gitSubCmd string, flagtype string) []prompt.Suggest {
 	str := ""
 
 	// git help pull | col -b > man.txt
@@ -1346,11 +1346,6 @@ Do not set up "upstream" configuration, even if the branch.autoSetupMerge config
 --guess
 --no-guess
 If <branch> is not found but there does exist a tracking branch in exactly one remote (call it <remote>) with a matching name, treat as equivalent to
-
-$ git checkout -b <branch> --track <remote>/<branch>
-If the branch exists in multiple remotes and one of them is named by the checkout.defaultRemote configuration variable, we’ll use that one for the purposes of disambiguation, even if the <branch> isn’t unique across all remotes. Set it to e.g. checkout.defaultRemote=origin to always checkout remote branches from there if <branch> is ambiguous but exists on the origin remote. See also checkout.defaultRemote in git-config[1].
-
-Use --no-guess to disable this.
 
 -l
 Create the new branch’s reflog; see git-branch[1] for details.

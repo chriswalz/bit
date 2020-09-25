@@ -83,12 +83,18 @@ func rootCommandCompleter(suggestionMap map[string][]prompt.Suggest) func(d prom
 			suggestions = suggestionMap["root"]
 		} else {
 			split := strings.Split(d.Text, " ")
-			prev := split[0]
-			curr := split[1]
+			filterFlags := make([]string, 0, len(split))
+			for i, v := range split {
+				if !strings.HasPrefix(v, "-") || i == len(split) - 1{
+					filterFlags = append(filterFlags, v)
+				}
+			}
+			prev := filterFlags[0] // git command or sub command (not a flag)
+			curr := filterFlags[1] // current argument or flag
 			if strings.HasPrefix(curr, "--") {
-				suggestions = util.FlagSuggestions(prev, "--")
+				suggestions = util.FlagSuggestionsForCommand(prev, "--")
 			} else if strings.HasPrefix(curr, "-") {
-				suggestions = util.FlagSuggestions(prev, "-")
+				suggestions = util.FlagSuggestionsForCommand(prev, "-")
 			} else if suggestionMap[prev] != nil {
 				suggestions = suggestionMap[prev]
 			}
