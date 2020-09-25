@@ -15,12 +15,7 @@
 - suggestions **work with git aliases**
 - new commands like `bit sync` that vastly simplify your workflow 
 - commands from git-extras such as *git-release* & *git-info*
-
-# bit
-
-Bit is an experimental simple version control system built on top of git. Bit is super easy to learn and will vastly simplify your development workflow. 
-
-At times, you may still want/need to use a git command. You can simply run the git command or run it via bit (e.g. bit rebase -i <SHA>) of course you can call git as well 
+- fully compatible with git allowing you to fallback to git if need be.  
 
 ## Installation
 
