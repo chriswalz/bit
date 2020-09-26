@@ -25,7 +25,7 @@ var saveCmd = &cobra.Command{
 // add comment
 
 func init() {
-	rootCmd.AddCommand(saveCmd)
+	shellCmd.AddCommand(saveCmd)
 	// saveCmd.PersistentFlags().String("foo", "", "A help for foo")
 	// saveCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

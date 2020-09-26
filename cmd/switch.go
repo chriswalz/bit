@@ -69,7 +69,7 @@ For creating a new branch it's the same command! You'll simply be prompted to co
 }
 
 func init() {
-	rootCmd.AddCommand(switchCmd)
+	shellCmd.AddCommand(switchCmd)
 	// switchCmd.PersistentFlags().String("foo", "", "A help for foo")
 	// switchCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

@@ -12,8 +12,8 @@ import (
 
 var cfgFile string
 
-// rootCmd represents the base command when called without any subcommands
-var rootCmd = &cobra.Command{
+// shellCmd represents the base command when called without any subcommands
+var shellCmd = &cobra.Command{
 	Use:   "bit",
 	Short: "Bit is Git with a simple interface. Plus you can still use all the old git commands",
 	Long:  `v0.3.3`,
@@ -28,7 +28,7 @@ var rootCmd = &cobra.Command{
 		}
 		completerSuggestionMap := map[string][]prompt.Suggest{
 			"":         {},
-			"root":     util.CobraCommandToSuggestions(append(gitCmds, bitCmds...)),
+			"shell":     util.CobraCommandToSuggestions(append(gitCmds, bitCmds...)),
 			"checkout": util.BranchListSuggestions(),
 			"switch":   util.BranchListSuggestions(),
 			"add":      util.GitAddSuggestions(),
@@ -37,7 +37,7 @@ var rootCmd = &cobra.Command{
 				{Text: "<version>", Description: "Name of release version e.g. v0.1.2"},
 						},
 		}
-		resp := util.SuggestionPrompt("bit ", rootCommandCompleter(completerSuggestionMap))
+		resp := util.SuggestionPrompt("bit ", shellCommandCompleter(completerSuggestionMap))
 		subCommand := resp
 		if strings.Index(resp, " ") > 0 {
 			subCommand = subCommand[0:strings.Index(resp, " ")]
@@ -64,23 +64,23 @@ var rootCmd = &cobra.Command{
 	},
 }
 
-// Execute adds all child commands to the root command and sets flags appropriately.
-// This is called by main.main(). It only needs to happen once to the rootCmd.
+// Execute adds all child commands to the shell command and sets flags appropriately.
+// This is called by main.main(). It only needs to happen once to the shellCmd.
 func Execute() {
-	if err := rootCmd.Execute(); err != nil {
+	if err := shellCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
 }
 
-func rootCommandCompleter(suggestionMap map[string][]prompt.Suggest) func(d prompt.Document) []prompt.Suggest {
+func shellCommandCompleter(suggestionMap map[string][]prompt.Suggest) func(d prompt.Document) []prompt.Suggest {
 	return func(d prompt.Document) []prompt.Suggest {
 		//fmt.Println(d.GetWordBeforeCursor())
 		// only 1 command
 		var suggestions []prompt.Suggest
 		if len(d.GetWordBeforeCursor()) == len(d.Text) {
 			//fmt.Println("same")
-			suggestions = suggestionMap["root"]
+			suggestions = suggestionMap["shell"]
 		} else {
 			split := strings.Split(d.Text, " ")
 			filterFlags := make([]string, 0, len(split))

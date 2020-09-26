@@ -25,5 +25,5 @@ var releaseCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(releaseCmd)
+	shellCmd.AddCommand(releaseCmd)
 }

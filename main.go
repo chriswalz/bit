@@ -34,12 +34,10 @@ func Find(slice []string, val string) bool {
 func main() {
 	argsWithoutProg := os.Args[1:]
 	bitcliCmds := []string{"save", "sync", "version", "switch", "help", "info", "release"}
-	if len(argsWithoutProg) == 0 {
-		bitcli()
-	} else if Find(bitcliCmds, argsWithoutProg[0]) {
+	if len(argsWithoutProg) == 0 || Find(bitcliCmds, argsWithoutProg[0]){
 		bitcli()
 	} else {
-		err := util.Runwithcolor("git",argsWithoutProg)
+		err := util.Runwithcolor("git", argsWithoutProg)
 		if err != nil {
 			fmt.Println("DEBUG: CMD may not be allow listed")
 		}
