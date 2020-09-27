@@ -2,6 +2,7 @@
 package main
 
 import (
+	"github.com/chriswalz/bit/cmd"
 	"github.com/posener/complete/v2"
 	"github.com/posener/complete/v2/predict"
 )
@@ -50,54 +51,29 @@ func main() {
 	//	Args: goFiles,
 	//}
 	//
-	//vet := &complete.Command{
-	//	Flags: map[string]complete.Predictor{
-	//		"n": predict.Nothing,
-	//		"x": predict.Nothing,
-	//	},
-	//	Args: anyGo,
-	//}
-	//
-	//list := &complete.Command{
-	//	Flags: map[string]complete.Predictor{
-	//		"e":    predict.Nothing,
-	//		"f":    predict.Something,
-	//		"json": predict.Nothing,
-	//	},
-	//	Args: predict.Or(anyPackage, ellipsis),
-	//}
 
-	//doc := &complete.Command{
-	//	Flags: map[string]complete.Predictor{
-	//		"c":   predict.Nothing,
-	//		"cmd": predict.Nothing,
-	//		"u":   predict.Nothing,
-	//	},
-	//	Args: anyPackage,
-	//}
-	//
-	//clean := &complete.Command{
-	//	Args: predict.Or(anyPackage, ellipsis),
-	//}
-	//
-	//env := &complete.Command{
-	//	Args: predict.Something,
-	//}
-	//
-	//fix := &complete.Command{
-	//	Args: anyGo,
-	//}
+	branchCompletion := &complete.Command{
+		Args: complete.PredictFunc(func(prefix string) []string{
+			branches := cmd.BranchListSuggestions()
+			completion := make([]string, len(branches))
+			for i, v := range branches {
+				completion[i] = v.Text
+			}
+			return completion
+		}),
+	}
+
+	cmds := cmd.AllBitAndGitSubCommands(cmd.ShellCmd)
+	completionSubCmdMap := map[string]*complete.Command{}
+	for _, v := range cmds {
+		completionSubCmdMap[v.Name()] = &complete.Command{}
+		if v.Name() == "checkout" || v.Name() == "co" || v.Name() == "switch" {
+			completionSubCmdMap[v.Name()] = branchCompletion
+		}
+	}
 
 	gogo := &complete.Command{
-		Sub: map[string]*complete.Command{
-			"checkout": {},
-			"status": {},
-			"pull": {},
-			"push": {},
-			"stash": {},
-			"commit": {},
-			"add": {},
-		},
+		Sub: completionSubCmdMap,
 	}
 
 	gogo.Complete("bit")

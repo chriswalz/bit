@@ -1,4 +1,4 @@
-package util
+package cmd
 
 import (
 	"bufio"
@@ -271,6 +271,21 @@ func AllGitSubCommands() (cc []*cobra.Command) {
 	}
 
 	return cc
+}
+
+func AllBitSubCommands(rootCmd *cobra.Command) ([]*cobra.Command, map[string]*cobra.Command) {
+	bitCmds := rootCmd.Commands()
+	bitCmdMap := map[string]*cobra.Command{}
+	for _, bitCmd := range bitCmds {
+		bitCmdMap[bitCmd.Name()] = bitCmd
+	}
+	return bitCmds, bitCmdMap
+}
+
+func AllBitAndGitSubCommands(rootCmd *cobra.Command) (cc []*cobra.Command) {
+	gitCmds := AllGitSubCommands()
+	bitCmds, _ := AllBitSubCommands(rootCmd)
+	return append(gitCmds, bitCmds...)
 }
 
 func FlagSuggestionsForCommand(gitSubCmd string, flagtype string) []prompt.Suggest {

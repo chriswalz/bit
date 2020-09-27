@@ -18,7 +18,6 @@ package main
 import (
 	"fmt"
 	bitcmd "github.com/chriswalz/bit/cmd"
-	"github.com/chriswalz/bit/util"
 	"os"
 )
 
@@ -37,7 +36,7 @@ func main() {
 	if len(argsWithoutProg) == 0 || find(bitcliCmds, argsWithoutProg[0]) {
 		bitcli()
 	} else {
-		err := util.Runwithcolor("git", argsWithoutProg)
+		err := bitcmd.Runwithcolor("git", argsWithoutProg)
 		if err != nil {
 			fmt.Println("DEBUG: CMD may not be allow listed")
 		}

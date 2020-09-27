@@ -21,7 +21,8 @@
 ## Installation
 
 
-`curl -sf https://gobinaries.com/chriswalz/bit | sh`
+`curl -sf https://gobinaries.com/chriswalz/bit | sh;
+curl -sf https://gobinaries.com/chriswalz/bit/bitcomplete | sh && COMP_INSTALL=1 bitcomplete`
 
 Verify installation with:
 

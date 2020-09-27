@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/chriswalz/bit/util"
 	"github.com/spf13/cobra"
 	"strings"
 )
@@ -25,27 +24,27 @@ var saveCmd = &cobra.Command{
 // add comment
 
 func init() {
-	shellCmd.AddCommand(saveCmd)
+	ShellCmd.AddCommand(saveCmd)
 	// saveCmd.PersistentFlags().String("foo", "", "A help for foo")
 	// saveCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
 func save(msg string) {
-	if util.NothingToCommit() {
+	if NothingToCommit() {
 		fmt.Println("nothing to save or commit")
 		return
 	}
 
 	if msg == "" {
 		//if ahead of master
-		if util.IsAheadOfCurrent() || !util.CloudBranchExists() {
-			util.Runwithcolor("git", []string{"commit", "-a", "--amend", "--no-edit"}) // amend if already ahead
+		if IsAheadOfCurrent() || !CloudBranchExists() {
+			Runwithcolor("git", []string{"commit", "-a", "--amend", "--no-edit"}) // amend if already ahead
 		} else {
-			util.Runwithcolor("git", []string{"status", "-sb"})
-			resp := util.PromptUser("Please provide a description of your changes")
-			util.Runwithcolor("git", []string{"commit", "-a", "-m " + resp})
+			Runwithcolor("git", []string{"status", "-sb"})
+			resp := PromptUser("Please provide a description of your changes")
+			Runwithcolor("git", []string{"commit", "-a", "-m " + resp})
 		}
 	} else {
-		util.Runwithcolor("git", []string{"commit", "-a", "-m " + msg})
+		Runwithcolor("git", []string{"commit", "-a", "-m " + msg})
 	}
 }

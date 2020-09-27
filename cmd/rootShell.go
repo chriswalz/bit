@@ -3,7 +3,6 @@ package cmd
 import (
 	"fmt"
 	"github.com/c-bata/go-prompt"
-	"github.com/chriswalz/bit/util"
 	"github.com/spf13/cobra"
 	"os"
 	"strings"
@@ -11,35 +10,26 @@ import (
 
 var cfgFile string
 
-// shellCmd represents the base command when called without any subcommands
-var shellCmd = &cobra.Command{
+// ShellCmd represents the base command when called without any subcommands
+var ShellCmd = &cobra.Command{
 	Use:   "bit",
 	Short: "Bit is Git with a simple interface. Plus you can still use all the old git commands",
 	Long:  `v0.3.11`,
-	ValidArgs: []string{"checkout", "status", "stash"},
-	//ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-	//	//gitCmds := util.AllGitSubCommands()
-	//	return []string{"checkout", "status", "stash"}, cobra.ShellCompDirectiveDefault
-	//},
 	Run: func(cmd *cobra.Command, args []string) {
-		gitCmds := util.AllGitSubCommands()
-		bitCmds := cmd.Commands()
-		bitCmdMap := map[string]*cobra.Command{}
-		for _, bitCmd := range bitCmds {
-			bitCmdMap[bitCmd.Name()] = bitCmd
-		}
+		_, bitCmdMap := AllBitSubCommands(cmd)
+		allBitCmds := AllBitAndGitSubCommands(cmd)
 		completerSuggestionMap := map[string][]prompt.Suggest{
 			"":         {},
-			"shell":    util.CobraCommandToSuggestions(append(gitCmds, bitCmds...)),
-			"checkout": util.BranchListSuggestions(),
-			"switch":   util.BranchListSuggestions(),
-			"add":      util.GitAddSuggestions(),
+			"shell":    CobraCommandToSuggestions(allBitCmds),
+			"checkout": BranchListSuggestions(),
+			"switch":   BranchListSuggestions(),
+			"add":      GitAddSuggestions(),
 			"release": {
 				{Text: "bump", Description: "Increment SemVer from tags and release"},
 				{Text: "<version>", Description: "Name of release version e.g. v0.1.2"},
 			},
 		}
-		resp := util.SuggestionPrompt("bit ", shellCommandCompleter(completerSuggestionMap))
+		resp := SuggestionPrompt("bit ", shellCommandCompleter(completerSuggestionMap))
 		subCommand := resp
 		if strings.Index(resp, " ") > 0 {
 			subCommand = subCommand[0:strings.Index(resp, " ")]
@@ -50,7 +40,7 @@ var shellCmd = &cobra.Command{
 				fmt.Println(err)
 				return
 			}
-			err = util.Runwithcolor("git", parsedArgs)
+			err = Runwithcolor("git", parsedArgs)
 			if err != nil {
 				fmt.Println("DEBUG: CMD may not be allow listed")
 			}
@@ -67,9 +57,9 @@ var shellCmd = &cobra.Command{
 }
 
 // Execute adds all child commands to the shell command and sets flags appropriately.
-// This is called by main.main(). It only needs to happen once to the shellCmd.
+// This is called by main.main(). It only needs to happen once to the ShellCmd.
 func Execute() {
-	if err := shellCmd.Execute(); err != nil {
+	if err := ShellCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
@@ -94,9 +84,9 @@ func shellCommandCompleter(suggestionMap map[string][]prompt.Suggest) func(d pro
 			prev := filterFlags[0] // git command or sub command (not a flag)
 			curr := filterFlags[1] // current argument or flag
 			if strings.HasPrefix(curr, "--") {
-				suggestions = util.FlagSuggestionsForCommand(prev, "--")
+				suggestions = FlagSuggestionsForCommand(prev, "--")
 			} else if strings.HasPrefix(curr, "-") {
-				suggestions = util.FlagSuggestionsForCommand(prev, "-")
+				suggestions = FlagSuggestionsForCommand(prev, "-")
 			} else if suggestionMap[prev] != nil {
 				suggestions = suggestionMap[prev]
 			}
