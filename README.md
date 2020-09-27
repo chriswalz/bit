@@ -5,6 +5,7 @@
     width="800px" border="0" alt="croc">
 <br>
 <a href="https://github.com/chriswalz/bit/tags"><img src="https://img.shields.io/badge/version-v0.3.4-brightgreen.svg?style=flat-square" alt="Version"></a>
+<a href="https://github.com/chriswalz/bit/tags"><img src="https://goreportcard.com/badge/github.com/chriswalz/bit" alt="Version"></a>
 </p>
 
 `bit` is a modernized git CLI built on top of git that provides command and --flag suggestions along with other niceties:
