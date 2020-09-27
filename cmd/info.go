@@ -13,7 +13,7 @@ import (
 var infoCmd = &cobra.Command{
 	Use:   "info",
 	Short: "Get general information about the status of your repository",
-	Long: ``,
+	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		os.MkdirAll(filepath.Dir("/tmp/bit/git-extras/"), os.ModePerm)
 		fmt.Println("--- INFO ---")

@@ -86,16 +86,16 @@ effort() {
     local color reset_color commits len dot f_dot i msg active
     reset_color=""
     test "$to_tty" = true && reset_color="$(tputq sgr0)"
-    commit_dates=`+ "`dates \"$path\"`" + `
+    commit_dates=` + "`dates \"$path\"`" + `
     [ $? -gt 0 ] && exit 255
 
     # Ensure it's not just an empty line
-    if [ -z "`+ "`head -c 1 <<<$(echo $commit_dates)`"+`" ]
+    if [ -z "` + "`head -c 1 <<<$(echo $commit_dates)`" + `" ]
     then
       exit 0
     fi
 
-    commits=`+"`wc -l <<<\"$(echo \"$commit_dates\")\"`"+`
+    commits=` + "`wc -l <<<\"$(echo \"$commit_dates\")\"`" + `
     color='90'
 
     # ignore <= --above
@@ -114,7 +114,7 @@ effort() {
     msg=$(printf "  ${color}%s %-10d" "$f_dot" $commits)
 
     # active days
-    active=`+"`active_days \"$commit_dates\"`"+`
+    active=` + "`active_days \"$commit_dates\"`" + `
     color_for $(( $active - $above ))
     msg="$msg $(printf "${color} %d${reset_color}\n" $active)"
     echo "$msg"
@@ -183,8 +183,8 @@ export args_to_git_log
 
 if test "${#paths}" -eq 0; then
   save_ifs=$IFS
-  IFS=`+"`echo -en \"\\n\\b\"`"+`
-  paths=(`+"`git ls-files`"+`)
+  IFS=` + "`echo -en \"\\n\\b\"`" + `
+  paths=(` + "`git ls-files`" + `)
   IFS=$save_ifs
   unset save_ifs
 fi

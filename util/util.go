@@ -130,7 +130,7 @@ func GenBumpedSemVersion() string {
 	if err != nil {
 		fmt.Println(err)
 	}
-		out := string(msg)
+	out := string(msg)
 	return out
 }
 
@@ -290,17 +290,17 @@ func FlagSuggestionsForCommand(gitSubCmd string, flagtype string) []prompt.Sugge
 	//	//return []prompt.Suggest{}
 	//}
 	flagMap := map[string]string{
-		"add":   addFlagsStr,
-		"diff":   diffFlagsStr,
-		"status": statusFlagsStr,
-		"commit": commitFlagsStr,
-		"branch":  branchFlagsStr,
-		"tags": tagFlagsStr,
+		"add":      addFlagsStr,
+		"diff":     diffFlagsStr,
+		"status":   statusFlagsStr,
+		"commit":   commitFlagsStr,
+		"branch":   branchFlagsStr,
+		"tags":     tagFlagsStr,
 		"checkout": checkoutFlagsStr,
-		"merge": mergeFlagsStr,
-		"pull": pullFlagsStr,
-		"push":   pushFlagsStr,
-		"log": logFlagsStr,
+		"merge":    mergeFlagsStr,
+		"pull":     pullFlagsStr,
+		"push":     pushFlagsStr,
+		"log":      logFlagsStr,
 	}
 	str = flagMap[gitSubCmd]
 	if str == "" {

@@ -15,7 +15,7 @@ sync origin master
 sync local-branch
 `,
 	Run: func(cmd *cobra.Command, args []string) {
-		util.Runwithcolor("git",[]string{"fetch"})
+		util.Runwithcolor("git", []string{"fetch"})
 
 		// squash specific branch into current branch?
 		if len(args) == 1 {
@@ -24,37 +24,37 @@ sync local-branch
 				fmt.Println("Not supported")
 				return
 			}
-			util.Runwithcolor("git",[]string{"pull", "--ff-only"})
-			util.Runwithcolor("git",[]string{"merge", "--squash", branch})
+			util.Runwithcolor("git", []string{"pull", "--ff-only"})
+			util.Runwithcolor("git", []string{"merge", "--squash", branch})
 
 		}
 		// if possibly squashed
 		if util.IsDiverged() {
-			util.Runwithcolor("git",[]string{"status", "-sb"})
+			util.Runwithcolor("git", []string{"status", "-sb"})
 			resp := util.PromptUser("Force (destructive) push to origin/" + util.CurrentBranch() + "? Y/n")
 			if util.IsYes(resp) {
-				util.Runwithcolor("git",[]string{"push", "--force-with-lease"})
+				util.Runwithcolor("git", []string{"push", "--force-with-lease"})
 			}
 			return
 		}
 		if !util.CloudBranchExists() {
-			util.Runwithcolor("git",[]string{"push", "--set-upstream", "origin", util.CurrentBranch()})
+			util.Runwithcolor("git", []string{"push", "--set-upstream", "origin", util.CurrentBranch()})
 			save("")
-			util.Runwithcolor("git",[]string{"push"})
+			util.Runwithcolor("git", []string{"push"})
 			return
 		}
 		save("")
 		if !util.CloudBranchExists() {
-			util.Runwithcolor("git",[]string{"push", "--set-upstream", "origin", util.CurrentBranch()})
+			util.Runwithcolor("git", []string{"push", "--set-upstream", "origin", util.CurrentBranch()})
 		}
 		if util.IsAheadOfCurrent() {
-			util.Runwithcolor("git",[]string{"push"})
+			util.Runwithcolor("git", []string{"push"})
 		} else {
-			util.Runwithcolor("git",[]string{"pull", "-r"})
+			util.Runwithcolor("git", []string{"pull", "-r"})
 			if len(args) > 0 {
-				util.Runwithcolor("git",append([]string{"pull", "-r"}, args...))
+				util.Runwithcolor("git", append([]string{"pull", "-r"}, args...))
 			}
-			util.Runwithcolor("git",[]string{"push"})
+			util.Runwithcolor("git", []string{"push"})
 		}
 
 	},

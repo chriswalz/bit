@@ -1,7 +1,6 @@
 package git_extras
 
-const GitSummary =
-`#!/usr/bin/env bash
+const GitSummary = `#!/usr/bin/env bash
 cd "$(git root)" || { echo "Can't cd to top level directory";exit 1; }
 
 SUMMARY_BY_LINE=

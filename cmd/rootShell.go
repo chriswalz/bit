@@ -16,13 +16,12 @@ var cfgFile string
 var shellCmd = &cobra.Command{
 	Use:   "bit",
 	Short: "Bit is Git with a simple interface. Plus you can still use all the old git commands",
-	Long:  `v0.3.3`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-		//gitCmds := util.AllGitSubCommands()
-		return []string{"checkout", "status", "stash"}, cobra.ShellCompDirectiveDefault
-	},
+	Long:  `v0.3.11`,
+	ValidArgs: []string{"checkout", "status", "stash"},
+	//ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	//	//gitCmds := util.AllGitSubCommands()
+	//	return []string{"checkout", "status", "stash"}, cobra.ShellCompDirectiveDefault
+	//},
 	Run: func(cmd *cobra.Command, args []string) {
 		gitCmds := util.AllGitSubCommands()
 		bitCmds := cmd.Commands()
@@ -32,14 +31,14 @@ var shellCmd = &cobra.Command{
 		}
 		completerSuggestionMap := map[string][]prompt.Suggest{
 			"":         {},
-			"shell":     util.CobraCommandToSuggestions(append(gitCmds, bitCmds...)),
+			"shell":    util.CobraCommandToSuggestions(append(gitCmds, bitCmds...)),
 			"checkout": util.BranchListSuggestions(),
 			"switch":   util.BranchListSuggestions(),
 			"add":      util.GitAddSuggestions(),
 			"release": {
 				{Text: "bump", Description: "Increment SemVer from tags and release"},
 				{Text: "<version>", Description: "Name of release version e.g. v0.1.2"},
-						},
+			},
 		}
 		resp := util.SuggestionPrompt("bit ", shellCommandCompleter(completerSuggestionMap))
 		subCommand := resp
@@ -52,7 +51,7 @@ var shellCmd = &cobra.Command{
 				fmt.Println(err)
 				return
 			}
-			err = util.Runwithcolor("git",parsedArgs)
+			err = util.Runwithcolor("git", parsedArgs)
 			if err != nil {
 				fmt.Println("DEBUG: CMD may not be allow listed")
 			}
@@ -89,7 +88,7 @@ func shellCommandCompleter(suggestionMap map[string][]prompt.Suggest) func(d pro
 			split := strings.Split(d.Text, " ")
 			filterFlags := make([]string, 0, len(split))
 			for i, v := range split {
-				if !strings.HasPrefix(v, "-") || i == len(split) - 1{
+				if !strings.HasPrefix(v, "-") || i == len(split)-1 {
 					filterFlags = append(filterFlags, v)
 				}
 			}

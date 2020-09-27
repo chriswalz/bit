@@ -12,7 +12,7 @@ import (
 var releaseCmd = &cobra.Command{
 	Use:   "release",
 	Short: "Generate a production release",
-	Long: ``,
+	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		arg := args[0]
 		if arg == "bump" {
