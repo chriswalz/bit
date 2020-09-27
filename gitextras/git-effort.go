@@ -1,5 +1,5 @@
-package git_extras
-
+package gitextras
+// GitEffort is the git-effort bash script from git-extras
 const GitEffort = `#!/usr/bin/env bash
 
 tmp=$(git_extra_mktemp)

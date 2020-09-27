@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	git_extras "github.com/chriswalz/bit/git-extras"
+	"github.com/chriswalz/bit/gitextras"
 	"github.com/chriswalz/bit/util"
 	"github.com/spf13/cobra"
 	"os"
@@ -19,7 +19,7 @@ var releaseCmd = &cobra.Command{
 			arg = util.GenBumpedSemVersion()
 		}
 		os.MkdirAll(filepath.Dir("/tmp/bit/git-extras/"), os.ModePerm)
-		util.RunScriptWithString("/tmp/bit/git-extras/git-release.sh", git_extras.GitRelease, arg)
+		util.RunScriptWithString("/tmp/bit/git-extras/git-release.sh", gitextras.GitRelease, arg)
 	},
 	Args: cobra.ExactArgs(1),
 }

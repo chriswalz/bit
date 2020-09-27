@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"errors"
 	"fmt"
 	"github.com/c-bata/go-prompt"
 	"github.com/chriswalz/bit/util"
@@ -162,7 +161,7 @@ func parseCommandLine(command string) ([]string, error) {
 	}
 
 	if state == "quotes" {
-		return []string{}, errors.New(fmt.Sprintf("Unclosed quote in command line: %s", command))
+		return []string{}, fmt.Errorf("Unclosed quote in command line: %s", command)
 	}
 
 	if current != "" {

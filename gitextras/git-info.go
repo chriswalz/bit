@@ -1,5 +1,6 @@
-package git_extras
+package gitextras
 
+// GitInfo is the git-info bash script from git-extras
 const GitInfo = `#!/usr/bin/env bash
 GREEN="$(tput setaf 2)"
 NORMAL="$(tput sgr0)"

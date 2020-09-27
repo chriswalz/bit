@@ -1,5 +1,6 @@
-package git_extras
+package gitextras
 
+// GitRelease is the git-release bash script from git-extras
 const GitRelease = `#!/usr/bin/env bash
 set -e
 
