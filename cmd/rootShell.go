@@ -19,6 +19,10 @@ var shellCmd = &cobra.Command{
 	Long:  `v0.3.3`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
+	ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		//gitCmds := util.AllGitSubCommands()
+		return []string{"checkout", "status", "stash"}, cobra.ShellCompDirectiveDefault
+	},
 	Run: func(cmd *cobra.Command, args []string) {
 		gitCmds := util.AllGitSubCommands()
 		bitCmds := cmd.Commands()
