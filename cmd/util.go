@@ -311,7 +311,7 @@ func AllBitAndGitSubCommands(rootCmd *cobra.Command) (cc []*cobra.Command) {
 	gitCmds := AllGitSubCommands()
 	bitCmds, _ := AllBitSubCommands(rootCmd)
 	commonCommands := CommonCommandsList()
-	return concatCopyPreAllocate([][]*cobra.Command{gitAliases, gitCmds, bitCmds, commonCommands})
+	return concatCopyPreAllocate([][]*cobra.Command{commonCommands, gitCmds, bitCmds, gitAliases})
 }
 
 func concatCopyPreAllocate(slices [][]*cobra.Command) []*cobra.Command {
@@ -414,6 +414,10 @@ func CommonCommandsList() []*cobra.Command {
 		{
 			Use:        "commit -am \"",
 			Short: "Commit all tracked files",
+		},
+		{
+			Use:        "commit -a --amend --no-edit",
+			Short: "Amend most recent commit with new changes",
 		},
 	}
 }
