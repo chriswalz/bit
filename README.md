@@ -25,7 +25,7 @@
 ## install bit cli
 curl -sf https://gobinaries.com/chriswalz/bit | sh;
 ## add autocompletion
-curl -sf https://gobinaries.com/chriswalz/bit/bitcomplete | sh && COMP_INSTALL=1 bitcomplet
+curl -sf https://gobinaries.com/chriswalz/bit/bitcomplete | sh && COMP_INSTALL=1 bitcomplete
 ```
 
 Verify installation with:
