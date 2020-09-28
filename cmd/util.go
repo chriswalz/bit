@@ -120,6 +120,9 @@ func BranchList() []Branch {
 			Name:         cols[3],
 			RelativeDate: list[i][strings.Index(list[i], "("):],
 		}
+		if b.Name == "origin/master" || b.Name == "origin/HEAD" {
+			continue
+		}
 		branches = append(branches, b)
 	}
 	return branches
@@ -202,7 +205,7 @@ func CobraCommandToSuggestions(cmds []*cobra.Command) []prompt.Suggest {
 	var suggestions []prompt.Suggest
 	for _, branch := range cmds {
 		suggestions = append(suggestions, prompt.Suggest{
-			Text:        branch.Name(),
+			Text:        branch.Use,
 			Description: branch.Short,
 		})
 	}
@@ -252,6 +255,27 @@ func SuggestionPrompt(prefix string, completer func(d prompt.Document) []prompt.
 	return branchName
 }
 
+func AllGitAliases() (cc []*cobra.Command) {
+	msg, err := exec.Command("git", "config", "--get-regexp", "alias").CombinedOutput()
+	if err != nil {
+		fmt.Println(err)
+	}
+	aliases := strings.Split(string(msg), "\n")
+	for _, alias := range aliases {
+		if alias == "" {
+			continue
+		}
+		split := strings.Fields(strings.TrimSpace(alias)[6:])
+		c := cobra.Command{
+			Use:   split[0],
+			Short: strings.Join(split[1:], " "),
+		}
+		cc = append(cc, &c)
+	}
+
+	return cc
+}
+
 func AllGitSubCommands() (cc []*cobra.Command) {
 	msg, err := exec.Command("git", "help", "-a").CombinedOutput()
 	if err != nil {
@@ -283,9 +307,24 @@ func AllBitSubCommands(rootCmd *cobra.Command) ([]*cobra.Command, map[string]*co
 }
 
 func AllBitAndGitSubCommands(rootCmd *cobra.Command) (cc []*cobra.Command) {
+	gitAliases := AllGitAliases()
 	gitCmds := AllGitSubCommands()
 	bitCmds, _ := AllBitSubCommands(rootCmd)
-	return append(gitCmds, bitCmds...)
+	commonCommands := CommonCommandsList()
+	return concatCopyPreAllocate([][]*cobra.Command{gitAliases, gitCmds, bitCmds, commonCommands})
+}
+
+func concatCopyPreAllocate(slices [][]*cobra.Command) []*cobra.Command {
+	var totalLen int
+	for _, s := range slices {
+		totalLen += len(s)
+	}
+	tmp := make([]*cobra.Command, totalLen)
+	var i int
+	for _, s := range slices {
+		i += copy(tmp[i:], s)
+	}
+	return tmp
 }
 
 func FlagSuggestionsForCommand(gitSubCmd string, flagtype string) []prompt.Suggest {
@@ -352,6 +391,31 @@ func FlagSuggestionsForCommand(gitSubCmd string, flagtype string) []prompt.Sugge
 		//log.Println(list[i])
 	}
 	return suggestions
+}
+
+func CommonCommandsList() []*cobra.Command {
+	return []*cobra.Command{
+		{
+			Use:        "pull --rebase",
+			Short: "Rebase on origin branch",
+		},
+		{
+			Use:        "push --force-with-lease",
+			Short: "force push with a safety net",
+		},
+		{
+			Use:        "stash pop",
+			Short: "Use most recently stashed changes",
+		},
+		{
+			Use:        "add -u",
+			Short: "Add all modified or deleted files to Staging Area",
+		},
+		{
+			Use:        "commit -am \"",
+			Short: "Commit all tracked files",
+		},
+	}
 }
 
 func RunScriptWithString(path string, script string, args ...string) {
