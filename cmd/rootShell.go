@@ -29,8 +29,11 @@ var ShellCmd = &cobra.Command{
 				{Text: "<version>", Description: "Name of release version e.g. v0.1.2"},
 			},
 		}
-		resp := SuggestionPrompt("bit ", shellCommandCompleter(completerSuggestionMap))
+		resp := SuggestionPrompt("> bit ", shellCommandCompleter(completerSuggestionMap))
 		subCommand := resp
+		if subCommand == "" {
+			return
+		}
 		if strings.Index(resp, " ") > 0 {
 			subCommand = subCommand[0:strings.Index(resp, " ")]
 		}

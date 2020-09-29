@@ -9,5 +9,7 @@ require (
 	github.com/posener/complete/v2 v2.0.1-alpha.12
 	github.com/posener/script v1.1.5 // indirect
 	github.com/spf13/cobra v1.0.0
+	github.com/stretchr/testify v1.4.0
+	github.com/thoas/go-funk v0.7.0 // indirect
 	gopkg.in/yaml.v2 v2.2.4 // indirect
 )

@@ -237,16 +237,14 @@ func SuggestionPrompt(prefix string, completer func(d prompt.Document) []prompt.
 		prompt.OptionShowCompletionAtStart(),
 		prompt.OptionCompletionOnDown(),
 		prompt.OptionSwitchKeyBindMode(prompt.CommonKeyBind),
-		prompt.OptionAddKeyBind(prompt.KeyBind{
+		/*prompt.OptionAddKeyBind(prompt.KeyBind{
 			Key: prompt.ControlC,
 			Fn: func(b *prompt.Buffer) {
-				err := os.Stdin.Close()
-				log.Println(err)
-				err = os.Stdin.Close()
-				log.Println(err)
-				os.Exit(1)
+				os.Stdin.WriteString("exit\n")
+				//err := os.Stdin.Close()
+				//os.Exit(1)
 			},
-		}),
+		}), */
 	)
 	branchName := strings.TrimSpace(result)
 	if strings.HasPrefix(result, "origin/") {
