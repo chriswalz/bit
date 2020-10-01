@@ -106,6 +106,14 @@ func StashableChanges() bool {
 	return strings.Contains(string(msg), "Changes to be committed:") || strings.Contains(string(msg), "Changes not staged for commit:")
 }
 
+func MostRecentCommonAncestorCommit(branchA, branchB string) string {
+	msg, err := exec.Command("git", "merge-base", branchA, branchB).CombinedOutput()
+	if err != nil {
+		//fmt.Println(err)
+	}
+	return string(msg)
+}
+
 func StashList() []string {
 	msg, err := exec.Command("git", "stash", "list").CombinedOutput()
 	if err != nil {
@@ -447,6 +455,10 @@ func CommonCommandsList() []*cobra.Command {
 		{
 			Use:   "commit --amend --no-edit",
 			Short: "Amend most recent commit with added changes",
+		},
+		{
+			Use:   "merge --squash",
+			Short: "Squash and merge changes from a specified branch",
 		},
 	}
 }
