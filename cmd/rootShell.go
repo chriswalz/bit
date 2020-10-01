@@ -28,7 +28,13 @@ var ShellCmd = &cobra.Command{
 				{Text: "bump", Description: "Increment SemVer from tags and release"},
 				{Text: "<version>", Description: "Name of release version e.g. v0.1.2"},
 			},
+			"reset": GitResetSuggestions(),
 		}
+		//if isGitRepo() {
+		//	fmt.Println("fatal: not a git repository (or any of the parent directories): .git")
+		//	return
+		//}
+
 		resp := SuggestionPrompt("> bit ", shellCommandCompleter(completerSuggestionMap))
 		subCommand := resp
 		if subCommand == "" {
@@ -84,8 +90,8 @@ func shellCommandCompleter(suggestionMap map[string][]prompt.Suggest) func(d pro
 					filterFlags = append(filterFlags, v)
 				}
 			}
-			prev := filterFlags[0] // git command or sub command (not a flag)
-			curr := filterFlags[1] // current argument or flag
+			prev := filterFlags[0] // in git commit -m "hello"  commit is prev
+			curr := filterFlags[1] // in git commit -m "hello"  "hello" is curr
 			if strings.HasPrefix(curr, "--") {
 				suggestions = FlagSuggestionsForCommand(prev, "--")
 			} else if strings.HasPrefix(curr, "-") {

@@ -95,3 +95,9 @@ func TestFlagSuggestionsForCommand(t *testing.T) {
 		}
 	}
 }
+
+func BenchmarkAllBitAndGitSubCommands(b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		AllBitAndGitSubCommands(ShellCmd)
+	}
+}
