@@ -8,10 +8,10 @@ import (
 )
 
 var (
-	ellipsis   = predict.Set{"./..."}
+	ellipsis = predict.Set{"./..."}
 	//anyPackage = complete.PredictFunc(predictPackages)
-	goFiles    = predict.Files("*.go")
-	anyFile    = predict.Files("*")
+	goFiles = predict.Files("*.go")
+	anyFile = predict.Files("*")
 	//anyGo      = predict.Or(goFiles, anyPackage, ellipsis)
 )
 
@@ -53,7 +53,7 @@ func main() {
 	//
 
 	branchCompletion := &complete.Command{
-		Args: complete.PredictFunc(func(prefix string) []string{
+		Args: complete.PredictFunc(func(prefix string) []string {
 			branches := cmd.BranchListSuggestions()
 			completion := make([]string, len(branches))
 			for i, v := range branches {

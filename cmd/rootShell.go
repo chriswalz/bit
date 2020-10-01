@@ -18,11 +18,13 @@ var ShellCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		_, bitCmdMap := AllBitSubCommands(cmd)
 		allBitCmds := AllBitAndGitSubCommands(cmd)
+		branchListSuggestions := BranchListSuggestions()
 		completerSuggestionMap := map[string][]prompt.Suggest{
 			"":         {},
 			"shell":    CobraCommandToSuggestions(allBitCmds),
-			"checkout": BranchListSuggestions(),
-			"switch":   BranchListSuggestions(),
+			"checkout": branchListSuggestions,
+			"switch":   branchListSuggestions,
+			"co":       branchListSuggestions,
 			"add":      GitAddSuggestions(),
 			"release": {
 				{Text: "bump", Description: "Increment SemVer from tags and release"},
@@ -48,6 +50,14 @@ var ShellCmd = &cobra.Command{
 			if err != nil {
 				fmt.Println(err)
 				return
+			}
+			sub := parsedArgs[0]
+			if sub == "checkout" || sub == "switch" || sub == "co" {
+				branchName := strings.TrimSpace(parsedArgs[len(parsedArgs)-1])
+				if strings.HasPrefix(branchName, "origin/") {
+					branchName = branchName[7:]
+				}
+				parsedArgs[len(parsedArgs)-1] = branchName
 			}
 			err = Runwithcolor("git", parsedArgs)
 			if err != nil {

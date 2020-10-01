@@ -64,9 +64,9 @@ func TestFlagSuggestionsForCommand(t *testing.T) {
 	// fixme add support for all git sub commands
 	expects :=
 		[]struct {
-			cmd      string
+			cmd             string
 			expectedOptions []string
-			expectedFlags []string
+			expectedFlags   []string
 		}{
 			{
 				"push",

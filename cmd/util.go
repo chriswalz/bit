@@ -65,8 +65,6 @@ func isGitRepo() bool {
 	return true
 }
 
-
-
 func IsBehindCurrent() bool {
 	msg, err := exec.Command("git", "status", "-sb").CombinedOutput()
 	if err != nil {
@@ -419,35 +417,35 @@ func FlagSuggestionsForCommand(gitSubCmd string, flagtype string) []prompt.Sugge
 func CommonCommandsList() []*cobra.Command {
 	return []*cobra.Command{
 		{
-			Use:        "pull --rebase",
+			Use:   "pull --rebase",
 			Short: "Rebase on origin branch",
 		},
 		{
-			Use:        "pull --rebase origin master",
+			Use:   "pull --rebase origin master",
 			Short: "Rebase on origin master branch",
 		},
 		{
-			Use:        "push --force-with-lease",
+			Use:   "push --force-with-lease",
 			Short: "force push with a safety net",
 		},
 		{
-			Use:        "stash pop",
+			Use:   "stash pop",
 			Short: "Use most recently stashed changes",
 		},
 		{
-			Use:        "add -u",
+			Use:   "add -u",
 			Short: "Add all modified or deleted files to Staging Area",
 		},
 		{
-			Use:        "commit -am \"",
+			Use:   "commit -am \"",
 			Short: "Commit all tracked files",
 		},
 		{
-			Use:        "commit -a --amend --no-edit",
+			Use:   "commit -a --amend --no-edit",
 			Short: "Amend most recent commit with new changes",
 		},
 		{
-			Use:        "commit --amend --no-edit",
+			Use:   "commit --amend --no-edit",
 			Short: "Amend most recent commit with added changes",
 		},
 	}

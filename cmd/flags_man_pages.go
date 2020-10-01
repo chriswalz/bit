@@ -1,6 +1,5 @@
 package cmd
 
-
 const addFlagsStr = `-n
 --dry-run
 Don’t actually add the file(s), just show if they exist and/or will be ignored.
