@@ -9,6 +9,7 @@ import (
 	"os"
 	"os/exec"
 	"regexp"
+	"runtime/debug"
 	"strings"
 )
 
@@ -287,20 +288,34 @@ func SuggestionPrompt(prefix string, completer func(d prompt.Document) []prompt.
 		prompt.OptionShowCompletionAtStart(),
 		prompt.OptionCompletionOnDown(),
 		prompt.OptionSwitchKeyBindMode(prompt.CommonKeyBind),
-		/*prompt.OptionAddKeyBind(prompt.KeyBind{
+		prompt.OptionAddKeyBind(prompt.KeyBind{
 			Key: prompt.ControlC,
-			Fn: func(b *prompt.Buffer) {
-				os.Stdin.WriteString("exit\n")
-				//err := os.Stdin.Close()
-				//os.Exit(1)
-			},
-		}), */
+			Fn: exit,
+		}),
 	)
 	branchName := strings.TrimSpace(result)
 	if strings.HasPrefix(result, "origin/") {
 		branchName = branchName[7:]
 	}
 	return branchName
+}
+
+type Exit int
+
+func exit(_ *prompt.Buffer) {
+	panic(Exit(0))
+}
+
+func HandleExit() {
+	switch v := recover().(type) {
+	case nil:
+		return
+	case Exit:
+		os.Exit(int(v))
+	default:
+		fmt.Println(v)
+		fmt.Println(string(debug.Stack()))
+	}
 }
 
 func AllGitAliases() (cc []*cobra.Command) {

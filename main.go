@@ -31,6 +31,7 @@ func find(slice []string, val string) bool {
 }
 
 func main() {
+	defer bitcmd.HandleExit()
 	if !bitcmd.IsGitRepo() {
 		fmt.Println("fatal: not a git repository (or any of the parent directories): .git")
 		return
@@ -47,3 +48,4 @@ func main() {
 func bitcli() {
 	bitcmd.Execute()
 }
+
