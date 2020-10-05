@@ -74,12 +74,13 @@ func main() {
 		flags := funk.Map(flagSuggestions, func(x prompt.Suggest) (string, complete.Predictor) {
 			if strings.HasPrefix(x.Text, "--") {
 				return x.Text[2:], predict.Nothing
-			} else {
-				if len(x.Text) > 2 {
-					fmt.Println("fix:", x.Text)
-					return "Z", predict.Nothing
-				}
+			} else if strings.HasPrefix(x.Text, "-") {
 				return x.Text[1:2], predict.Nothing
+			} else {
+				if len(x.Text) < 3 {
+					fmt.Println("fix:", x.Text)
+				}
+				return "", predict.Nothing
 			}
 		})
 		completionSubCmdMap[v.Name()] = &complete.Command{
