@@ -30,9 +30,9 @@ func main() {
 		flagSuggestions := append(cmd.FlagSuggestionsForCommand(v.Name(), "--"), cmd.FlagSuggestionsForCommand(v.Name(), "-")...)
 		flags := funk.Map(flagSuggestions, func(x prompt.Suggest) (string, complete.Predictor) {
 			if strings.HasPrefix(x.Text, "--") {
-				return x.Text[2:], predict.Nothing
+				return x.Text, predict.Nothing
 			} else if strings.HasPrefix(x.Text, "-") {
-				return x.Text[1:2], predict.Nothing
+				return x.Text, predict.Nothing
 			} else {
 				return "", predict.Nothing
 			}
@@ -41,6 +41,7 @@ func main() {
 			Flags: flags.(map[string]complete.Predictor),
 		}
 		if v.Name() == "checkout" || v.Name() == "co" || v.Name() == "switch" {
+			branchCompletion.Flags = flags.(map[string]complete.Predictor)
 			completionSubCmdMap[v.Name()] = branchCompletion
 		}
 	}

@@ -8,7 +8,7 @@
 <a href="https://goreportcard.com/report/github.com/chriswalz/bit"><img src="https://goreportcard.com/badge/github.com/chriswalz/bit" alt="Version"></a>
 </p>
 
-`bit` is a modernized git CLI built on top of git that provides command and --flag suggestions along with other niceties:
+`bit` is an experimental modernized git CLI built on top of git that provides happy defaults and other niceties:
 
 - command and **flag suggestions** to help you navigate the plethora of options git provides you
 - autocompletion for files and branch names when using `bit add` or `bit checkout`
@@ -33,6 +33,12 @@ Verify installation with:
 `bit`
 
 Dependencies: Git
+
+Platform Support:
+- iTerm2 (macOS)
+- Terminal.app (macOS)
+- Command Prompt (Windows)
+- gnome-terminal (Ubuntu)
 
 ## Usage 
 
