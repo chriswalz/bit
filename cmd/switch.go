@@ -63,12 +63,12 @@ For creating a new branch it's the same command! You'll simply be prompted to co
 
 			}
 		}
-		Runwithcolor("git", []string{"pull", "--ff-only"})
+		refreshBranch()
 	},
 }
 
 func init() {
-	ShellCmd.AddCommand(switchCmd)
+	//ShellCmd.AddCommand(switchCmd)
 	// switchCmd.PersistentFlags().String("foo", "", "A help for foo")
 	// switchCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

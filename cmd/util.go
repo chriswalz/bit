@@ -123,6 +123,15 @@ func StashList() []string {
 	return strings.Split(string(msg), "\n")
 }
 
+func refreshBranch() error {
+	_, err := exec.Command("git", "pull", "--ff-only").CombinedOutput()
+	if err != nil {
+		return err
+	}
+	fmt.Println("Branch was fast-forwarded")
+	return nil
+}
+
 func BranchList() []Branch {
 	msg, err := exec.Command("git", "for-each-ref", "--sort=-committerdate", "refs/heads/", "refs/remotes", "--format='%(authordate:short); %(authorname); %(color:red)%(objectname:short); %(color:yellow)%(refname:short)%(color:reset); (%(color:green)%(committerdate:relative)%(color:reset))'").CombinedOutput()
 	if err != nil {

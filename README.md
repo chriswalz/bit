@@ -4,14 +4,15 @@
     src="https://user-images.githubusercontent.com/6971318/94226426-96309480-fec5-11ea-929f-34551c5356dd.png"
     width="800px" border="0" alt="croc">
 <br>
-<a href="https://github.com/chriswalz/bit/tags"><img src="https://img.shields.io/badge/version-v0.3.4-brightgreen.svg?style=flat-square" alt="Version"></a>
+<a href="https://github.com/chriswalz/bit/tags"><img src="https://img.shields.io/badge/version-v0.4.1-brightgreen.svg?style=flat-square" alt="Version"></a>
 <a href="https://goreportcard.com/report/github.com/chriswalz/bit"><img src="https://goreportcard.com/badge/github.com/chriswalz/bit" alt="Version"></a>
 </p>
 
 `bit` is an experimental modernized git CLI built on top of git that provides happy defaults and other niceties:
 
 - command and **flag suggestions** to help you navigate the plethora of options git provides you
-- autocompletion for files and branch names when using `bit add` or `bit checkout`
+- autocompletion for files and branch names when using 
+`bit add` or `bit checkout`
 - automatic fetch and **branch fast-forwarding** reducing the likelihood of merge conflicts 
 - suggestions **work with git aliases**
 - new commands like `bit sync` that vastly simplify your workflow 
@@ -23,9 +24,7 @@
 
 ```shell script
 curl -sf https://gobinaries.com/chriswalz/bit | sh;
-echo 'Installed bit CLI';
-curl -sf https://gobinaries.com/chriswalz/bit/bitcomplete | sh && COMP_INSTALL=1 bitcomplete
-echo 'Added bit tab completion';
+curl -sf https://gobinaries.com/chriswalz/bit/bitcomplete | sh && echo y | COMP_INSTALL=1 bitcomplete
 ```
 
 Verify installation with:
@@ -40,23 +39,19 @@ Platform Support:
 - Command Prompt (Windows)
 - gnome-terminal (Ubuntu)
 
-## Usage 
+## Bit specific command Usage 
 
 Create a new commit
 
 `bit save [commit message]`
 
-Save your changes to the current branch [amends current commit]
+Save your changes to the current branch [amends current commit when ahead of origin]
 
 `bit save` 
 
-Synchronize yours changes to origin branch 
+Synchronize your changes to origin branch (Beta)
 
 `bit sync`
-
-Switch branches
-
-`bit switch [branch-name]`
 
 You have access to ALL git commands as well. 90% of the time the above commands will have you covered. 
 
