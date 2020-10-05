@@ -88,7 +88,6 @@ func TestFlagSuggestionsForCommand(t *testing.T) {
 				[]string{"-q"},
 				[]string{"--ff-only", "--no-ff", "--no-edit"},
 			},
-
 		}
 	for _, e := range expects {
 		realityFlags := suggestionToString(FlagSuggestionsForCommand(e.cmd, "--"))

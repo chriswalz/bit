@@ -69,12 +69,12 @@ func main() {
 	cmds := cmd.AllBitAndGitSubCommands(cmd.ShellCmd)
 	completionSubCmdMap := map[string]*complete.Command{}
 	for _, v := range cmds {
-		flagSuggestions := append(cmd.FlagSuggestionsForCommand(v.Name(), "--"), cmd.FlagSuggestionsForCommand(v.Name(), "--")...)
+		flagSuggestions := append(cmd.FlagSuggestionsForCommand(v.Name(), "--"), cmd.FlagSuggestionsForCommand(v.Name(), "-")...)
 		flags := funk.Map(flagSuggestions, func(x prompt.Suggest) (string, complete.Predictor) {
 			if strings.HasPrefix(x.Text, "--") {
 				return x.Text[2:], predict.Nothing
 			} else {
-				return x.Text[1:], predict.Nothing
+				return x.Text[1:2], predict.Nothing
 			}
 		})
 		completionSubCmdMap[v.Name()] = &complete.Command{

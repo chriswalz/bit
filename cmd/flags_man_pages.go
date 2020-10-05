@@ -2127,7 +2127,7 @@ Show recursive diffs.
 -t
 Show the tree objects in the diff output. This implies -r.`
 
-const rebaseFlagsStr =`--onto <newbase>
+const rebaseFlagsStr = `--onto <newbase>
 Starting point at which to create the new commits. If the --onto option is not specified, the starting point is <upstream>. May be any valid commit, and not just an existing branch name.
 
 As a special case, you may use "A...B" as a shortcut for the merge base of A and B if there is exactly one merge base. You can leave out at most one of A and B, in which case it defaults to HEAD.
@@ -2360,7 +2360,7 @@ Automatically create a temporary stash entry before the operation begins, and ap
 --no-reschedule-failed-exec
 Automatically reschedule exec commands that failed. This only makes sense in interactive mode (or when an --exec option was provided).`
 
-const resetFlagsStr=`--soft
+const resetFlagsStr = `--soft
 Does not touch the index file or the working tree at all (but resets the head to <commit>, just like all modes do). This leaves all your changed files "Changes to be committed", as git status would put it.
 
 --mixed
