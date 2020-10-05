@@ -58,7 +58,7 @@ func IsAheadOfCurrent() bool {
 	return strings.Contains(string(msg), "ahead")
 }
 
-func isGitRepo() bool {
+func IsGitRepo() bool {
 	_, err := exec.Command("git", "status").CombinedOutput()
 	if err != nil {
 		return false

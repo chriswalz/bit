@@ -36,10 +36,6 @@ var ShellCmd = &cobra.Command{
 			"reset": GitResetSuggestions(),
 			//"_any": commonCommands,
 		}
-		if !isGitRepo() {
-			fmt.Println("fatal: not a git repository (or any of the parent directories): .git")
-			return
-		}
 
 		resp := SuggestionPrompt("> bit ", shellCommandCompleter(completerSuggestionMap))
 		subCommand := resp
