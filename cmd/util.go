@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-func Runwithcolor(cmdName string, args []string) error {
+func RunInTerminalWithColor(cmdName string, args []string) error {
 	_, w, err := os.Pipe()
 	if err != nil {
 		panic(err)
@@ -483,7 +483,7 @@ func RunScriptWithString(path string, script string, args ...string) {
 	}
 	f.WriteString(script)
 	defer f.Close()
-	err = Runwithcolor(path, args)
+	err = RunInTerminalWithColor(path, args)
 	if err != nil {
 		fmt.Println(err)
 	}

@@ -16,7 +16,6 @@ limitations under the License.
 package main
 
 import (
-	"fmt"
 	bitcmd "github.com/chriswalz/bit/cmd"
 	"os"
 )
@@ -36,10 +35,7 @@ func main() {
 	if len(argsWithoutProg) == 0 || find(bitcliCmds, argsWithoutProg[0]) {
 		bitcli()
 	} else {
-		err := bitcmd.Runwithcolor("git", argsWithoutProg)
-		if err != nil {
-			fmt.Println("DEBUG: CMD may not be allow listed")
-		}
+		bitcmd.RunGitCommandWithArgs(argsWithoutProg)
 	}
 }
 

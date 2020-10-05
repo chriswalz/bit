@@ -19,7 +19,7 @@ For creating a new branch it's the same command! You'll simply be prompted to co
 `,
 	Args: cobra.MaximumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		Runwithcolor("git", []string{"fetch"})
+		RunInTerminalWithColor("git", []string{"fetch"})
 
 		branchName := ""
 		if len(args) >= 1 {
@@ -33,9 +33,9 @@ For creating a new branch it's the same command! You'll simply be prompted to co
 		}
 
 		if StashableChanges() {
-			Runwithcolor("git", []string{"stash", "save", CurrentBranch() + "-automaticBitStash"})
+			RunInTerminalWithColor("git", []string{"stash", "save", CurrentBranch() + "-automaticBitStash"})
 		}
-		Runwithcolor("git", []string{"pull", "--ff-only"})
+		RunInTerminalWithColor("git", []string{"pull", "--ff-only"})
 		branchExists := checkoutBranch(branchName)
 		if !branchExists {
 			prompt := promptui.Prompt{
@@ -47,18 +47,18 @@ For creating a new branch it's the same command! You'll simply be prompted to co
 
 			if err != nil {
 				fmt.Printf("Cancelling...")
-				Runwithcolor("git", []string{"stash", "pop"})
+				RunInTerminalWithColor("git", []string{"stash", "pop"})
 				return
 			}
 
-			Runwithcolor("git", []string{"checkout", "-b", branchName})
+			RunInTerminalWithColor("git", []string{"checkout", "-b", branchName})
 			return
 		}
 		stashList := StashList()
 		for _, stashLine := range stashList {
 			if strings.Contains(stashLine, CurrentBranch()+"-automaticBitStash") {
 				stashId := strings.Split(stashLine, ":")[0]
-				Runwithcolor("git", []string{"stash", "pop", stashId})
+				RunInTerminalWithColor("git", []string{"stash", "pop", stashId})
 				return
 
 			}
