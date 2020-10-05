@@ -2,9 +2,11 @@
 package main
 
 import (
+	"github.com/c-bata/go-prompt"
 	"github.com/chriswalz/bit/cmd"
 	"github.com/posener/complete/v2"
 	"github.com/posener/complete/v2/predict"
+	"github.com/thoas/go-funk"
 )
 
 var (
@@ -66,7 +68,12 @@ func main() {
 	cmds := cmd.AllBitAndGitSubCommands(cmd.ShellCmd)
 	completionSubCmdMap := map[string]*complete.Command{}
 	for _, v := range cmds {
-		completionSubCmdMap[v.Name()] = &complete.Command{}
+		flags := funk.Map(cmd.FlagSuggestionsForCommand(v.Name(), "--"), func(x prompt.Suggest) (string, complete.Predictor) {
+			return x.Text, predict.Nothing
+		})
+		completionSubCmdMap[v.Name()] = &complete.Command{
+			Flags: flags.(map[string]complete.Predictor),
+		}
 		if v.Name() == "checkout" || v.Name() == "co" || v.Name() == "switch" {
 			completionSubCmdMap[v.Name()] = branchCompletion
 		}

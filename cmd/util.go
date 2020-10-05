@@ -8,6 +8,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"regexp"
 	"strings"
 )
 
@@ -388,6 +389,7 @@ func FlagSuggestionsForCommand(gitSubCmd string, flagtype string) []prompt.Sugge
 	str = flagMap[gitSubCmd]
 	if str == "" {
 		return []prompt.Suggest{}
+		//str = parseManPage(gitSubCmd)
 	}
 
 	list := strings.Split(str, ".\n\n")
@@ -475,3 +477,18 @@ func RunScriptWithString(path string, script string, args ...string) {
 		fmt.Println(err)
 	}
 }
+
+func parseManPage(subCmd string) string {
+	msg, err := exec.Command("/bin/bash", "-c", "git help " + subCmd + " | col -b").CombinedOutput()
+	if err != nil {
+		fmt.Println(err)
+	}
+	splitA := strings.Split(string(msg), "\n\nOPTIONS")
+	splitB :=regexp.MustCompile(`\.\n\n[A-Z]+`).Split(splitA[1], 2)
+	rawFlagSection := splitB[0]
+	//removeTabs := strings.ReplaceAll(rawFlagSection, "\t", "%%%")
+	//removeTabs := strings.ReplaceAll(rawFlagSection, "\n\t", "")
+	//removeTabs = strings.ReplaceAll(removeTabs, "%%%", "\n\n\t")
+	return rawFlagSection
+}
+

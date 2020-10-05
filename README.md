@@ -22,10 +22,10 @@
 
 
 ```shell script
-## install bit cli
 curl -sf https://gobinaries.com/chriswalz/bit | sh;
-## add autocompletion
+echo 'Installed bit CLI';
 curl -sf https://gobinaries.com/chriswalz/bit/bitcomplete | sh && COMP_INSTALL=1 bitcomplete
+echo 'Added bit tab completion';
 ```
 
 Verify installation with:
