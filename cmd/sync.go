@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"fmt"
 	"github.com/spf13/cobra"
+	"strings"
 )
 
 // syncCmd represents the sync command
@@ -16,17 +16,6 @@ sync local-branch
 	Run: func(cmd *cobra.Command, args []string) {
 		RunInTerminalWithColor("git", []string{"fetch"})
 
-		// squash specific branch into current branch?
-		if len(args) == 1 {
-			branch := args[0]
-			if branch == "master" {
-				fmt.Println("Not supported")
-				return
-			}
-			RunInTerminalWithColor("git", []string{"pull", "--ff-only"})
-			RunInTerminalWithColor("git", []string{"merge", "--squash", branch})
-
-		}
 		// if possibly squashed
 		if IsDiverged() {
 			RunInTerminalWithColor("git", []string{"status", "-sb"})
@@ -54,6 +43,20 @@ sync local-branch
 				RunInTerminalWithColor("git", append([]string{"pull", "-r"}, args...))
 			}
 			RunInTerminalWithColor("git", []string{"push"})
+		}
+
+		// After syncing with current branch and user wants to sync with another branch
+
+		if CurrentBranch() == "master" && len(args) == 1 && strings.HasSuffix(args[0], "master"){
+			PromptUser("Squash & merge this branch into master")
+			RunInTerminalWithColor("git", []string{"merge", "--squash"})
+			return
+		}
+
+		// squash specific branch into current branch?
+		if len(args) == 1 {
+			branch := args[0]
+			refreshOnBranch(branch)
 		}
 
 	},
