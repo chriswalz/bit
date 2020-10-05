@@ -2,7 +2,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/c-bata/go-prompt"
 	"github.com/chriswalz/bit/cmd"
 	"github.com/posener/complete/v2"
@@ -77,9 +76,6 @@ func main() {
 			} else if strings.HasPrefix(x.Text, "-") {
 				return x.Text[1:2], predict.Nothing
 			} else {
-				if len(x.Text) < 3 {
-					fmt.Println("fix:", x.Text)
-				}
 				return "", predict.Nothing
 			}
 		})
