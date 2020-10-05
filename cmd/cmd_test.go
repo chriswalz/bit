@@ -32,7 +32,7 @@ func branchToString(list []Branch) []string {
 }
 
 func TestCommonCommandsList(t *testing.T) {
-	expects := []string{"pull --rebase", "commit -a --amend --no-edit", "add -u"}
+	expects := []string{"pull --rebase origin master", "commit -a --amend --no-edit"}
 	reality := toString(CommonCommandsList())
 	for _, e := range expects {
 		assert.Contains(t, reality, e)
@@ -53,7 +53,7 @@ func TestBranchList(t *testing.T) {
 
 // Tests AllBitAndGitSubCommands has common commands, git sub commands, git aliases, git-extras and bit commands
 func TestAllBitAndGitSubCommands(t *testing.T) {
-	expects := []string{"pull --rebase", "commit -a --amend --no-edit", "add", "push", "fetch", "pull", "co", "lg", "release", "info", "save", "sync"}
+	expects := []string{"pull --rebase origin master", "commit -a --amend --no-edit", "add", "push", "fetch", "pull", "co", "lg", "release", "info", "save", "sync"}
 	reality := toString(AllBitAndGitSubCommands(ShellCmd))
 	for _, e := range expects {
 		assert.Contains(t, reality, e)

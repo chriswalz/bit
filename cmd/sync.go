@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"fmt"
+	"github.com/manifoldco/promptui"
 	"github.com/spf13/cobra"
 	"strings"
 )
@@ -48,12 +50,22 @@ sync local-branch
 		// After syncing with current branch and user wants to sync with another branch
 
 		if CurrentBranch() == "master" && len(args) == 1 && strings.HasSuffix(args[0], "master"){
-			PromptUser("Squash & merge this branch into master")
+			prompt := promptui.Prompt{
+				Label:     "Squash & merge this branch into master",
+				IsConfirm: true,
+			}
+
+			_, err := prompt.Run()
+
+			if err != nil {
+				fmt.Printf("Cancelling...")
+				RunInTerminalWithColor("git", []string{"stash", "pop"})
+				return
+			}
 			RunInTerminalWithColor("git", []string{"merge", "--squash"})
 			return
 		}
 
-		// squash specific branch into current branch?
 		if len(args) == 1 {
 			branch := args[0]
 			refreshOnBranch(branch)
