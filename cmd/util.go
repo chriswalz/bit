@@ -429,10 +429,6 @@ func FlagSuggestionsForCommand(gitSubCmd string, flagtype string) []prompt.Sugge
 func CommonCommandsList() []*cobra.Command {
 	return []*cobra.Command{
 		{
-			Use:   "pull --rebase",
-			Short: "Rebase on origin branch",
-		},
-		{
 			Use:   "pull --rebase origin master",
 			Short: "Rebase on origin master branch",
 		},
@@ -443,10 +439,6 @@ func CommonCommandsList() []*cobra.Command {
 		{
 			Use:   "stash pop",
 			Short: "Use most recently stashed changes",
-		},
-		{
-			Use:   "add -u",
-			Short: "Add all modified or deleted files to Staging Area",
 		},
 		{
 			Use:   "commit -am \"",
@@ -463,6 +455,14 @@ func CommonCommandsList() []*cobra.Command {
 		{
 			Use:   "merge --squash",
 			Short: "Squash and merge changes from a specified branch",
+		},
+		{
+			Use:   "release bump",
+			Short: "Commit unstaged changes, bump minor tag, push",
+		},
+		{
+			Use:   "log --oneline",
+			Short: "Display one commit per line",
 		},
 	}
 }

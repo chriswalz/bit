@@ -18,6 +18,7 @@ var ShellCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		_, bitCmdMap := AllBitSubCommands(cmd)
 		allBitCmds := AllBitAndGitSubCommands(cmd)
+		//commonCommands := CobraCommandToSuggestions(CommonCommandsList())
 		branchListSuggestions := BranchListSuggestions()
 		completerSuggestionMap := map[string][]prompt.Suggest{
 			"":         {},
@@ -32,6 +33,7 @@ var ShellCmd = &cobra.Command{
 				{Text: "<version>", Description: "Name of release version e.g. v0.1.2"},
 			},
 			"reset": GitResetSuggestions(),
+			//"_any": commonCommands,
 		}
 		//if isGitRepo() {
 		//	fmt.Println("fatal: not a git repository (or any of the parent directories): .git")
@@ -110,8 +112,8 @@ func shellCommandCompleter(suggestionMap map[string][]prompt.Suggest) func(d pro
 			} else if suggestionMap[prev] != nil {
 				suggestions = suggestionMap[prev]
 			}
-
 		}
+		//suggestions = append(suggestionMap["_any"], suggestions...)
 		return prompt.FilterContains(suggestions, d.GetWordBeforeCursor(), true)
 	}
 }
