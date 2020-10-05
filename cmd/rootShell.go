@@ -116,9 +116,10 @@ func RunGitCommandWithArgs(args []string) {
 			branchName = branchName[7:]
 		}
 		args[len(args)-1] = branchName
+		createBranchFlagUsed := args[len(args)-2] == "-b"
 
 		branchExists := checkoutBranch(branchName)
-		if !branchExists {
+		if !branchExists && !createBranchFlagUsed{
 			prompt := promptui.Prompt{
 				Label:     "Branch does not exist. Do you want to create it",
 				IsConfirm: true,
