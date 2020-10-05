@@ -10,50 +10,8 @@ import (
 	"strings"
 )
 
-var (
-	ellipsis = predict.Set{"./..."}
-	//anyPackage = complete.PredictFunc(predictPackages)
-	goFiles = predict.Files("*.go")
-	anyFile = predict.Files("*")
-	//anyGo      = predict.Or(goFiles, anyPackage, ellipsis)
-)
 
 func main() {
-	//build := &complete.Command{
-	//	Flags: map[string]complete.Predictor{
-	//		"o": anyFile,
-	//		"i": predict.Nothing,
-	//
-	//		"a":             predict.Nothing,
-	//		"n":             predict.Nothing,
-	//		"p":             predict.Something,
-	//		"race":          predict.Nothing,
-	//		"msan":          predict.Nothing,
-	//		"v":             predict.Nothing,
-	//		"work":          predict.Nothing,
-	//		"x":             predict.Nothing,
-	//		"asmflags":      predict.Something,
-	//		"buildmode":     predict.Something,
-	//		"compiler":      predict.Something,
-	//		"gccgoflags":    predict.Set{"gccgo", "gc"},
-	//		"gcflags":       predict.Something,
-	//		"installsuffix": predict.Something,
-	//		"ldflags":       predict.Something,
-	//		"linkshared":    predict.Nothing,
-	//		"pkgdir":        anyPackage,
-	//		"tags":          predict.Something,
-	//		"toolexec":      predict.Something,
-	//	},
-	//	Args: anyGo,
-	//}
-	//
-	//run := &complete.Command{
-	//	Flags: map[string]complete.Predictor{
-	//		"exec": predict.Something,
-	//	},
-	//	Args: goFiles,
-	//}
-	//
 
 	branchCompletion := &complete.Command{
 		Args: complete.PredictFunc(func(prefix string) []string {
