@@ -2126,3 +2126,258 @@ Show recursive diffs.
 
 -t
 Show the tree objects in the diff output. This implies -r.`
+
+const rebaseFlagsStr =`--onto <newbase>
+Starting point at which to create the new commits. If the --onto option is not specified, the starting point is <upstream>. May be any valid commit, and not just an existing branch name.
+
+As a special case, you may use "A...B" as a shortcut for the merge base of A and B if there is exactly one merge base. You can leave out at most one of A and B, in which case it defaults to HEAD.
+
+--keep-base
+Set the starting point at which to create the new commits to the merge base of <upstream> <branch>. Running git rebase --keep-base <upstream> <branch> is equivalent to running git rebase --onto <upstream>…​ <upstream>.
+
+This option is useful in the case where one is developing a feature on top of an upstream branch. While the feature is being worked on, the upstream branch may advance and it may not be the best idea to keep rebasing on top of the upstream but to keep the base commit as-is.
+
+Although both this option and --fork-point find the merge base between <upstream> and <branch>, this option uses the merge base as the starting point on which new commits will be created, whereas --fork-point uses the merge base to determine the set of commits which will be rebased.
+
+See also INCOMPATIBLE OPTIONS below.
+
+<upstream>
+Upstream branch to compare against. May be any valid commit, not just an existing branch name. Defaults to the configured upstream for the current branch.
+
+<branch>
+Working branch; defaults to HEAD.
+
+--continue
+Restart the rebasing process after having resolved a merge conflict.
+
+--abort
+Abort the rebase operation and reset HEAD to the original branch. If <branch> was provided when the rebase operation was started, then HEAD will be reset to <branch>. Otherwise HEAD will be reset to where it was when the rebase operation was started.
+
+--quit
+Abort the rebase operation but HEAD is not reset back to the original branch. The index and working tree are also left unchanged as a result. If a temporary stash entry was created using --autostash, it will be saved to the stash list.
+
+--apply
+Use applying strategies to rebase (calling git-am internally). This option may become a no-op in the future once the merge backend handles everything the apply one does.
+
+See also INCOMPATIBLE OPTIONS below.
+
+--empty={drop,keep,ask}
+How to handle commits that are not empty to start and are not clean cherry-picks of any upstream commit, but which become empty after rebasing (because they contain a subset of already upstream changes). With drop (the default), commits that become empty are dropped. With keep, such commits are kept. With ask (implied by --interactive), the rebase will halt when an empty commit is applied allowing you to choose whether to drop it, edit files more, or just commit the empty changes. Other options, like --exec, will use the default of drop unless -i/--interactive is explicitly specified.
+
+Note that commits which start empty are kept (unless --no-keep-empty is specified), and commits which are clean cherry-picks (as determined by git log --cherry-mark ...) are detected and dropped as a preliminary step (unless --reapply-cherry-picks is passed).
+
+See also INCOMPATIBLE OPTIONS below.
+
+--no-keep-empty
+--keep-empty
+Do not keep commits that start empty before the rebase (i.e. that do not change anything from its parent) in the result. The default is to keep commits which start empty, since creating such commits requires passing the --allow-empty override flag to git commit, signifying that a user is very intentionally creating such a commit and thus wants to keep it.
+
+Usage of this flag will probably be rare, since you can get rid of commits that start empty by just firing up an interactive rebase and removing the lines corresponding to the commits you don’t want. This flag exists as a convenient shortcut, such as for cases where external tools generate many empty commits and you want them all removed.
+
+For commits which do not start empty but become empty after rebasing, see the --empty flag.
+
+See also INCOMPATIBLE OPTIONS below.
+
+--reapply-cherry-picks
+--no-reapply-cherry-picks
+Reapply all clean cherry-picks of any upstream commit instead of preemptively dropping them. (If these commits then become empty after rebasing, because they contain a subset of already upstream changes, the behavior towards them is controlled by the --empty flag.)
+
+By default (or if --no-reapply-cherry-picks is given), these commits will be automatically dropped. Because this necessitates reading all upstream commits, this can be expensive in repos with a large number of upstream commits that need to be read.
+
+--reapply-cherry-picks allows rebase to forgo reading all upstream commits, potentially improving performance.
+
+See also INCOMPATIBLE OPTIONS below.
+
+--allow-empty-message
+No-op. Rebasing commits with an empty message used to fail and this option would override that behavior, allowing commits with empty messages to be rebased. Now commits with an empty message do not cause rebasing to halt.
+
+See also INCOMPATIBLE OPTIONS below.
+
+--skip
+Restart the rebasing process by skipping the current patch.
+
+--edit-todo
+Edit the todo list during an interactive rebase.
+
+--show-current-patch
+Show the current patch in an interactive rebase or when rebase is stopped because of conflicts. This is the equivalent of git show REBASE_HEAD.
+
+-m
+--merge
+Use merging strategies to rebase. When the recursive (default) merge strategy is used, this allows rebase to be aware of renames on the upstream side. This is the default.
+
+Note that a rebase merge works by replaying each commit from the working branch on top of the <upstream> branch. Because of this, when a merge conflict happens, the side reported as ours is the so-far rebased series, starting with <upstream>, and theirs is the working branch. In other words, the sides are swapped.
+
+See also INCOMPATIBLE OPTIONS below.
+
+-s <strategy>
+--strategy=<strategy>
+Use the given merge strategy. If there is no -s option git merge-recursive is used instead. This implies --merge.
+
+Because git rebase replays each commit from the working branch on top of the <upstream> branch using the given strategy, using the ours strategy simply empties all patches from the <branch>, which makes little sense.
+
+See also INCOMPATIBLE OPTIONS below.
+
+-X <strategy-option>
+--strategy-option=<strategy-option>
+Pass the <strategy-option> through to the merge strategy. This implies --merge and, if no strategy has been specified, -s recursive. Note the reversal of ours and theirs as noted above for the -m option.
+
+See also INCOMPATIBLE OPTIONS below.
+
+--rerere-autoupdate
+--no-rerere-autoupdate
+Allow the rerere mechanism to update the index with the result of auto-conflict resolution if possible.
+
+-S[<keyid>]
+--gpg-sign[=<keyid>]
+--no-gpg-sign
+GPG-sign commits. The keyid argument is optional and defaults to the committer identity; if specified, it must be stuck to the option without a space. --no-gpg-sign is useful to countermand both commit.gpgSign configuration variable, and earlier --gpg-sign.
+
+-q
+--quiet
+Be quiet. Implies --no-stat.
+
+-v
+--verbose
+Be verbose. Implies --stat.
+
+--stat
+Show a diffstat of what changed upstream since the last rebase. The diffstat is also controlled by the configuration option rebase.stat.
+
+-n
+--no-stat
+Do not show a diffstat as part of the rebase process.
+
+--no-verify
+This option bypasses the pre-rebase hook. See also githooks[5].
+
+--verify
+Allows the pre-rebase hook to run, which is the default. This option can be used to override --no-verify. See also githooks[5].
+
+-C<n>
+Ensure at least <n> lines of surrounding context match before and after each change. When fewer lines of surrounding context exist they all must match. By default no context is ever ignored. Implies --apply.
+
+See also INCOMPATIBLE OPTIONS below.
+
+--no-ff
+--force-rebase
+-f
+Individually replay all rebased commits instead of fast-forwarding over the unchanged ones. This ensures that the entire history of the rebased branch is composed of new commits.
+
+You may find this helpful after reverting a topic branch merge, as this option recreates the topic branch with fresh commits so it can be remerged successfully without needing to "revert the reversion" (see the revert-a-faulty-merge How-To for details).
+
+--fork-point
+--no-fork-point
+Use reflog to find a better common ancestor between <upstream> and <branch> when calculating which commits have been introduced by <branch>.
+
+When --fork-point is active, fork_point will be used instead of <upstream> to calculate the set of commits to rebase, where fork_point is the result of git merge-base --fork-point <upstream> <branch> command (see git-merge-base[1]). If fork_point ends up being empty, the <upstream> will be used as a fallback.
+
+If <upstream> is given on the command line, then the default is --no-fork-point, otherwise the default is --fork-point.
+
+If your branch was based on <upstream> but <upstream> was rewound and your branch contains commits which were dropped, this option can be used with --keep-base in order to drop those commits from your branch.
+
+See also INCOMPATIBLE OPTIONS below.
+
+--ignore-whitespace
+--whitespace=<option>
+These flags are passed to the git apply program (see git-apply[1]) that applies the patch. Implies --apply.
+
+See also INCOMPATIBLE OPTIONS below.
+
+--committer-date-is-author-date
+--ignore-date
+These flags are passed to git am to easily change the dates of the rebased commits (see git-am[1]).
+
+See also INCOMPATIBLE OPTIONS below.
+
+--signoff
+Add a Signed-off-by: trailer to all the rebased commits. Note that if --interactive is given then only commits marked to be picked, edited or reworded will have the trailer added.
+
+See also INCOMPATIBLE OPTIONS below.
+
+-i
+--interactive
+Make a list of the commits which are about to be rebased. Let the user edit that list before rebasing. This mode can also be used to split commits (see SPLITTING COMMITS below).
+
+The commit list format can be changed by setting the configuration option rebase.instructionFormat. A customized instruction format will automatically have the long commit hash prepended to the format.
+
+See also INCOMPATIBLE OPTIONS below.
+
+-r
+--rebase-merges[=(rebase-cousins|no-rebase-cousins)]
+By default, a rebase will simply drop merge commits from the todo list, and put the rebased commits into a single, linear branch. With --rebase-merges, the rebase will instead try to preserve the branching structure within the commits that are to be rebased, by recreating the merge commits. Any resolved merge conflicts or manual amendments in these merge commits will have to be resolved/re-applied manually.
+
+By default, or when no-rebase-cousins was specified, commits which do not have <upstream> as direct ancestor will keep their original branch point, i.e. commits that would be excluded by git-log[1]'s --ancestry-path option will keep their original ancestry by default. If the rebase-cousins mode is turned on, such commits are instead rebased onto <upstream> (or <onto>, if specified).
+
+The --rebase-merges mode is similar in spirit to the deprecated --preserve-merges but works with interactive rebases, where commits can be reordered, inserted and dropped at will.
+
+It is currently only possible to recreate the merge commits using the recursive merge strategy; Different merge strategies can be used only via explicit exec git merge -s <strategy> [...] commands.
+
+See also REBASING MERGES and INCOMPATIBLE OPTIONS below.
+
+-p
+--preserve-merges
+[DEPRECATED: use --rebase-merges instead] Recreate merge commits instead of flattening the history by replaying commits a merge commit introduces. Merge conflict resolutions or manual amendments to merge commits are not preserved.
+
+This uses the --interactive machinery internally, but combining it with the --interactive option explicitly is generally not a good idea unless you know what you are doing (see BUGS below).
+
+See also INCOMPATIBLE OPTIONS below.
+
+-x <cmd>
+--exec <cmd>
+Append "exec <cmd>" after each line creating a commit in the final history. <cmd> will be interpreted as one or more shell commands. Any command that fails will interrupt the rebase, with exit code 1.
+
+You may execute several commands by either using one instance of --exec with several commands:
+
+git rebase -i --exec "cmd1 && cmd2 && ..."
+or by giving more than one --exec:
+
+git rebase -i --exec "cmd1" --exec "cmd2" --exec ...
+If --autosquash is used, "exec" lines will not be appended for the intermediate commits, and will only appear at the end of each squash/fixup series.
+
+This uses the --interactive machinery internally, but it can be run without an explicit --interactive.
+
+See also INCOMPATIBLE OPTIONS below.
+
+--root
+Rebase all commits reachable from <branch>, instead of limiting them with an <upstream>. This allows you to rebase the root commit(s) on a branch. When used with --onto, it will skip changes already contained in <newbase> (instead of <upstream>) whereas without --onto it will operate on every change. When used together with both --onto and --preserve-merges, all root commits will be rewritten to have <newbase> as parent instead.
+
+See also INCOMPATIBLE OPTIONS below.
+
+--autosquash
+--no-autosquash
+When the commit log message begins with "squash! …​" (or "fixup! …​"), and there is already a commit in the todo list that matches the same ..., automatically modify the todo list of rebase -i so that the commit marked for squashing comes right after the commit to be modified, and change the action of the moved commit from pick to squash (or fixup). A commit matches the ... if the commit subject matches, or if the ... refers to the commit’s hash. As a fall-back, partial matches of the commit subject work, too. The recommended way to create fixup/squash commits is by using the --fixup/--squash options of git-commit[1].
+
+If the --autosquash option is enabled by default using the configuration variable rebase.autoSquash, this option can be used to override and disable this setting.
+
+See also INCOMPATIBLE OPTIONS below.
+
+--autostash
+--no-autostash
+Automatically create a temporary stash entry before the operation begins, and apply it after the operation ends. This means that you can run rebase on a dirty worktree. However, use with care: the final stash application after a successful rebase might result in non-trivial conflicts.
+
+--reschedule-failed-exec
+--no-reschedule-failed-exec
+Automatically reschedule exec commands that failed. This only makes sense in interactive mode (or when an --exec option was provided).`
+
+const resetFlagsStr=`--soft
+Does not touch the index file or the working tree at all (but resets the head to <commit>, just like all modes do). This leaves all your changed files "Changes to be committed", as git status would put it.
+
+--mixed
+Resets the index but not the working tree (i.e., the changed files are preserved but not marked for commit) and reports what has not been updated. This is the default action.
+
+If -N is specified, removed paths are marked as intent-to-add (see git-add[1]).
+
+--hard
+Resets the index and working tree. Any changes to tracked files in the working tree since <commit> are discarded.
+
+--merge
+Resets the index and updates the files in the working tree that are different between <commit> and HEAD, but keeps those which are different between the index and working tree (i.e. which have changes which have not been added). If a file that is different between <commit> and the index has unstaged changes, reset is aborted.
+
+In other words, --merge does something like a git read-tree -u -m <commit>, but carries forward unmerged index entries.
+
+--keep
+Resets index entries and updates files in the working tree that are different between <commit> and HEAD. If a file that is different between <commit> and HEAD has local changes, reset is aborted.
+
+--[no-]recurse-submodules
+When the working tree is updated, using --recurse-submodules will also recursively reset the working tree of all active submodules according to the commit recorded in the superproject, also setting the submodules' HEAD to be detached at that commit.`

@@ -7,6 +7,7 @@ import (
 	"github.com/posener/complete/v2"
 	"github.com/posener/complete/v2/predict"
 	"github.com/thoas/go-funk"
+	"strings"
 )
 
 var (
@@ -68,8 +69,13 @@ func main() {
 	cmds := cmd.AllBitAndGitSubCommands(cmd.ShellCmd)
 	completionSubCmdMap := map[string]*complete.Command{}
 	for _, v := range cmds {
-		flags := funk.Map(cmd.FlagSuggestionsForCommand(v.Name(), "--"), func(x prompt.Suggest) (string, complete.Predictor) {
-			return x.Text, predict.Nothing
+		flagSuggestions := append(cmd.FlagSuggestionsForCommand(v.Name(), "--"), cmd.FlagSuggestionsForCommand(v.Name(), "--")...)
+		flags := funk.Map(flagSuggestions, func(x prompt.Suggest) (string, complete.Predictor) {
+			if strings.HasPrefix(x.Text, "--") {
+				return x.Text[2:], predict.Nothing
+			} else {
+				return x.Text[1:], predict.Nothing
+			}
 		})
 		completionSubCmdMap[v.Name()] = &complete.Command{
 			Flags: flags.(map[string]complete.Predictor),
