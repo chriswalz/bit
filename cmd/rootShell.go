@@ -13,8 +13,8 @@ var cfgFile string
 // ShellCmd represents the base command when called without any subcommands
 var ShellCmd = &cobra.Command{
 	Use:   "bit",
-	Short: "Bit is Git with a simple interface. Plus you can still use all the old git commands",
-	Long:  `v0.3.11`,
+	Short: "Bit is a Git CLI that predicts what you want to do",
+	Long:  `v0.3.16`,
 	Run: func(cmd *cobra.Command, args []string) {
 		_, bitCmdMap := AllBitSubCommands(cmd)
 		allBitCmds := AllBitAndGitSubCommands(cmd)
@@ -25,6 +25,7 @@ var ShellCmd = &cobra.Command{
 			"checkout": branchListSuggestions,
 			"switch":   branchListSuggestions,
 			"co":       branchListSuggestions,
+			"merge":    branchListSuggestions,
 			"add":      GitAddSuggestions(),
 			"release": {
 				{Text: "bump", Description: "Increment SemVer from tags and release"},

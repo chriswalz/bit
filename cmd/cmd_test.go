@@ -60,6 +60,11 @@ func TestAllBitAndGitSubCommands(t *testing.T) {
 	}
 }
 
+func TestParseManPage(t *testing.T) {
+	reality := parseManPage("rebase")
+	assert.NotContains(t, reality, "GIT-REBASE(1)")
+}
+
 func TestFlagSuggestionsForCommand(t *testing.T) {
 	// fixme add support for all git sub commands
 	expects :=
@@ -69,6 +74,11 @@ func TestFlagSuggestionsForCommand(t *testing.T) {
 			expectedFlags   []string
 		}{
 			{
+				"rebase",
+				[]string{"-i"},
+				[]string{"--continue", "--abort", "--merge"},
+			},
+			{
 				"push",
 				[]string{"-f"},
 				[]string{"--force", "--dry-run", "--porcelain", "--delete", "--tags"},
@@ -77,11 +87,6 @@ func TestFlagSuggestionsForCommand(t *testing.T) {
 				"pull",
 				[]string{"-q"},
 				[]string{"--ff-only", "--no-ff", "--no-edit"},
-			},
-			{
-				"commit",
-				[]string{"-a", "-F <file>"},
-				[]string{"--all", "--squash=<commit>", "--reset-author", "--branch", "--allow-empty"},
 			},
 		}
 	for _, e := range expects {
@@ -93,6 +98,7 @@ func TestFlagSuggestionsForCommand(t *testing.T) {
 		for _, ee := range e.expectedOptions {
 			assert.Contains(t, realityOptions, ee)
 		}
+
 	}
 }
 

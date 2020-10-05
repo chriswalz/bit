@@ -8,6 +8,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"regexp"
 	"strings"
 )
 
@@ -104,6 +105,14 @@ func StashableChanges() bool {
 		//fmt.Println(err)
 	}
 	return strings.Contains(string(msg), "Changes to be committed:") || strings.Contains(string(msg), "Changes not staged for commit:")
+}
+
+func MostRecentCommonAncestorCommit(branchA, branchB string) string {
+	msg, err := exec.Command("git", "merge-base", branchA, branchB).CombinedOutput()
+	if err != nil {
+		//fmt.Println(err)
+	}
+	return string(msg)
 }
 
 func StashList() []string {
@@ -376,10 +385,13 @@ func FlagSuggestionsForCommand(gitSubCmd string, flagtype string) []prompt.Sugge
 		"pull":     pullFlagsStr,
 		"push":     pushFlagsStr,
 		"log":      logFlagsStr,
+		"rebase":   rebaseFlagsStr,
+		"reset":    resetFlagsStr,
 	}
 	str = flagMap[gitSubCmd]
 	if str == "" {
 		return []prompt.Suggest{}
+		//str = parseManPage(gitSubCmd)
 	}
 
 	list := strings.Split(str, ".\n\n")
@@ -448,6 +460,10 @@ func CommonCommandsList() []*cobra.Command {
 			Use:   "commit --amend --no-edit",
 			Short: "Amend most recent commit with added changes",
 		},
+		{
+			Use:   "merge --squash",
+			Short: "Squash and merge changes from a specified branch",
+		},
 	}
 }
 
@@ -462,4 +478,18 @@ func RunScriptWithString(path string, script string, args ...string) {
 	if err != nil {
 		fmt.Println(err)
 	}
+}
+
+func parseManPage(subCmd string) string {
+	msg, err := exec.Command("/bin/bash", "-c", "git help "+subCmd+" | col -b").CombinedOutput()
+	if err != nil {
+		fmt.Println(err)
+	}
+	splitA := strings.Split(string(msg), "\n\nOPTIONS")
+	splitB := regexp.MustCompile(`\.\n\n[A-Z]+`).Split(splitA[1], 2)
+	rawFlagSection := splitB[0]
+	//removeTabs := strings.ReplaceAll(rawFlagSection, "\t", "%%%")
+	//removeTabs := strings.ReplaceAll(rawFlagSection, "\n\t", "")
+	//removeTabs = strings.ReplaceAll(removeTabs, "%%%", "\n\n\t")
+	return rawFlagSection
 }

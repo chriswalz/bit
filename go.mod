@@ -10,6 +10,6 @@ require (
 	github.com/posener/script v1.1.5 // indirect
 	github.com/spf13/cobra v1.0.0
 	github.com/stretchr/testify v1.4.0
-	github.com/thoas/go-funk v0.7.0 // indirect
+	github.com/thoas/go-funk v0.7.0
 	gopkg.in/yaml.v2 v2.2.4 // indirect
 )
