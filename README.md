@@ -2,7 +2,7 @@
 <p align="center">
 <img
     src="https://user-images.githubusercontent.com/6971318/95147815-cd1d6a80-074f-11eb-8265-56466ac628f8.gif"
-    width="600px" border="0" alt="croc">
+    width="600px" border="0" alt="bit">
 <br>
 <a href="https://github.com/chriswalz/bit/tags"><img src="https://img.shields.io/badge/version-v0.4.1-brightgreen.svg?style=flat-square" alt="Version"></a>
 <a href="https://goreportcard.com/report/github.com/chriswalz/bit"><img src="https://goreportcard.com/badge/github.com/chriswalz/bit" alt="Version"></a>
@@ -90,6 +90,33 @@ Switched to a new branch 'example-branch'
 - Simplify your entire rebase workflow with a single command `bit sync` 
 - Automatic suggestions at your fingertips 
 - `bit` is **fully compatible** with `git`. All features of git are available if need be.  
+
+###### Common commands at your finger tips 
+
+<p align="center">
+<img
+    src="https://user-images.githubusercontent.com/6971318/95157964-6eb0b600-0768-11eb-8f8a-075e2987fde8.gif"
+    width="600px" border="0" alt="bit">
+<br>
+</p>
+
+###### Commit, bump a tag and push with a single command 
+
+<p align="center">
+<img
+    src="https://user-images.githubusercontent.com/6971318/95157973-753f2d80-0768-11eb-8ef6-31239c76d305.gif"
+    width="600px" border="0" alt="bit">
+<br>
+</p>
+
+###### Instant git statistics and config information 
+
+<p align="center">
+<img
+    src="https://user-images.githubusercontent.com/6971318/95158539-d7e4f900-0769-11eb-8530-9ffc4610a71a.gif"
+    width="600px" border="0" alt="bit">
+<br>
+</p>
 
 
 ## Principles 
