@@ -19,8 +19,8 @@ sync local-branch
 
 		// if possibly squashed
 		if IsDiverged() {
-			RunInTerminalWithColor("git", []string{"status", "-sb"})
-			yes := AskConfirm("Force (destructive) push to origin/" + CurrentBranch() + "? Y/n")
+			RunInTerminalWithColor("git", []string{"status", "-sb", "--untracked-files=no"})
+			yes := AskConfirm("Force (destructive) push to origin/" + CurrentBranch() + "?")
 			if yes {
 				RunInTerminalWithColor("git", []string{"push", "--force-with-lease"})
 			}
@@ -49,7 +49,7 @@ sync local-branch
 		// After syncing with current branch and user wants to sync with another branch
 
 		if CurrentBranch() == "master" && len(args) == 1 && strings.HasSuffix(args[0], "master"){
-			yes := AskConfirm( "Squash & merge this branch into master")
+			yes := AskConfirm( "Squash & merge this branch into master?")
 
 			if yes {
 				RunInTerminalWithColor("git", []string{"merge", "--squash"})
