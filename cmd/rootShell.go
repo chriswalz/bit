@@ -3,7 +3,6 @@ package cmd
 import (
 	"fmt"
 	"github.com/c-bata/go-prompt"
-	"github.com/manifoldco/promptui"
 	"github.com/spf13/cobra"
 	"os"
 	"strings"
@@ -15,7 +14,7 @@ var cfgFile string
 var ShellCmd = &cobra.Command{
 	Use:   "bit",
 	Short: "Bit is a Git CLI that predicts what you want to do",
-	Long:  `v0.3.16`,
+	Long:  `v0.4.10`,
 	Run: func(cmd *cobra.Command, args []string) {
 		_, bitCmdMap := AllBitSubCommands(cmd)
 		allBitCmds := AllBitAndGitSubCommands(cmd)
@@ -113,19 +112,14 @@ func RunGitCommandWithArgs(args []string) {
 
 		branchExists := checkoutBranch(branchName)
 		if !branchExists && !createBranchFlagUsed{
-			prompt := promptui.Prompt{
-				Label:     "Branch does not exist. Do you want to create it",
-				IsConfirm: true,
-			}
+			yes := AskConfirm("Branch does not exist. Do you want to create it")
 
-			_, err := prompt.Run()
-
-			if err != nil {
-				fmt.Printf("Cancelling...")
+			if yes {
+				RunInTerminalWithColor("git", []string{"checkout", "-b", branchName})
 				return
 			}
 
-			RunInTerminalWithColor("git", []string{"checkout", "-b", branchName})
+			fmt.Printf("Cancelling...")
 			return
 		}
 		refreshBranch()

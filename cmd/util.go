@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"bufio"
 	"fmt"
 	"github.com/c-bata/go-prompt"
 	"github.com/spf13/cobra"
@@ -11,6 +10,7 @@ import (
 	"regexp"
 	"runtime/debug"
 	"strings"
+	"github.com/AlecAivazis/survey/v2"
 )
 
 func RunInTerminalWithColor(cmdName string, args []string) error {
@@ -91,13 +91,21 @@ func IsDiverged() bool {
 	return strings.Contains(string(msg), "have diverged")
 }
 
-// fixme when writing input the user cant backspace in the normal fashion
-func PromptUser(prompt string) string {
-	fmt.Println(prompt)
-	scanner := bufio.NewScanner(os.Stdin)
-	scanner.Scan()
-	resp := scanner.Text()
-	return resp
+func AskConfirm(q string) bool {
+	ans := false
+	survey.AskOne(&survey.Confirm{
+		Message: q,
+	}, &ans)
+	return ans
+}
+
+func AskMultLine(q string) string {
+	text := ""
+	prompt := &survey.Multiline{
+		Message: q,
+	}
+	survey.AskOne(prompt, &text)
+	return text
 }
 
 func StashableChanges() bool {
@@ -281,11 +289,13 @@ func SuggestionPrompt(prefix string, completer func(d prompt.Document) []prompt.
 	result := prompt.Input(prefix, completer,
 		prompt.OptionTitle(""),
 		prompt.OptionHistory([]string{""}),
-		prompt.OptionPrefixTextColor(prompt.Yellow),
-		prompt.OptionPreviewSuggestionTextColor(prompt.Yellow),
+		prompt.OptionPrefixTextColor(prompt.Yellow), // fine
+		//prompt.OptionPreviewSuggestionBGColor(prompt.Yellow),
+		//prompt.OptionPreviewSuggestionTextColor(prompt.Yellow),
 		prompt.OptionSelectedSuggestionBGColor(prompt.Yellow),
 		prompt.OptionSuggestionBGColor(prompt.Yellow),
-		prompt.OptionSelectedSuggestionTextColor(prompt.Purple),
+		prompt.OptionSuggestionTextColor(prompt.DarkGray),
+		prompt.OptionSelectedSuggestionTextColor(prompt.Blue),
 		prompt.OptionDescriptionBGColor(prompt.Black),
 		prompt.OptionDescriptionTextColor(prompt.White),
 		prompt.OptionShowCompletionAtStart(),
@@ -507,4 +517,12 @@ func parseManPage(subCmd string) string {
 	//removeTabs := strings.ReplaceAll(rawFlagSection, "\n\t", "")
 	//removeTabs = strings.ReplaceAll(removeTabs, "%%%", "\n\n\t")
 	return rawFlagSection
+}
+
+func checkoutBranch(branch string) bool {
+	msg, err := exec.Command("git", "checkout", branch).CombinedOutput()
+	if err != nil {
+		//fmt.Println(err)
+	}
+	return !strings.Contains(string(msg), "did not match any file")
 }

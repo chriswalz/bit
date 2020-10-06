@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/manifoldco/promptui"
 	"github.com/spf13/cobra"
 	"strings"
 )
@@ -21,8 +20,8 @@ sync local-branch
 		// if possibly squashed
 		if IsDiverged() {
 			RunInTerminalWithColor("git", []string{"status", "-sb"})
-			resp := PromptUser("Force (destructive) push to origin/" + CurrentBranch() + "? Y/n")
-			if IsYes(resp) {
+			yes := AskConfirm("Force (destructive) push to origin/" + CurrentBranch() + "? Y/n")
+			if yes {
 				RunInTerminalWithColor("git", []string{"push", "--force-with-lease"})
 			}
 			return
@@ -50,19 +49,14 @@ sync local-branch
 		// After syncing with current branch and user wants to sync with another branch
 
 		if CurrentBranch() == "master" && len(args) == 1 && strings.HasSuffix(args[0], "master"){
-			prompt := promptui.Prompt{
-				Label:     "Squash & merge this branch into master",
-				IsConfirm: true,
-			}
+			yes := AskConfirm( "Squash & merge this branch into master")
 
-			_, err := prompt.Run()
-
-			if err != nil {
-				fmt.Printf("Cancelling...")
-				RunInTerminalWithColor("git", []string{"stash", "pop"})
+			if yes {
+				RunInTerminalWithColor("git", []string{"merge", "--squash"})
 				return
 			}
-			RunInTerminalWithColor("git", []string{"merge", "--squash"})
+			fmt.Printf("Cancelling...")
+			//RunInTerminalWithColor("git", []string{"stash", "pop"}) deprecated switch stashing
 			return
 		}
 
