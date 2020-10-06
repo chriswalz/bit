@@ -45,19 +45,16 @@ var ShellCmd = &cobra.Command{
 		if strings.Index(resp, " ") > 0 {
 			subCommand = subCommand[0:strings.Index(resp, " ")]
 		}
-		if bitCmdMap[subCommand] == nil {
-			parsedArgs, err := parseCommandLine(resp)
-			if err != nil {
-				fmt.Println(err)
-				return
-			}
-			RunGitCommandWithArgs(parsedArgs)
-		}
 		parsedArgs, err := parseCommandLine(resp)
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
+		if bitCmdMap[subCommand] == nil {
+			RunGitCommandWithArgs(parsedArgs)
+			return
+		}
+
 		cmd.SetArgs(parsedArgs)
 		cmd.Execute()
 	},

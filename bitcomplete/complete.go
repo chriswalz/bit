@@ -40,7 +40,7 @@ func main() {
 		completionSubCmdMap[v.Name()] = &complete.Command{
 			Flags: flags,
 		}
-		if v.Name() == "checkout" || v.Name() == "co" || v.Name() == "switch" {
+		if v.Name() == "checkout" || v.Name() == "co" || v.Name() == "switch" || v.Name() == "pull" || v.Name() == "merge" {
 			branchCompletion.Flags = flags
 			completionSubCmdMap[v.Name()] = branchCompletion
 		}
