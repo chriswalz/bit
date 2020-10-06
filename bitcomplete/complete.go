@@ -44,6 +44,11 @@ func main() {
 			branchCompletion.Flags = flags
 			completionSubCmdMap[v.Name()] = branchCompletion
 		}
+		if v.Name() == "release" {
+			completionSubCmdMap[v.Name()].Sub = map[string]*complete.Command{
+				"bump": {},
+			}
+		}
 	}
 
 	gogo := &complete.Command{

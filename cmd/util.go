@@ -125,9 +125,12 @@ func StashList() []string {
 }
 
 func refreshBranch() error {
-	_, err := exec.Command("git", "pull", "--ff-only").CombinedOutput()
+	msg, err := exec.Command("git", "pull", "--ff-only").CombinedOutput()
 	if err != nil {
 		return err
+	}
+	if strings.TrimSpace(string(msg)) == "Already up to date." {
+		return nil
 	}
 	fmt.Println("Branch was fast-forwarded")
 	return nil

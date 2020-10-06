@@ -128,13 +128,12 @@ func RunGitCommandWithArgs(args []string) {
 			RunInTerminalWithColor("git", []string{"checkout", "-b", branchName})
 			return
 		}
+		refreshBranch()
+		return
 	}
 	err = RunInTerminalWithColor("git", args)
 	if err != nil {
-		fmt.Println("DEBUG: CMD may not be allow listed", err)
-	}
-	if sub == "checkout" || sub == "switch" || sub == "co" {
-		refreshBranch()
+		fmt.Println("Command may not exist", err)
 	}
 	return
 }

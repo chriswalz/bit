@@ -16,7 +16,7 @@
 - automatic fetch and **branch fast-forwarding** reducing the likelihood of merge conflicts 
 - suggestions **work with git aliases**
 - new commands like `bit sync` that vastly simplify your workflow 
-- commands from **git-extras** such as *git-release* & *git-info*
+- commands from **git-extras** such as `bit release` & `bit info`
 - **fully compatible with git** allowing you to fallback to git if need be.  
 
 ## Installation
@@ -87,7 +87,7 @@ Switched to a new branch 'example-branch'
 ## Features
 
 - Automatic fetching & fast forwarding to keep your branches up to date and prevent merge conflicts
-- Simplify your entire rebase workflow with a single command `bit sync [branch-name]` 
+- Simplify your entire rebase workflow with a single command `bit sync` 
 - Automatic suggestions at your fingertips 
 - `bit` is **fully compatible** with `git`. All features of git are available if need be.  
 
@@ -102,4 +102,4 @@ Switched to a new branch 'example-branch'
 
 ## Inspiration
 
-Thanks to [Gitless](https://gitless.com/), [git-extras](https://github.com/tj/git-extras), researchers in the field and of course the developers of git itself! 
+Thanks to [Gitless](https://gitless.com/), [git-extras](https://github.com/tj/git-extras), researchers in the field and of course the developers of `git` itself! Also, thanks to [go-prompt](https://github.com/c-bata/go-prompt) for the interactive prompt library
