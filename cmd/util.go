@@ -293,7 +293,7 @@ func SuggestionPrompt(prefix string, completer func(d prompt.Document) []prompt.
 		prompt.OptionSwitchKeyBindMode(prompt.CommonKeyBind),
 		prompt.OptionAddKeyBind(prompt.KeyBind{
 			Key: prompt.ControlC,
-			Fn: exit,
+			Fn:  exit,
 		}),
 	)
 	branchName := strings.TrimSpace(result)
@@ -335,27 +335,6 @@ func AllGitAliases() (cc []*cobra.Command) {
 		c := cobra.Command{
 			Use:   split[0],
 			Short: strings.Join(split[1:], " "),
-		}
-		cc = append(cc, &c)
-	}
-
-	return cc
-}
-
-func AllGitSubCommands() (cc []*cobra.Command) {
-	msg, err := exec.Command("git", "help", "-a").CombinedOutput()
-	if err != nil {
-		fmt.Println(err)
-	}
-	commands := strings.Split(strings.Split(strings.Split(string(msg), "Main Porcelain Commands")[1], "Ancillary Commands")[0], "\n")
-	for _, command := range commands {
-		if command == "" {
-			continue
-		}
-		split := strings.Split(strings.TrimSpace(command), "   ")
-		c := cobra.Command{
-			Use:   split[0],
-			Short: strings.TrimSpace(split[len(split)-1]),
 		}
 		cc = append(cc, &c)
 	}
