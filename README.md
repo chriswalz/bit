@@ -87,7 +87,6 @@ Switched to a new branch 'example-branch'
 ## Features
 
 - Automatic fetching & fast forwarding to keep your branches up to date and prevent merge conflicts
-- Every branch is a completely independent line. Changes in your working directory are saved and in the branch that you switch saved changes are retrieved.
 - Simplify your entire rebase workflow with a single command `bit sync [branch-name]` 
 - Automatic suggestions at your fingertips 
 - `bit` is **fully compatible** with `git`. All features of git are available if need be.  
