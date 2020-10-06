@@ -10,7 +10,6 @@ import (
 	"strings"
 )
 
-
 func main() {
 
 	branchCompletion := &complete.Command{

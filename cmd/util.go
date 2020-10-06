@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/AlecAivazis/survey/v2"
 	"github.com/c-bata/go-prompt"
 	"github.com/spf13/cobra"
 	"log"
@@ -10,7 +11,6 @@ import (
 	"regexp"
 	"runtime/debug"
 	"strings"
-	"github.com/AlecAivazis/survey/v2"
 )
 
 func RunInTerminalWithColor(cmdName string, args []string) error {

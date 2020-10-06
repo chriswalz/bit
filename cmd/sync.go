@@ -48,8 +48,8 @@ sync local-branch
 
 		// After syncing with current branch and user wants to sync with another branch
 
-		if CurrentBranch() == "master" && len(args) == 1 && strings.HasSuffix(args[0], "master"){
-			yes := AskConfirm( "Squash & merge this branch into master?")
+		if CurrentBranch() == "master" && len(args) == 1 && strings.HasSuffix(args[0], "master") {
+			yes := AskConfirm("Squash & merge this branch into master?")
 
 			if yes {
 				RunInTerminalWithColor("git", []string{"merge", "--squash"})

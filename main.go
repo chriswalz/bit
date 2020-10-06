@@ -48,4 +48,3 @@ func main() {
 func bitcli() {
 	bitcmd.Execute()
 }
-
