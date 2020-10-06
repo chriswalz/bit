@@ -2,7 +2,7 @@
 <p align="center">
 <img
     src="https://user-images.githubusercontent.com/6971318/95147815-cd1d6a80-074f-11eb-8265-56466ac628f8.gif"
-    width="800px" border="0" alt="croc">
+    width="600px" border="0" alt="croc">
 <br>
 <a href="https://github.com/chriswalz/bit/tags"><img src="https://img.shields.io/badge/version-v0.4.1-brightgreen.svg?style=flat-square" alt="Version"></a>
 <a href="https://goreportcard.com/report/github.com/chriswalz/bit"><img src="https://goreportcard.com/badge/github.com/chriswalz/bit" alt="Version"></a>
