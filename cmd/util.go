@@ -496,15 +496,16 @@ func CommonCommandsList() []*cobra.Command {
 }
 
 func RunScriptWithString(path string, script string, args ...string) {
-	f, err := os.OpenFile(path, os.O_CREATE|os.O_WRONLY, os.ModePerm)
-	if err != nil {
-		log.Fatal(err)
-	}
+	var err error
 	// ubuntu complains when trying to write to existing file that has
-	if stat, err := f.Stat(); err != nil && stat.Size() < 100 {
+	if !fileExists(path) {
+		f, err := os.OpenFile(path, os.O_CREATE|os.O_WRONLY, os.ModePerm)
+		if err != nil {
+			log.Fatal(err)
+		}
 		f.WriteString(script)
+		defer f.Close()
 	}
-	defer f.Close()
 	err = RunInTerminalWithColor(path, args)
 	if err != nil {
 		fmt.Println(err)
@@ -531,4 +532,12 @@ func checkoutBranch(branch string) bool {
 		//fmt.Println(err)
 	}
 	return !strings.Contains(string(msg), "did not match any file")
+}
+
+func fileExists(filename string) bool {
+	info, err := os.Stat(filename)
+	if os.IsNotExist(err) {
+		return false
+	}
+	return !info.IsDir()
 }
