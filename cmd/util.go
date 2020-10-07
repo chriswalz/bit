@@ -343,7 +343,7 @@ func HandleExit() {
 }
 
 func AllGitAliases() (cc []*cobra.Command) {
-	msg, err := exec.Command("git", "config", "--get-regexp", "alias").CombinedOutput()
+	msg, err := exec.Command("git", "config", "--get-regexp", "^alias").CombinedOutput()
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -352,6 +352,7 @@ func AllGitAliases() (cc []*cobra.Command) {
 		if alias == "" {
 			continue
 		}
+
 		split := strings.Fields(strings.TrimSpace(alias)[6:])
 		c := cobra.Command{
 			Use:   split[0],
@@ -415,7 +416,7 @@ func FlagSuggestionsForCommand(gitSubCmd string, flagtype string) []prompt.Sugge
 		"status":   statusFlagsStr,
 		"commit":   commitFlagsStr,
 		"branch":   branchFlagsStr,
-		"tags":     tagFlagsStr,
+		"tag":     tagFlagsStr,
 		"checkout": checkoutFlagsStr,
 		"merge":    mergeFlagsStr,
 		"pull":     pullFlagsStr,
