@@ -9,6 +9,7 @@ import (
 	"os"
 	"os/exec"
 	"regexp"
+	"runtime"
 	"runtime/debug"
 	"strings"
 )
@@ -23,7 +24,9 @@ func RunInTerminalWithColor(cmdName string, args []string) error {
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-	cmd.ExtraFiles = []*os.File{w}
+	if runtime.GOOS != "windows" {
+		cmd.ExtraFiles = []*os.File{w}
+	}
 
 	err = cmd.Run()
 	return err
