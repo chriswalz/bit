@@ -144,3 +144,7 @@ Switched to a new branch 'example-branch'
 ## Inspiration
 
 Thanks to [Gitless](https://gitless.com/), [git-extras](https://github.com/tj/git-extras), researchers in the field and of course the developers of `git` itself! Also, thanks to [go-prompt](https://github.com/c-bata/go-prompt) for the interactive prompt library
+
+## News 
+- https://www.tldrnewsletter.com/archives/20201007
+- https://www.reddit.com/r/golang/comments/j5wggn/bit_an_experimental_git_cli_with_a_powerful/
