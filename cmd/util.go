@@ -500,7 +500,10 @@ func RunScriptWithString(path string, script string, args ...string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	f.WriteString(script)
+	// ubuntu complains when trying to write to existing file that has
+	if stat, err := f.Stat(); err != nil && stat.Size() < 100 {
+		f.WriteString(script)
+	}
 	defer f.Close()
 	err = RunInTerminalWithColor(path, args)
 	if err != nil {
