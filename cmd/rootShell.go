@@ -14,7 +14,7 @@ var cfgFile string
 var ShellCmd = &cobra.Command{
 	Use:   "bit",
 	Short: "Bit is a Git CLI that predicts what you want to do",
-	Long:  `v0.4.10`,
+	Long:  `v0.4.14`,
 	Run: func(cmd *cobra.Command, args []string) {
 		_, bitCmdMap := AllBitSubCommands(cmd)
 		allBitCmds := AllBitAndGitSubCommands(cmd)

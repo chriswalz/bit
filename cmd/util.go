@@ -506,7 +506,7 @@ func RunScriptWithString(path string, script string, args ...string) {
 		f.WriteString(script)
 		defer f.Close()
 	}
-	err = RunInTerminalWithColor(path, args)
+	err = RunInTerminalWithColor("bin/sh", args)
 	if err != nil {
 		fmt.Println(err)
 	}
