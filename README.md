@@ -23,11 +23,23 @@
 
 ## Installation
 
+### Curl
 
 ```shell script
 curl -sf https://gobinaries.com/chriswalz/bit | sh;
 curl -sf https://gobinaries.com/chriswalz/bit/bitcomplete | sh && echo y | COMP_INSTALL=1 bitcomplete
 ```
+
+
+### Go Get
+
+```shell script
+go get -u github.com/chriswalz/bit;
+go get -u github.com/chriswalz/bit/bitcomplete;
+COMP_INSTALL=1 bitcomplete;
+```
+
+*Note*: Tab completion only works on Mac, Linux, Ubuntu etc.
 
 Verify installation with:
 
