@@ -1,9 +1,8 @@
 package gitextras
 
 // GitRelease is the git-release bash script from git-extras
-const GitRelease = `#!/usr/bin/env bash
-set -e
-
+const GitRelease = `
+echo "$PWD"
 hook() {
   local hook=.git/hooks/$1.sh
   # compat without extname

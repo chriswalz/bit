@@ -1,10 +1,7 @@
 package cmd
 
 import (
-	"github.com/chriswalz/bit/gitextras"
 	"github.com/spf13/cobra"
-	"os"
-	"path/filepath"
 )
 
 // releaseCmd represents the release command
@@ -13,12 +10,13 @@ var releaseCmd = &cobra.Command{
 	Short: "Generate a production release",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		arg := args[0]
-		if arg == "bump" {
-			arg = GenBumpedSemVersion()
+		version := args[0]
+		if version == "bump" {
+			version = GenBumpedSemVersion()
 		}
-		os.MkdirAll(filepath.Dir("/tmp/bit/git-extras/"), os.ModePerm)
-		RunScriptWithString("/tmp/bit/git-extras/git-release.sh", gitextras.GitRelease, arg)
+		save("")
+		tagCurrentBranch(version)
+		RunInTerminalWithColor("git", []string{"push", "--force-with-lease"})
 	},
 	Args: cobra.ExactArgs(1),
 }

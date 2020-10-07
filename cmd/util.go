@@ -5,7 +5,6 @@ import (
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/c-bata/go-prompt"
 	"github.com/spf13/cobra"
-	"log"
 	"os"
 	"os/exec"
 	"regexp"
@@ -15,12 +14,21 @@ import (
 )
 
 func RunInTerminalWithColor(cmdName string, args []string) error {
+	dir ,err := os.Getwd()
+	if err != nil {
+		return err
+	}
+	return RunInTerminalWithColorInDir(cmdName, dir, args)
+}
+
+func RunInTerminalWithColorInDir(cmdName string, dir string, args []string) error {
 	_, w, err := os.Pipe()
 	if err != nil {
 		panic(err)
 	}
 
 	cmd := exec.Command(cmdName, args...)
+	cmd.Dir = dir
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
@@ -184,7 +192,7 @@ func GenBumpedSemVersion() string {
 		fmt.Println(err)
 	}
 	out := string(msg)
-	return out
+	return strings.TrimSpace(out)
 }
 
 func AddCommandToShellHistory(cmd string, args []string) {
@@ -497,16 +505,7 @@ func CommonCommandsList() []*cobra.Command {
 
 func RunScriptWithString(path string, script string, args ...string) {
 	var err error
-	// ubuntu complains when trying to write to existing file that has
-	if !fileExists(path) {
-		f, err := os.OpenFile(path, os.O_CREATE|os.O_WRONLY, os.ModePerm)
-		if err != nil {
-			log.Fatal(err)
-		}
-		f.WriteString(script)
-		defer f.Close()
-	}
-	err = RunInTerminalWithColor(path, args)
+	err = RunInTerminalWithColor("bin/sh", args)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -532,6 +531,14 @@ func checkoutBranch(branch string) bool {
 		//fmt.Println(err)
 	}
 	return !strings.Contains(string(msg), "did not match any file")
+}
+
+func tagCurrentBranch(version string) error {
+	_, err := exec.Command("git", "tag", version).CombinedOutput()
+	if err != nil {
+		return err
+	}
+	return err
 }
 
 func fileExists(filename string) bool {

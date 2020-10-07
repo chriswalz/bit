@@ -16,13 +16,13 @@ var infoCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		os.MkdirAll(filepath.Dir("/tmp/bit/git-extras/"), os.ModePerm)
 		fmt.Println("--- INFO ---")
-		RunScriptWithString("/tmp/bit/git-extras/git-info.sh", gitextras.GitInfo)
+		RunInTerminalWithColor("/bin/sh", []string{`-c`, gitextras.GitInfo})
 
 		fmt.Println("--- SUMMARY ---")
-		RunScriptWithString("/tmp/bit/git-extras/git-summary.sh", gitextras.GitSummary)
+		RunInTerminalWithColor("/bin/sh", []string{`-c`, gitextras.GitSummary})
 
 		fmt.Println("--- EFFORT ---")
-		RunScriptWithString("/tmp/bit/git-extras/git-effort.sh", gitextras.GitEffort)
+		RunInTerminalWithColor("/bin/sh", []string{`-c`, gitextras.GitEffort})
 	},
 	//Args: cobra.MaximumNArgs(1),
 }
