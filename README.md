@@ -31,13 +31,22 @@ curl -sf https://gobinaries.com/chriswalz/bit/bitcomplete | sh && echo y | COMP_
 ```
 
 
-### Go Get
+### Go Get 
+Caveats: GOPATH and GOBIN need to be set. Verify with `go env`. If they're not set add this to your .bashrc or .bash_profile etc. AND reset terminal
+```
+export GOPATH=$HOME/go
+export GOBIN=$(go env GOPATH)/bin
+```
+
 
 ```shell script
-go get -u github.com/chriswalz/bit;
-go get -u github.com/chriswalz/bit/bitcomplete; (Warning: bitcomplete/tab completion not installing correctly via Go Get)
+GO111MODULE=on go get github.com/chriswalz/bit@latest;
+GO111MODULE=on go get github.com/chriswalz/bit/bitcomplete@latest;
+
 COMP_INSTALL=1 bitcomplete;
+bit
 ```
+
 
 *Note*: Tab completion only works on Mac, Linux, Ubuntu etc.
 
