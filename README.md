@@ -35,7 +35,7 @@ curl -sf https://gobinaries.com/chriswalz/bit/bitcomplete | sh && echo y | COMP_
 
 ```shell script
 go get -u github.com/chriswalz/bit;
-go get -u github.com/chriswalz/bit/bitcomplete;
+go get -u github.com/chriswalz/bit/bitcomplete; (Warning: bitcomplete/tab completion not installing correctly via Go Get)
 COMP_INSTALL=1 bitcomplete;
 ```
 
