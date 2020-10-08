@@ -17,25 +17,7 @@ var ShellCmd = &cobra.Command{
 	Short: "Bit is a Git CLI that predicts what you want to do",
 	Long:  `v0.4.14`,
 	Run: func(cmd *cobra.Command, args []string) {
-		_, bitCmdMap := AllBitSubCommands(cmd)
-		allBitCmds := AllBitAndGitSubCommands(cmd)
-		//commonCommands := CobraCommandToSuggestions(CommonCommandsList())
-		branchListSuggestions := BranchListSuggestions()
-		completerSuggestionMap := map[string][]prompt.Suggest{
-			"":         {},
-			"shell":    CobraCommandToSuggestions(allBitCmds),
-			"checkout": branchListSuggestions,
-			"switch":   branchListSuggestions,
-			"co":       branchListSuggestions,
-			"merge":    branchListSuggestions,
-			"add":      GitAddSuggestions(),
-			"release": {
-				{Text: "bump", Description: "Increment SemVer from tags and release"},
-				{Text: "<version>", Description: "Name of release version e.g. v0.1.2"},
-			},
-			"reset": GitResetSuggestions(),
-			//"_any": commonCommands,
-		}
+		completerSuggestionMap, bitCmdMap := CreateSuggestionMap(cmd)
 
 		resp := SuggestionPrompt("> bit ", shellCommandCompleter(completerSuggestionMap))
 		subCommand := resp
@@ -51,6 +33,10 @@ var ShellCmd = &cobra.Command{
 			return
 		}
 		if bitCmdMap[subCommand] == nil {
+			yes := GitCommandsPromptUsed(parsedArgs, completerSuggestionMap)
+			if yes {
+				return
+			}
 			RunGitCommandWithArgs(parsedArgs)
 			return
 		}
@@ -58,6 +44,30 @@ var ShellCmd = &cobra.Command{
 		cmd.SetArgs(parsedArgs)
 		cmd.Execute()
 	},
+}
+
+func CreateSuggestionMap(cmd *cobra.Command) (map[string][]prompt.Suggest, map[string]*cobra.Command) {
+	_, bitCmdMap := AllBitSubCommands(cmd)
+	allBitCmds := AllBitAndGitSubCommands(cmd)
+	//commonCommands := CobraCommandToSuggestions(CommonCommandsList())
+	branchListSuggestions := BranchListSuggestions()
+	completerSuggestionMap := map[string][]prompt.Suggest{
+		"":         {},
+		"shell":    CobraCommandToSuggestions(allBitCmds),
+		"checkout": branchListSuggestions,
+		"switch":   branchListSuggestions,
+		"co":       branchListSuggestions,
+		"merge":    branchListSuggestions,
+		"add":      GitAddSuggestions(),
+		"release": {
+			{Text: "bump", Description: "Increment SemVer from tags and release"},
+			{Text: "<version>", Description: "Name of release version e.g. v0.1.2"},
+		},
+		"reset": GitResetSuggestions(),
+		//"_any": commonCommands,
+	}
+	return completerSuggestionMap, bitCmdMap
+
 }
 
 // Execute adds all child commands to the shell command and sets flags appropriately.
@@ -71,37 +81,53 @@ func Execute() {
 
 func shellCommandCompleter(suggestionMap map[string][]prompt.Suggest) func(d prompt.Document) []prompt.Suggest {
 	return func(d prompt.Document) []prompt.Suggest {
-		//fmt.Println(d.GetWordBeforeCursor())
-		// only 1 command
-		var suggestions []prompt.Suggest
-		if len(d.GetWordBeforeCursor()) == len(d.Text) {
-			//fmt.Println("same")
-			suggestions = suggestionMap["shell"]
-		} else {
-			split := strings.Split(d.Text, " ")
-			filterFlags := make([]string, 0, len(split))
-			for i, v := range split {
-				if !strings.HasPrefix(v, "-") || i == len(split)-1 {
-					filterFlags = append(filterFlags, v)
-				}
-			}
-			prev := filterFlags[0] // in git commit -m "hello"  commit is prev
-			curr := filterFlags[1] // in git commit -m "hello"  "hello" is curr
-			if strings.HasPrefix(curr, "--") {
-				suggestions = FlagSuggestionsForCommand(prev, "--")
-			} else if strings.HasPrefix(curr, "-") {
-				suggestions = FlagSuggestionsForCommand(prev, "-")
-			} else if suggestionMap[prev] != nil {
-				suggestions = suggestionMap[prev]
-			}
-		}
-		//suggestions = append(suggestionMap["_any"], suggestions...)
-		return prompt.FilterContains(suggestions, d.GetWordBeforeCursor(), true)
+		return promptCompleter(suggestionMap, d.Text)
 	}
 }
 
+func branchCommandCompleter(suggestionMap map[string][]prompt.Suggest) func(d prompt.Document) []prompt.Suggest {
+	return func(d prompt.Document) []prompt.Suggest {
+		return promptCompleter(suggestionMap, "checkout " + d.Text)
+	}
+}
+
+func promptCompleter(suggestionMap map[string][]prompt.Suggest, text string) []prompt.Suggest{
+	var suggestions []prompt.Suggest
+	split := strings.Split(text, " ")
+	filterFlags := make([]string, 0, len(split))
+	for i, v := range split {
+		if !strings.HasPrefix(v, "-") || i == len(split)-1 {
+			filterFlags = append(filterFlags, v)
+		}
+	}
+	prev := filterFlags[0] // in git commit -m "hello"  commit is prev
+	curr := filterFlags[1] // in git commit -m "hello"  "hello" is curr
+	if len(prev) == len(text) {
+		suggestions = suggestionMap["shell"]
+	} else {
+		if strings.HasPrefix(curr, "--") {
+			suggestions = FlagSuggestionsForCommand(prev, "--")
+		} else if strings.HasPrefix(curr, "-") {
+			suggestions = FlagSuggestionsForCommand(prev, "-")
+		} else if suggestionMap[prev] != nil {
+			suggestions = suggestionMap[prev]
+		}
+	}
+	return prompt.FilterContains(suggestions, curr, true)
+}
+
+
+
 func RunGitCommandWithArgs(args []string) {
 	var err error
+	err = RunInTerminalWithColor("git", args)
+	if err != nil {
+		fmt.Println("Command may not exist", err)
+	}
+	return
+}
+
+func GitCommandsPromptUsed(args []string, suggestionMap map[string][]prompt.Suggest) bool {
 	sub := args[0]
 	// handle checkout,switch,co commands as checkout
 	// if "-b" flag is not provided and branch does not exist
@@ -109,11 +135,13 @@ func RunGitCommandWithArgs(args []string) {
 	// expected usage format
 	//   bit (checkout|switch|co) [-b] branch-name
 	if sub == "checkout" || sub == "switch" || sub == "co" {
+		branchName := ""
 		if len(args) < 2 {
-			fmt.Println("invalid command: expected branch name")
-			return
+			branchName = SuggestionPrompt("> bit " + sub, branchCommandCompleter(suggestionMap))
+		} else {
+			branchName = strings.TrimSpace(args[len(args)-1])
 		}
-		branchName := strings.TrimSpace(args[len(args)-1])
+
 		if strings.HasPrefix(branchName, "origin/") {
 			branchName = branchName[7:]
 		}
@@ -125,22 +153,18 @@ func RunGitCommandWithArgs(args []string) {
 		branchExists := checkoutBranch(branchName)
 		if branchExists {
 			refreshBranch()
-			return
+			return true
 		}
 
 		if !createBranch && !AskConfirm("Branch does not exist. Do you want to create it?") {
 			fmt.Printf("Cancelling...")
-			return
+			return true
 		}
 
 		RunInTerminalWithColor("git", []string{"checkout", "-b", branchName})
-		return
+		return true
 	}
-	err = RunInTerminalWithColor("git", args)
-	if err != nil {
-		fmt.Println("Command may not exist", err)
-	}
-	return
+	return false
 }
 
 func parseCommandLine(command string) ([]string, error) {

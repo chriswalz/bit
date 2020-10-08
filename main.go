@@ -41,6 +41,11 @@ func main() {
 	if len(argsWithoutProg) == 0 || find(bitcliCmds, argsWithoutProg[0]) {
 		bitcli()
 	} else {
+		completerSuggestionMap, _ := bitcmd.CreateSuggestionMap(bitcmd.ShellCmd)
+		yes := bitcmd.GitCommandsPromptUsed(argsWithoutProg, completerSuggestionMap)
+		if yes {
+			return
+		}
 		bitcmd.RunGitCommandWithArgs(argsWithoutProg)
 	}
 }
