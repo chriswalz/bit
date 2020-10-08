@@ -2,10 +2,11 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/c-bata/go-prompt"
-	"github.com/spf13/cobra"
 	"os"
 	"strings"
+
+	"github.com/c-bata/go-prompt"
+	"github.com/spf13/cobra"
 )
 
 var cfgFile string
@@ -102,27 +103,37 @@ func shellCommandCompleter(suggestionMap map[string][]prompt.Suggest) func(d pro
 func RunGitCommandWithArgs(args []string) {
 	var err error
 	sub := args[0]
+	// handle checkout,switch,co commands as checkout
+	// if "-b" flag is not provided and branch does not exist
+	// user would be prompted asking whether to create a branch or not
+	// expected usage format
+	//   bit (checkout|switch|co) [-b] branch-name
 	if sub == "checkout" || sub == "switch" || sub == "co" {
+		if len(args) < 2 {
+			fmt.Println("invalid command: expected branch name")
+			return
+		}
 		branchName := strings.TrimSpace(args[len(args)-1])
 		if strings.HasPrefix(branchName, "origin/") {
 			branchName = branchName[7:]
 		}
 		args[len(args)-1] = branchName
-		createBranchFlagUsed := args[len(args)-2] == "-b"
-
+		var createBranch bool
+		if len(args) == 3 && args[len(args)-2] == "-b" {
+			createBranch = true
+		}
 		branchExists := checkoutBranch(branchName)
-		if !branchExists && !createBranchFlagUsed {
-			yes := AskConfirm("Branch does not exist. Do you want to create it?")
+		if branchExists {
+			refreshBranch()
+			return
+		}
 
-			if yes {
-				RunInTerminalWithColor("git", []string{"checkout", "-b", branchName})
-				return
-			}
-
+		if !createBranch && !AskConfirm("Branch does not exist. Do you want to create it?") {
 			fmt.Printf("Cancelling...")
 			return
 		}
-		refreshBranch()
+
+		RunInTerminalWithColor("git", []string{"checkout", "-b", branchName})
 		return
 	}
 	err = RunInTerminalWithColor("git", args)
