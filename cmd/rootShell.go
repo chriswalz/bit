@@ -101,17 +101,17 @@ func promptCompleter(suggestionMap map[string][]prompt.Suggest, text string) []p
 		}
 	}
 	prev := filterFlags[0] // in git commit -m "hello"  commit is prev
-	curr := filterFlags[1] // in git commit -m "hello"  "hello" is curr
 	if len(prev) == len(text) {
 		suggestions = suggestionMap["shell"]
-	} else {
-		if strings.HasPrefix(curr, "--") {
-			suggestions = FlagSuggestionsForCommand(prev, "--")
-		} else if strings.HasPrefix(curr, "-") {
-			suggestions = FlagSuggestionsForCommand(prev, "-")
-		} else if suggestionMap[prev] != nil {
-			suggestions = suggestionMap[prev]
-		}
+		return prompt.FilterContains(suggestions, prev, true)
+	}
+	curr := filterFlags[1] // in git commit -m "hello"  "hello" is curr
+	if strings.HasPrefix(curr, "--") {
+		suggestions = FlagSuggestionsForCommand(prev, "--")
+	} else if strings.HasPrefix(curr, "-") {
+		suggestions = FlagSuggestionsForCommand(prev, "-")
+	} else if suggestionMap[prev] != nil {
+		suggestions = suggestionMap[prev]
 	}
 	return prompt.FilterContains(suggestions, curr, true)
 }
@@ -137,7 +137,7 @@ func GitCommandsPromptUsed(args []string, suggestionMap map[string][]prompt.Sugg
 	if sub == "checkout" || sub == "switch" || sub == "co" {
 		branchName := ""
 		if len(args) < 2 {
-			branchName = SuggestionPrompt("> bit " + sub, branchCommandCompleter(suggestionMap))
+			branchName = SuggestionPrompt("> bit " + sub + " ", branchCommandCompleter(suggestionMap))
 		} else {
 			branchName = strings.TrimSpace(args[len(args)-1])
 		}

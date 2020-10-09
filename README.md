@@ -157,3 +157,5 @@ Thanks to [Gitless](https://gitless.com/), [git-extras](https://github.com/tj/gi
 ## News 
 - https://www.tldrnewsletter.com/archives/20201007
 - https://www.reddit.com/r/golang/comments/j5wggn/bit_an_experimental_git_cli_with_a_powerful/
+- https://b.hatena.ne.jp/entry/s/github.com/chriswalz/bit
+- https://news.hada.io/topic?id=2990

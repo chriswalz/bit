@@ -31,6 +31,7 @@ func find(slice []string, val string) bool {
 }
 
 func main() {
+	// defer needed to handle funkyness with CTRL + C & go-prompt
 	defer bitcmd.HandleExit()
 	if !bitcmd.IsGitRepo() {
 		fmt.Println("fatal: not a git repository (or any of the parent directories): .git")
