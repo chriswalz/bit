@@ -346,7 +346,8 @@ func HandleExit() {
 func AllGitAliases() (cc []*cobra.Command) {
 	msg, err := exec.Command("git", "config", "--get-regexp", "^alias").CombinedOutput()
 	if err != nil {
-		fmt.Println("Error was", err)
+		log.Println("Git alias retrieval failed:", err)
+		log.Println("alias msg:", string(msg))
 	}
 	log.Println("post git regex alias")
 	aliases := strings.Split(strings.TrimSpace(string(msg)), "\n")
