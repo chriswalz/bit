@@ -345,7 +345,8 @@ func HandleExit() {
 func AllGitAliases() (cc []*cobra.Command) {
 	msg, err := exec.Command("git", "config", "--get-regexp", "^alias").CombinedOutput()
 	if err != nil {
-		fmt.Println(err)
+		//fmt.Println(err)
+		return cc
 	}
 	aliases := strings.Split(strings.TrimSpace(string(msg)), "\n")
 	for _, alias := range aliases {
