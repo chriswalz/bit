@@ -134,6 +134,9 @@ func GitCommandsPromptUsed(args []string, suggestionMap map[string][]prompt.Sugg
 	// user would be prompted asking whether to create a branch or not
 	// expected usage format
 	//   bit (checkout|switch|co) [-b] branch-name
+	if args[len(args)-1] == "--version" {
+		fmt.Println("bit version 0.4.17")
+	}
 	if sub == "checkout" || sub == "switch" || sub == "co" {
 		branchName := ""
 		if len(args) < 2 {
