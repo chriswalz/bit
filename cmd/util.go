@@ -169,14 +169,21 @@ func BranchList() []Branch {
 	if err != nil {
 		//fmt.Println(err)
 	}
-	list := strings.Split(string(msg), "\n")
+	list := strings.Split(strings.TrimSpace(string(msg)), "\n")
+
 	var branches []Branch
-	for i := 0; i < len(list)-1; i++ {
+	for i := 0; i < len(list); i++ {
+		startInfoIndex := strings.Index(list[i], "(")
+		relativeDate := "Unknown date"
+		if startInfoIndex != -1 {
+			relativeDate = list[i][startInfoIndex:]
+		}
+
 		cols := strings.Split(list[i], "; ")
 		b := Branch{
 			Author:       cols[1],
 			Name:         cols[3],
-			RelativeDate: list[i][strings.Index(list[i], "("):],
+			RelativeDate: relativeDate,
 		}
 		if b.Name == "origin/master" || b.Name == "origin/HEAD" {
 			continue
