@@ -539,9 +539,9 @@ func checkoutBranch(branch string) bool {
 }
 
 func tagCurrentBranch(version string) error {
-	_, err := exec.Command("git", "tag", version).CombinedOutput()
+	msg, err := exec.Command("git", "tag", version).CombinedOutput()
 	if err != nil {
-		return err
+		return fmt.Errorf("%v: %w", string(msg), err)
 	}
 	return err
 }

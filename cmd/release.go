@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
+	"log"
 )
 
 // releaseCmd represents the release command
@@ -15,7 +16,11 @@ var releaseCmd = &cobra.Command{
 			version = GenBumpedSemVersion()
 		}
 		save("")
-		tagCurrentBranch(version)
+		err := tagCurrentBranch(version)
+		if err != nil {
+			log.Println(err)
+			return
+		}
 		RunInTerminalWithColor("git", []string{"push", "--force-with-lease"})
 		RunInTerminalWithColor("git", []string{"push", "--tags"})
 	},
