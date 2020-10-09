@@ -46,8 +46,11 @@ func main() {
 		log.Println("bit cli")
 		bitcli()
 	} else {
+		log.Println("git cli start")
 		completerSuggestionMap, _ := bitcmd.CreateSuggestionMap(bitcmd.ShellCmd)
+		log.Println("post suggestion")
 		yes := bitcmd.GitCommandsEnhancementPrompt(argsWithoutProg, completerSuggestionMap)
+		log.Println("post enhance?")
 		if yes {
 			log.Println("git enhancement command used")
 			return
