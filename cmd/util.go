@@ -5,6 +5,7 @@ import (
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/c-bata/go-prompt"
 	"github.com/spf13/cobra"
+	"log"
 	"os"
 	"os/exec"
 	"regexp"
@@ -377,9 +378,13 @@ func AllBitSubCommands(rootCmd *cobra.Command) ([]*cobra.Command, map[string]*co
 }
 
 func AllBitAndGitSubCommands(rootCmd *cobra.Command) (cc []*cobra.Command) {
+	log.Println("pre bit git aliases")
 	gitAliases := AllGitAliases()
+	log.Println("pre git sub")
 	gitCmds := AllGitSubCommands()
+	log.Println("pre bit sub")
 	bitCmds, _ := AllBitSubCommands(rootCmd)
+	log.Println("pre common")
 	commonCommands := CommonCommandsList()
 	return concatCopyPreAllocate([][]*cobra.Command{commonCommands, gitCmds, bitCmds, gitAliases})
 }
