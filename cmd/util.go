@@ -347,16 +347,19 @@ func AllGitAliases() (cc []*cobra.Command) {
 	if err != nil {
 		fmt.Println(err)
 	}
-	aliases := strings.Split(string(msg), "\n")
+	aliases := strings.Split(strings.TrimSpace(string(msg)), "\n")
 	for _, alias := range aliases {
 		if alias == "" {
 			continue
 		}
 
 		split := strings.Fields(strings.TrimSpace(alias)[6:])
+		if len(split) < 2 {
+			continue
+		}
 		c := cobra.Command{
-			Use:   split[0],
-			Short: strings.Join(split[1:], " "),
+		Use:   split[0],
+		Short: strings.Join(split[1:], " "),
 		}
 		cc = append(cc, &c)
 	}
