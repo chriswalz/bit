@@ -33,7 +33,7 @@ var ShellCmd = &cobra.Command{
 			return
 		}
 		if bitCmdMap[subCommand] == nil {
-			yes := GitCommandsPromptUsed(parsedArgs, completerSuggestionMap)
+			yes := GitCommandsEnhancementPrompt(parsedArgs, completerSuggestionMap)
 			if yes {
 				return
 			}
@@ -127,7 +127,7 @@ func RunGitCommandWithArgs(args []string) {
 	return
 }
 
-func GitCommandsPromptUsed(args []string, suggestionMap map[string][]prompt.Suggest) bool {
+func GitCommandsEnhancementPrompt(args []string, suggestionMap map[string][]prompt.Suggest) bool {
 	sub := args[0]
 	// handle checkout,switch,co commands as checkout
 	// if "-b" flag is not provided and branch does not exist

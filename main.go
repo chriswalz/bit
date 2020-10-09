@@ -18,6 +18,7 @@ package main
 import (
 	"fmt"
 	bitcmd "github.com/chriswalz/bit/cmd"
+	"log"
 	"os"
 )
 
@@ -31,22 +32,27 @@ func find(slice []string, val string) bool {
 }
 
 func main() {
+	log.Println("Start")
 	// defer needed to handle funkyness with CTRL + C & go-prompt
 	defer bitcmd.HandleExit()
 	if !bitcmd.IsGitRepo() {
 		fmt.Println("fatal: not a git repository (or any of the parent directories): .git")
 		return
 	}
+	log.Println("pre bit")
 	argsWithoutProg := os.Args[1:]
 	bitcliCmds := []string{"save", "sync", "version", "help", "info", "release"}
 	if len(argsWithoutProg) == 0 || find(bitcliCmds, argsWithoutProg[0]) {
+		log.Println("bit cli")
 		bitcli()
 	} else {
 		completerSuggestionMap, _ := bitcmd.CreateSuggestionMap(bitcmd.ShellCmd)
-		yes := bitcmd.GitCommandsPromptUsed(argsWithoutProg, completerSuggestionMap)
+		yes := bitcmd.GitCommandsEnhancementPrompt(argsWithoutProg, completerSuggestionMap)
 		if yes {
+			log.Println("git enhancement command used")
 			return
 		}
+		log.Println("git command")
 		bitcmd.RunGitCommandWithArgs(argsWithoutProg)
 	}
 }
