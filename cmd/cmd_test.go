@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"github.com/c-bata/go-prompt"
 	"github.com/spf13/cobra"
 	"github.com/stretchr/testify/assert"
@@ -50,6 +51,34 @@ func TestBranchList(t *testing.T) {
 		assert.NotContains(t, reality, ne)
 	}
 }
+
+func TestToStructuredBranchList(t *testing.T) {
+	expects :=
+		[]struct {
+			raw             string
+			expectedFirstBranchName string
+		}{
+			{
+				`'2020-10-06; John Doe; bf84c09; origin/other-branch; (3 days ago)'
+'2020-10-06; John Doe; bf84c09; origin/master; (3 days ago)'`,
+				"origin/other-branch",
+			},
+			{
+				`warning: ignoring broken ref refs/remotes/origin/HEAD
+'2020-10-02; John Doe; e5cffc5; origin/release-v2.11.0; (7 days ago)'
+'2020-10-01; John Doe; 2f41d5e; origin/feature_FD-5860; (8 days ago)'`,
+				"origin/release-v2.11.0",
+			},
+		}
+	for _, e := range expects {
+		fmt.Println(e.expectedFirstBranchName)
+		list := toStructuredBranchList(e.raw)
+		assert.Greaterf(t, len(list), 0, e.expectedFirstBranchName)
+		reality := list[0].Name
+		assert.Equal(t, reality, e.expectedFirstBranchName)
+	}
+}
+
 
 // Tests AllBitAndGitSubCommands has common commands, git sub commands, git aliases, git-extras and bit commands
 func TestAllBitAndGitSubCommands(t *testing.T) {

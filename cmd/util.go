@@ -164,26 +164,35 @@ func refreshOnBranch(branchName string) error {
 	return nil
 }
 
-func BranchList() []Branch {
+func branchListRaw() (string, error) {
 	msg, err := exec.Command("git", "for-each-ref", "--sort=-committerdate", "refs/heads/", "refs/remotes", "--format='%(authordate:short); %(authorname); %(color:red)%(objectname:short); %(color:yellow)%(refname:short)%(color:reset); (%(color:green)%(committerdate:relative)%(color:reset))'").CombinedOutput()
+	return string(msg), err
+}
+
+func BranchList() []Branch {
+	rawBranchData, err := branchListRaw()
 	if err != nil {
-		//fmt.Println(err)
+		//log.Println(err) // fixme use debug log
 	}
-	list := strings.Split(strings.TrimSpace(string(msg)), "\n")
+	return toStructuredBranchList(rawBranchData)
+}
+
+func toStructuredBranchList(rawBranchData string) []Branch {
+
+	list := strings.Split(strings.TrimSpace(rawBranchData), "\n")
 
 	var branches []Branch
-	for i := 0; i < len(list); i++ {
-		startInfoIndex := strings.Index(list[i], "(")
-		relativeDate := "Unknown date"
-		if startInfoIndex != -1 {
-			relativeDate = list[i][startInfoIndex:]
+	for _, line := range list {
+		// first character of each should start with ' which all commits have based on expected raw formatting
+		if !strings.HasPrefix(line, `'`) {
+			continue
 		}
 
-		cols := strings.Split(list[i], "; ")
+		cols := strings.Split(line, "; ")
 		b := Branch{
 			Author:       cols[1],
 			Name:         cols[3],
-			RelativeDate: relativeDate,
+			RelativeDate: line[strings.Index(line, "("):],
 		}
 		if b.Name == "origin/master" || b.Name == "origin/HEAD" {
 			continue
