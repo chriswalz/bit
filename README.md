@@ -159,3 +159,18 @@ Thanks to [Gitless](https://gitless.com/), [git-extras](https://github.com/tj/gi
 - https://www.reddit.com/r/golang/comments/j5wggn/bit_an_experimental_git_cli_with_a_powerful/
 - https://b.hatena.ne.jp/entry/s/github.com/chriswalz/bit
 - https://news.hada.io/topic?id=2990
+
+## Changelog 
+v0.5
+
+-[x] `bit switch`, `bit co`, `bit checkout` will show prompt 
+-[x] fix bit tab completion (bitcomplete)
+-[x] various minor fixes
+
+v0.4
+
+-[x] multiline support with Go Survey Library
+-[x] color mitigation to have roughly similar colors across OSs 
+-[x] fix README go get installation instructions
+-[x] QOL improvements for `bit sync`
+ 
