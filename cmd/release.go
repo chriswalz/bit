@@ -17,6 +17,7 @@ var releaseCmd = &cobra.Command{
 		save("")
 		tagCurrentBranch(version)
 		RunInTerminalWithColor("git", []string{"push", "--force-with-lease"})
+		RunInTerminalWithColor("git", []string{"push", "--tags"})
 	},
 	Args: cobra.ExactArgs(1),
 }
