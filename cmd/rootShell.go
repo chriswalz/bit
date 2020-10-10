@@ -87,11 +87,11 @@ func shellCommandCompleter(suggestionMap map[string][]prompt.Suggest) func(d pro
 
 func branchCommandCompleter(suggestionMap map[string][]prompt.Suggest) func(d prompt.Document) []prompt.Suggest {
 	return func(d prompt.Document) []prompt.Suggest {
-		return promptCompleter(suggestionMap, "checkout " + d.Text)
+		return promptCompleter(suggestionMap, "checkout "+d.Text)
 	}
 }
 
-func promptCompleter(suggestionMap map[string][]prompt.Suggest, text string) []prompt.Suggest{
+func promptCompleter(suggestionMap map[string][]prompt.Suggest, text string) []prompt.Suggest {
 	var suggestions []prompt.Suggest
 	split := strings.Split(text, " ")
 	filterFlags := make([]string, 0, len(split))
@@ -116,8 +116,6 @@ func promptCompleter(suggestionMap map[string][]prompt.Suggest, text string) []p
 	return prompt.FilterContains(suggestions, curr, true)
 }
 
-
-
 func RunGitCommandWithArgs(args []string) {
 	var err error
 	err = RunInTerminalWithColor("git", args)
@@ -140,7 +138,7 @@ func GitCommandsPromptUsed(args []string, suggestionMap map[string][]prompt.Sugg
 	if sub == "checkout" || sub == "switch" || sub == "co" {
 		branchName := ""
 		if len(args) < 2 {
-			branchName = SuggestionPrompt("> bit " + sub + " ", branchCommandCompleter(suggestionMap))
+			branchName = SuggestionPrompt("> bit "+sub+" ", branchCommandCompleter(suggestionMap))
 		} else {
 			branchName = strings.TrimSpace(args[len(args)-1])
 		}

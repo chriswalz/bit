@@ -55,7 +55,7 @@ func TestBranchList(t *testing.T) {
 func TestToStructuredBranchList(t *testing.T) {
 	expects :=
 		[]struct {
-			raw             string
+			raw                     string
 			expectedFirstBranchName string
 		}{
 			{
@@ -78,7 +78,6 @@ func TestToStructuredBranchList(t *testing.T) {
 		assert.Equal(t, reality, e.expectedFirstBranchName)
 	}
 }
-
 
 // Tests AllBitAndGitSubCommands has common commands, git sub commands, git aliases, git-extras and bit commands
 func TestAllBitAndGitSubCommands(t *testing.T) {

@@ -4,11 +4,12 @@
     src="https://user-images.githubusercontent.com/6971318/95147815-cd1d6a80-074f-11eb-8265-56466ac628f8.gif"
     width="600px" border="0" alt="bit">
 <br>
-<a href="https://github.com/chriswalz/bit/tags"><img src="https://img.shields.io/badge/version-v0.4.10-brightgreen.svg?style=flat-square" alt="Version"></a>
 <a href="https://goreportcard.com/report/github.com/chriswalz/bit"><img src="https://goreportcard.com/badge/github.com/chriswalz/bit" alt="Version"></a>
 <a href="#"><img src="https://img.shields.io/github/go-mod/go-version/chriswalz/bit" alt="Version"></a>
 <a href="#"><img src="https://img.shields.io/github/stars/chriswalz/bit?style=social" alt="Version"></a>
+<a href="https://github.com/chriswalz/bit/tags"><img src="https://img.shields.io/github/v/tag/chriswalz/bit?sort=semver" alt="Version"></a>
 </p>
+
 
 `bit` is an experimental modernized git CLI built on top of git that provides happy defaults and other niceties:
 
@@ -39,6 +40,7 @@ export GOBIN=$(go env GOPATH)/bin
 ```
 
 
+Enable GO Modules (Windows: `go env -w GO111MODULE=on`)
 ```shell script
 GO111MODULE=on go get github.com/chriswalz/bit@latest;
 GO111MODULE=on go get github.com/chriswalz/bit/bitcomplete@latest;
@@ -163,14 +165,16 @@ Thanks to [Gitless](https://gitless.com/), [git-extras](https://github.com/tj/gi
 ## Changelog 
 v0.5
 
--[x] `bit switch`, `bit co`, `bit checkout` will show prompt 
--[x] fix bit tab completion (bitcomplete)
--[x] various minor fixes
+- [X] `bit switch`, `bit co`, `bit checkout` will show prompt 
+- [X] fix bit tab completion (bitcomplete)
+- [X] fix edge case where there is an invalid ref
+- [X] various minor fixes
+- [X] Deployment: automatic versioning 
 
 v0.4
 
--[x] multiline support with Go Survey Library
--[x] color mitigation to have roughly similar colors across OSs 
--[x] fix README go get installation instructions
--[x] QOL improvements for `bit sync`
+- [X] multiline support with Go Survey Library
+- [X] color mitigation to have roughly similar colors across OSs 
+- [X] fix README go get installation instructions
+- [X] QOL improvements for `bit sync`
  

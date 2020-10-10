@@ -14,7 +14,7 @@ import (
 )
 
 func RunInTerminalWithColor(cmdName string, args []string) error {
-	dir ,err := os.Getwd()
+	dir, err := os.Getwd()
 	if err != nil {
 		return err
 	}
@@ -375,8 +375,8 @@ func AllGitAliases() (cc []*cobra.Command) {
 			continue
 		}
 		c := cobra.Command{
-		Use:   split[0],
-		Short: strings.Join(split[1:], " "),
+			Use:   split[0],
+			Short: strings.Join(split[1:], " "),
 		}
 		cc = append(cc, &c)
 	}
@@ -436,7 +436,7 @@ func FlagSuggestionsForCommand(gitSubCmd string, flagtype string) []prompt.Sugge
 		"status":   statusFlagsStr,
 		"commit":   commitFlagsStr,
 		"branch":   branchFlagsStr,
-		"tag":     tagFlagsStr,
+		"tag":      tagFlagsStr,
 		"checkout": checkoutFlagsStr,
 		"merge":    mergeFlagsStr,
 		"pull":     pullFlagsStr,
