@@ -31,26 +31,10 @@ curl -sf https://gobinaries.com/chriswalz/bit | sh;
 curl -sf https://gobinaries.com/chriswalz/bit/bitcomplete | sh && echo y | COMP_INSTALL=1 bitcomplete
 ```
 
-### using `go` (Harder way to install)
-*Caveats: GOPATH and GOBIN need to be set. Verify with `go env`. If they are not set, add this to your .bashrc or .bash_profile etc. AND open new terminal*
+### using `go`
 ```shell script
-export GOPATH=$HOME/go
-export GOBIN=$(go env GOPATH)/bin
+go get github.com/chriswalz/bit@latest
 ```
-
-```shell script
-GO111MODULE=on go get github.com/chriswalz/bit@latest;
-GO111MODULE=on go get github.com/chriswalz/bit/bitcomplete@latest;
-COMP_INSTALL=1 bitcomplete;
-```
-
-#### using `go` (For Windows Users) 
-```shell script
-go env -w GO111MODULE=on;
-go get github.com/chriswalz/bit@latest;
-bit
-```
-
 *Note*: On Windows only the interactive prompt completion works not classic tab completion
 
 Verify installation with:
