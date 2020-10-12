@@ -46,7 +46,6 @@ func AllGitSubCommands() []*cobra.Command {
 		{Use: "tag", Short: "Create, list, delete or verify a tag object signed with GPG"},
 		{Use: "worktree", Short: "Manage multiple working trees"},
 		{Use: "config", Short: "Get and set repository or global options"},
-		{Use: "fast-export", Short: "Git data exporter"},
 		{Use: "fast-import", Short: "Backend for fast Git data importers"},
 		{Use: "filter-branch", Short: "Rewrite branches"},
 		{Use: "mergetool", Short: "Run merge conflict resolution tools to resolve merge conflicts"},
@@ -76,12 +75,6 @@ func AllGitSubCommands() []*cobra.Command {
 		{Use: "cvsserver", Short: "A CVS server emulator for Git"},
 		{Use: "imap-send", Short: "Send a collection of patches from stdin to an IMAP folder"},
 		{Use: "p4", Short: "Import from and submit to Perforce repositories"},
-		{Use: "rm", Short: "Remove files from the working tree and from the index"},
 		{Use: "fast-export", Short: "Git data exporter"},
-		{Use: "fast-import", Short: "Backend for fast Git data importers"},
-		{Use: "filter-branch", Short: "Rewrite branches"},
-		{Use: "mergetool", Short: "Run merge conflict resolution tools to resolve merge conflicts"},
-		{Use: "pack-refs", Short: "Pack heads and tags for efficient repository access"},
-		{Use: "reflog", Short: "Manage reflog information"},
 	}
 }
