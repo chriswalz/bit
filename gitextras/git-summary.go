@@ -2,7 +2,7 @@ package gitextras
 
 // GitSummary is the git-summary bash script from git-extras
 const GitSummary = `#!/usr/bin/env bash
-cd "$(git root)" || { echo "Can't cd to top level directory";exit 1; }
+# cd "$(git root)" || { echo "Can't cd to top level directory";exit 1; }
 
 SUMMARY_BY_LINE=
 DEDUP_BY_EMAIL=
