@@ -53,7 +53,6 @@ go get github.com/chriswalz/bit@latest;
 bit
 ```
 
-
 *Note*: On Windows only the interactive prompt completion works not classic tab completion
 
 Verify installation with:
