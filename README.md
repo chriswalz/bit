@@ -24,14 +24,14 @@
 
 ## Install
 
-#### using cURL (Simplest way to install) 
+#### using `cURL` (Simplest way to install) 
 
 ```shell script
 curl -sf https://gobinaries.com/chriswalz/bit | sh;
 curl -sf https://gobinaries.com/chriswalz/bit/bitcomplete | sh && echo y | COMP_INSTALL=1 bitcomplete
 ```
 
-#### using `go`
+#### using `go` (Harder way to install)
 Caveats: GOPATH and GOBIN need to be set. Verify with `go env`. If they are not set, add this to your .bashrc or .bash_profile etc. AND open new terminal
 ```shell script
 export GOPATH=$HOME/go
