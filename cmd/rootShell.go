@@ -15,7 +15,7 @@ var cfgFile string
 var ShellCmd = &cobra.Command{
 	Use:   "bit",
 	Short: "Bit is a Git CLI that predicts what you want to do",
-	Long:  `v0.5.7`,
+	Long:  `v0.5.8`,
 	Run: func(cmd *cobra.Command, args []string) {
 		completerSuggestionMap, bitCmdMap := CreateSuggestionMap(cmd)
 
@@ -120,7 +120,7 @@ func RunGitCommandWithArgs(args []string) {
 	var err error
 	err = RunInTerminalWithColor("git", args)
 	if err != nil {
-		fmt.Println("Command may not exist", err)
+		//fixme fmt.Println("Command may not exist", err)  use debug level logging
 	}
 	return
 }
@@ -133,7 +133,7 @@ func GitCommandsPromptUsed(args []string, suggestionMap map[string][]prompt.Sugg
 	// expected usage format
 	//   bit (checkout|switch|co) [-b] branch-name
 	if args[len(args)-1] == "--version" {
-		fmt.Println("bit version v0.5.6")
+		fmt.Println("bit version v0.5.8")
 	}
 	if sub == "checkout" || sub == "switch" || sub == "co" {
 		branchName := ""
