@@ -63,6 +63,7 @@ Platform Support:
 - iTerm2 (macOS)
 - Terminal.app (macOS)
 - Command Prompt (Windows)
+- WSL/Windows Subsystem for Linux (Windows)
 - gnome-terminal (Ubuntu)
 
 ## Bit specific command Usage 
