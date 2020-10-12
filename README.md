@@ -179,3 +179,10 @@ v0.4
 - [X] fix README go get installation instructions
 - [X] QOL improvements for `bit sync`
  
+## How to uninstall
+*go binaries are self-contained so uninstalling simply requires deleting the binary(ies)*
+
+```
+rm `which bit`
+rm `which bitcomplete` 
+```
