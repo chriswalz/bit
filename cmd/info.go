@@ -21,8 +21,9 @@ var infoCmd = &cobra.Command{
 		fmt.Println("--- SUMMARY ---")
 		RunInTerminalWithColor("/bin/sh", []string{`-c`, gitextras.GitSummary})
 
-		fmt.Println("--- EFFORT ---")
-		RunInTerminalWithColor("/bin/sh", []string{`-c`, gitextras.GitEffort})
+		fmt.Println("\n--- EFFORT ---")
+		fmt.Println("\nCommits | Files")
+		RunInTerminalWithColor("/bin/sh", []string{`-c`, `git log --pretty=format: --name-only | sort | uniq -c | sort -rg | awk 'NR > 1 { print }' | head -15`})
 	},
 	//Args: cobra.MaximumNArgs(1),
 }

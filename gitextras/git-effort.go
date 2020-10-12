@@ -3,7 +3,7 @@ package gitextras
 // GitEffort is the git-effort bash script from git-extras
 const GitEffort = `#!/usr/bin/env bash
 
-tmp=$(git_extra_mktemp)
+tmp=bittmpbittmp
 above=0
 # if the output won't be printed to tty, disable the color
 test -t 1 && to_tty=true
