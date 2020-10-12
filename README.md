@@ -22,35 +22,36 @@
 - commands from **git-extras** such as `bit release` & `bit info`
 - **fully compatible with git** allowing you to fallback to git if need be.  
 
-## Installation
+## Install
 
-### Curl
+#### using cURL (Simplest way to install) 
 
 ```shell script
 curl -sf https://gobinaries.com/chriswalz/bit | sh;
 curl -sf https://gobinaries.com/chriswalz/bit/bitcomplete | sh && echo y | COMP_INSTALL=1 bitcomplete
 ```
 
-
-### Go Get 
-Caveats: GOPATH and GOBIN need to be set. Verify with `go env`. If they're not set add this to your .bashrc or .bash_profile etc. AND reset terminal
-```
+#### using `go`
+Caveats: GOPATH and GOBIN need to be set. Verify with `go env`. If they are not set, add this to your .bashrc or .bash_profile etc. AND open new terminal
+```shell script
 export GOPATH=$HOME/go
 export GOBIN=$(go env GOPATH)/bin
 ```
 
-
-Enable GO Modules (Windows: `go env -w GO111MODULE=on`)
 ```shell script
 GO111MODULE=on go get github.com/chriswalz/bit@latest;
 GO111MODULE=on go get github.com/chriswalz/bit/bitcomplete@latest;
-
 COMP_INSTALL=1 bitcomplete;
+```
+
+#### using `go` (For Windows Users) 
+```shell script
+go env -w GO111MODULE=on;
+go get github.com/chriswalz/bit@latest;
 bit
 ```
 
-
-*Note*: Tab completion only works on Mac, Linux, Ubuntu etc.
+*Note*: On Windows only the interactive prompt completion works not classic tab completion
 
 Verify installation with:
 
