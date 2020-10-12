@@ -40,16 +40,17 @@ export GOBIN=$(go env GOPATH)/bin
 
 ```shell script
 GO111MODULE=on go get github.com/chriswalz/bit@latest;
-GO111MODULE=on go get github.com/chriswalz/bit/bitcomplete@latest;
+GO111MODULE=on go get github.com/chriswalz/bit/bitcomplete@latest; 
 COMP_INSTALL=1 bitcomplete;
 ```
 
 #### using `go` (For Windows Users) 
 ```shell script
-go env -w GO111MODULE=on;
-go get github.com/chriswalz/bit@latest;
+go env -w GO111MODULE=on
+go get github.com/chriswalz/bit@latest; # if latest is not working, replace it with the latest tag found here https://github.com/chriswalz/bit/releases
 bit
 ```
+
 
 *Note*: On Windows only the interactive prompt completion works not classic tab completion
 
