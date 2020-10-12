@@ -47,7 +47,9 @@ COMP_INSTALL=1 bitcomplete;
 #### using `go` (For Windows Users) 
 ```shell script
 go env -w GO111MODULE=on
-go get github.com/chriswalz/bit@latest; # if latest is not working, replace it with the latest tag found here https://github.com/chriswalz/bit/releases
+
+# if latest is not working, replace it with the latest tag found here https://github.com/chriswalz/bit/releases
+go get github.com/chriswalz/bit@latest; 
 bit
 ```
 
