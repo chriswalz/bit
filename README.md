@@ -53,6 +53,14 @@ go get github.com/chriswalz/bit@latest;
 bit
 ```
 
+#### using `zinit` 
+```shell script
+zinit ice lucit wait"0" as"program" from"gh-r" pick"bit"
+zinit light "chriswalz/bit"
+```
+
+
+
 *Note*: On Windows only the interactive prompt completion works not classic tab completion
 
 Verify installation with:
