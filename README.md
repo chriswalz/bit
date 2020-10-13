@@ -181,7 +181,9 @@ v0.5
 - [X] fix bit tab completion (bitcomplete)
 - [X] fix edge case where there is an invalid ref
 - [X] various minor fixes
-- [X] Deployment: automatic versioning 
+- [X] more completions
+- [X] better suggestion filtering
+- [X] absolute and relative times for branch suggestions
 
 v0.4
 
