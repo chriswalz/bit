@@ -22,7 +22,7 @@
 - commands from **git-extras** such as `bit release` & `bit info`
 - **fully compatible with git** allowing you to fallback to git if need be.  
 
-## Install
+## Install / Update
 
 ### using `cURL` (Simplest way to install) 
 
@@ -169,10 +169,16 @@ Switched to a new branch 'example-branch'
 Thanks to [Gitless](https://gitless.com/), [git-extras](https://github.com/tj/git-extras), researchers in the field and of course the developers of `git` itself! Also, thanks to [go-prompt](https://github.com/c-bata/go-prompt) for the interactive prompt library
 
 ## News 
+- https://news.ycombinator.com/item?id=24751212
 - https://www.tldrnewsletter.com/archives/20201007
 - https://www.reddit.com/r/golang/comments/j5wggn/bit_an_experimental_git_cli_with_a_powerful/
 - https://b.hatena.ne.jp/entry/s/github.com/chriswalz/bit
 - https://news.hada.io/topic?id=2990
+- https://twitter.com/newsycombinator/status/1315517850954727424
+- https://forum.devtalk.com/t/bit-a-modernized-git-cli-written-in-go/3065
+- https://gocn.vip/topics/11063
+- https://golangweekly.com/issues/333
+- https://archive.faabli.com/archive/2020-10-09 
 
 ## Changelog 
 v0.5
