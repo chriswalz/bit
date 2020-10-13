@@ -486,6 +486,10 @@ func FlagSuggestionsForCommand(gitSubCmd string, flagtype string) []prompt.Sugge
 func CommonCommandsList() []*cobra.Command {
 	return []*cobra.Command{
 		{
+			Use:   "status",
+			Short: "Show the working tree status",
+		},
+		{
 			Use:   "pull --rebase origin master",
 			Short: "Rebase on origin master branch",
 		},
@@ -520,6 +524,10 @@ func CommonCommandsList() []*cobra.Command {
 		{
 			Use:   "log --oneline",
 			Short: "Display one commit per line",
+		},
+		{
+			Use:   "diff --cached",
+			Short: "Shows all staged changes",
 		},
 	}
 }
@@ -568,4 +576,8 @@ func fileExists(filename string) bool {
 		return false
 	}
 	return !info.IsDir()
+}
+
+func isBranchCompletionCommand(command string) bool {
+	return command == "checkout" || command == "switch" || command == "co" || command == "merge" || command == "log"
 }

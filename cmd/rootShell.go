@@ -9,13 +9,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var cfgFile string
 
 // ShellCmd represents the base command when called without any subcommands
 var ShellCmd = &cobra.Command{
 	Use:   "bit",
 	Short: "Bit is a Git CLI that predicts what you want to do",
-	Long:  `v0.5.10`,
+	Long:  `v0.5.11`,
 	Run: func(cmd *cobra.Command, args []string) {
 		completerSuggestionMap, bitCmdMap := CreateSuggestionMap(cmd)
 
@@ -58,6 +57,8 @@ func CreateSuggestionMap(cmd *cobra.Command) (map[string][]prompt.Suggest, map[s
 		"switch":   branchListSuggestions,
 		"co":       branchListSuggestions,
 		"merge":    branchListSuggestions,
+		"rebase":    branchListSuggestions,
+		"log":    branchListSuggestions,
 		"add":      GitAddSuggestions(),
 		"release": {
 			{Text: "bump", Description: "Increment SemVer from tags and release"},
@@ -103,7 +104,7 @@ func promptCompleter(suggestionMap map[string][]prompt.Suggest, text string) []p
 	prev := filterFlags[0] // in git commit -m "hello"  commit is prev
 	if len(prev) == len(text) {
 		suggestions = suggestionMap["shell"]
-		return prompt.FilterContains(suggestions, prev, true)
+		return prompt.FilterHasPrefix(suggestions, prev, true)
 	}
 	curr := filterFlags[1] // in git commit -m "hello"  "hello" is curr
 	if strings.HasPrefix(curr, "--") {
@@ -112,8 +113,11 @@ func promptCompleter(suggestionMap map[string][]prompt.Suggest, text string) []p
 		suggestions = FlagSuggestionsForCommand(prev, "-")
 	} else if suggestionMap[prev] != nil {
 		suggestions = suggestionMap[prev]
+		if isBranchCompletionCommand(prev) {
+			return prompt.FilterContains(suggestions, curr, true)
+		}
 	}
-	return prompt.FilterContains(suggestions, curr, true)
+	return prompt.FilterHasPrefix(suggestions, curr, true)
 }
 
 func RunGitCommandWithArgs(args []string) {
@@ -133,9 +137,9 @@ func GitCommandsPromptUsed(args []string, suggestionMap map[string][]prompt.Sugg
 	// expected usage format
 	//   bit (checkout|switch|co) [-b] branch-name
 	if args[len(args)-1] == "--version" {
-		fmt.Println("bit version v0.5.10")
+		fmt.Println("bit version v0.5.11")
 	}
-	if sub == "checkout" || sub == "switch" || sub == "co" {
+	if isBranchCompletionCommand(sub) {
 		branchName := ""
 		if len(args) < 2 {
 			branchName = SuggestionPrompt("> bit "+sub+" ", branchCommandCompleter(suggestionMap))

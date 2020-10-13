@@ -8,7 +8,7 @@ import (
 // releaseCmd represents the release command
 var releaseCmd = &cobra.Command{
 	Use:   "release",
-	Short: "Generate a production release",
+	Short: "Commit unstaged changes, bump minor tag, push",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		version := args[0]
