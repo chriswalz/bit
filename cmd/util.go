@@ -327,7 +327,7 @@ func SuggestionPrompt(prefix string, completer func(d prompt.Document) []prompt.
 		prompt.OptionDescriptionTextColor(prompt.White),
 		prompt.OptionShowCompletionAtStart(),
 		prompt.OptionCompletionOnDown(),
-		prompt.OptionSwitchKeyBindMode(prompt.CommonKeyBind),
+		prompt.OptionSwitchKeyBindMode(prompt.EmacsKeyBind),
 		prompt.OptionAddKeyBind(prompt.KeyBind{
 			Key: prompt.ControlC,
 			Fn:  exit,
