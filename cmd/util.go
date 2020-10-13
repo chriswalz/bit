@@ -165,7 +165,7 @@ func refreshOnBranch(branchName string) error {
 }
 
 func branchListRaw() (string, error) {
-	msg, err := exec.Command("git", "for-each-ref", "--sort=-committerdate", "refs/heads/", "refs/remotes", "--format='%(authordate:short); %(authorname); %(color:red)%(objectname:short); %(color:yellow)%(refname:short)%(color:reset); (%(color:green)%(committerdate:relative)%(color:reset))'").CombinedOutput()
+	msg, err := exec.Command("git", "for-each-ref", "--sort=-committerdate", "refs/heads/", "refs/remotes", "--format='%(authordate); %(authorname); %(color:red)%(objectname:short); %(color:yellow)%(refname:short)%(color:reset); (%(color:green)%(committerdate:relative)%(color:reset))'").CombinedOutput()
 	return string(msg), err
 }
 
@@ -188,11 +188,12 @@ func toStructuredBranchList(rawBranchData string) []Branch {
 			continue
 		}
 
-		cols := strings.Split(line, "; ")
+		cols := strings.Split(line[1:], "; ")
 		b := Branch{
 			Author:       cols[1],
 			Name:         cols[3],
-			RelativeDate: line[strings.Index(line, "("):],
+			RelativeDate: cols[4],
+			AbsoluteDate: cols[0],
 		}
 		if b.Name == "origin/master" || b.Name == "origin/HEAD" {
 			continue
@@ -226,7 +227,7 @@ func BranchListSuggestions() []prompt.Suggest {
 	for _, branch := range branches {
 		suggestions = append(suggestions, prompt.Suggest{
 			Text:        branch.Name,
-			Description: branch.RelativeDate + " " + branch.Author,
+			Description:  fmt.Sprintf("%s  %s  %s", branch.Author, branch.RelativeDate, branch.AbsoluteDate),
 		})
 	}
 	return suggestions
@@ -305,6 +306,7 @@ type Branch struct {
 	Author       string
 	Name         string
 	RelativeDate string
+	AbsoluteDate string
 }
 
 type FileChange struct {

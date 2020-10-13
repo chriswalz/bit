@@ -57,25 +57,37 @@ func TestToStructuredBranchList(t *testing.T) {
 		[]struct {
 			raw                     string
 			expectedFirstBranchName string
+			expectedAuthor string
+			expectedRelativeDate string
+			expectedAbsoluteDate string
 		}{
 			{
-				`'2020-10-06; John Doe; bf84c09; origin/other-branch; (3 days ago)'
-'2020-10-06; John Doe; bf84c09; origin/master; (3 days ago)'`,
+				`'Fri Sep 11 01:19:12 2020 -0400; John Doe; bf84c09; origin/other-branch; (3 days ago)'
+'Fri Sep 11 01:19:12 2020 -0400; John Doe; bf84c09; origin/master; (3 days ago)'`,
 				"origin/other-branch",
+				"John Doe",
+				"3 days ago",
+				"Fri Sep 11 01:19:12 2020 -0400",
 			},
 			{
 				`warning: ignoring broken ref refs/remotes/origin/HEAD
-'2020-10-02; John Doe; e5cffc5; origin/release-v2.11.0; (7 days ago)'
-'2020-10-01; John Doe; 2f41d5e; origin/feature_FD-5860; (8 days ago)'`,
+'Fri Sep 11 01:19:12 2020 -0400; John Doe; e5cffc5; origin/release-v2.11.0; (7 days ago)'
+'Fri Sep 11 01:19:12 2020 -0400; John Doe; 2f41d5e; origin/feature_FD-5860; (8 days ago)'`,
 				"origin/release-v2.11.0",
+				"John Doe",
+				"7 days ago",
+				"Fri Sep 11 01:19:12 2020 -0400",
 			},
 		}
 	for _, e := range expects {
 		fmt.Println(e.expectedFirstBranchName)
 		list := toStructuredBranchList(e.raw)
 		assert.Greaterf(t, len(list), 0, e.expectedFirstBranchName)
-		reality := list[0].Name
-		assert.Equal(t, reality, e.expectedFirstBranchName)
+		reality := list[0]
+		assert.Equal(t, reality.Name, e.expectedFirstBranchName)
+		assert.Equal(t, reality.Author, e.expectedAuthor)
+		assert.Contains(t, reality.RelativeDate, e.expectedRelativeDate)
+		assert.Equal(t, reality.AbsoluteDate, e.expectedAbsoluteDate)
 	}
 }
 
