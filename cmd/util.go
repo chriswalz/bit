@@ -423,19 +423,6 @@ func concatCopyPreAllocate(slices [][]*cobra.Command) []*cobra.Command {
 func FlagSuggestionsForCommand(gitSubCmd string, flagtype string) []prompt.Suggest {
 	str := ""
 
-	// git help pull | col -b > man.txt
-	//if gitSubCmd != "commit" && gitSubCmd != "push" && gitSubCmd != "status" {
-	//	msg, err := exec.Command("/bin/sh", "-c", "git help " + gitSubCmd + " | col -bx").CombinedOutput()
-	//	if err != nil {
-	//		//fmt.Println(err)
-	//	}
-	//	out := string(msg)
-	//	//out = stripCtlAndExtFromUTF8(out)
-	//	split := strings.Split(out, "OPTIONS")
-	//	fmt.Println(out, split)
-	//	out=split[1]
-	//	//return []prompt.Suggest{}
-	//}
 	flagMap := map[string]string{
 		"add":      addFlagsStr,
 		"diff":     diffFlagsStr,
@@ -459,7 +446,6 @@ func FlagSuggestionsForCommand(gitSubCmd string, flagtype string) []prompt.Sugge
 
 	list := strings.Split(str, ".\n\n")
 
-	//list := strings.Split(strings.Split(op[1], "CONFIGURATION")[0], "\n\n")
 	var suggestions []prompt.Suggest
 	for i := 0; i < len(list)-1; i++ {
 		line := list[i]
@@ -585,6 +571,5 @@ func fileExists(filename string) bool {
 }
 
 func isBranchCompletionCommand(command string) bool {
-
 	return command == "checkout" || command == "switch" || command == "co" || command == "merge"
 }
