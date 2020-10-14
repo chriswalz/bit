@@ -581,5 +581,5 @@ func fileExists(filename string) bool {
 }
 
 func isBranchCompletionCommand(command string) bool {
-	return command == "checkout" || command == "switch" || command == "co" || command == "merge" || command == "log"
+	return command == "checkout" || command == "switch" || command == "co" || command == "merge"
 }
