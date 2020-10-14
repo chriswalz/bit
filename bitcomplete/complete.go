@@ -16,15 +16,20 @@ import (
 func main() {
 	compLine := os.Getenv("COMP_LINE")
 	compPoint := os.Getenv("COMP_POINT")
-	i, err := strconv.Atoi(compPoint)
-	if err != nil {
-		fmt.Println("COMP_LINE", compLine, "COMP_POINT", compPoint, "err:", err)
-		return
-	}
-	if i > len(compLine) {
-		err := os.Setenv("COMP_POINT", strconv.Itoa(len(compLine)))
+	doInstall := os.Getenv("COMP_INSTALL") == "1"
+	doUninstall := os.Getenv("COMP_UNINSTALL") == "1"
+
+	if !doInstall && !doUninstall {
+		i, err := strconv.Atoi(compPoint)
 		if err != nil {
-			fmt.Println(err)
+			fmt.Println("COMP_LINE", compLine, "COMP_POINT", compPoint, "err:", err)
+			return
+		}
+		if i > len(compLine) {
+			err := os.Setenv("COMP_POINT", strconv.Itoa(len(compLine)))
+			if err != nil {
+				fmt.Println(err)
+			}
 		}
 	}
 
