@@ -2,15 +2,27 @@
 package main
 
 import (
+	"fmt"
 	"github.com/c-bata/go-prompt"
 	"github.com/chriswalz/bit/cmd"
 	"github.com/posener/complete/v2"
 	"github.com/posener/complete/v2/predict"
 	"github.com/thoas/go-funk"
+	"os"
+	"strconv"
 	"strings"
 )
 
 func main() {
+	comp_line := os.Getenv("COMP_LINE")
+	comp_point := os.Getenv("COMP_POINT")
+	i, err := strconv.Atoi(comp_point)
+	if err != nil {
+		fmt.Println("COMP_LINE", comp_line, "COMP_POINT", comp_point, "err:", err)
+	}
+	if i > len(comp_line) {
+		os.Setenv("COMP_POINT", strconv.Itoa(len(comp_line)))
+	}
 
 	branchCompletion := &complete.Command{
 		Args: complete.PredictFunc(func(prefix string) []string {
