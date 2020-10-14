@@ -37,11 +37,6 @@ func main() {
 		fmt.Println("fatal: not a git repository (or any of the parent directories): .git")
 		return
 	}
-	// change locale to english (since bit parses output in english)
-	lang := os.Getenv("LANG")
-	if lang != "C.UTF-8" && lang != "en_us.utf8" {
-		os.Setenv("LANG", "en_us.utf8")
-	}
 
 	argsWithoutProg := os.Args[1:]
 	bitcliCmds := []string{"save", "sync", "version", "help", "info", "release"}

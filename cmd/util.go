@@ -87,7 +87,12 @@ func IsBehindCurrent() bool {
 }
 
 func NothingToCommit() bool {
-	msg, err := exec.Command("git", "status").CombinedOutput()
+	// change locale to english (since bit parses output in english)
+
+	cmd := exec.Command("git", "status")
+	cmd.Env = os.Environ()
+	cmd.Env = append(cmd.Env, "LANG=C.UTF-8")
+	msg, err := cmd.CombinedOutput()
 	if err != nil {
 		//fmt.Println(err)
 	}
