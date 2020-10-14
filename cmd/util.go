@@ -361,6 +361,10 @@ func HandleExit() {
 	default:
 		fmt.Println(v)
 		fmt.Println(string(debug.Stack()))
+		fmt.Println("OS:", runtime.GOOS, runtime.GOARCH)
+		fmt.Println("bit version v0.6.0")
+		printGitVersion()
+
 	}
 }
 
@@ -405,6 +409,14 @@ func AllBitAndGitSubCommands(rootCmd *cobra.Command) (cc []*cobra.Command) {
 	bitCmds, _ := AllBitSubCommands(rootCmd)
 	commonCommands := CommonCommandsList()
 	return concatCopyPreAllocate([][]*cobra.Command{commonCommands, gitCmds, bitCmds, gitAliases})
+}
+
+func printGitVersion() {
+	msg, err := exec.Command("git", "--version").CombinedOutput()
+	if err != nil {
+		//fmt.Println(err)
+	}
+	fmt.Println(string(msg))
 }
 
 func concatCopyPreAllocate(slices [][]*cobra.Command) []*cobra.Command {
