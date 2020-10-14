@@ -98,3 +98,5 @@ man page parsing + flag suggestions for all commands
 git log --pretty=format:"* [%s](https://github.com/chriswalz/bit/commit/%H)" 09facd30..HEAD
 
 deleting tags from local and origin is painful
+
+COMP_POINT=25 COMP_LINE="bit status" bitcomplete
