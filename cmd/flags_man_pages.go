@@ -128,7 +128,9 @@ This option may be specified more than once.
 If a line exists in both the source and destination, exists only once, and starts with this text, this algorithm attempts to prevent it from appearing as a deletion or addition in the output. It uses the "patience diff" algorithm internally.
 
 --diff-algorithm={patience|minimal|histogram|myers}
-Choose a diff algorithm. The variants are as follows:
+Choose a diff algorithm.
+
+The variants are as follows:
 
 default, myers
 The basic greedy diff algorithm. Currently, this is the default.
@@ -160,7 +162,9 @@ Output only the last line of the --stat format containing total number of modifi
 
 -X[<param1,param2,…​>]
 --dirstat[=<param1,param2,…​>]
-Output the distribution of relative amount of changes for each sub-directory. The behavior of --dirstat can be customized by passing it a comma separated list of parameters. The defaults are controlled by the diff.dirstat configuration variable (see git-config[1]). The following parameters are available:
+Output the distribution of relative amount of changes for each sub-directory. The behavior of --dirstat can be customized by passing it a comma separated list of parameters. The defaults are controlled by the diff.dirstat configuration variable (see git-config[1]).
+
+The following parameters are available:
 
 changes
 Compute the dirstat numbers by counting the lines that have been removed from the source, or added to the destination. This ignores the amount of pure code movements within a file. In other words, rearranging lines in a file is not counted as much as other changes. This is the default behavior when no parameter is given.
@@ -212,7 +216,9 @@ Show colored diff. --color (i.e. without =<when>) is the same as --color=always.
 Turn off colored diff. This can be used to override configuration settings. It is the same as --color=never.
 
 --color-moved[=<mode>]
-Moved lines of code are colored differently. It can be changed by the diff.colorMoved configuration setting. The <mode> defaults to no if the option is not given and to zebra if the option with no mode is given. The mode must be one of:
+Moved lines of code are colored differently. It can be changed by the diff.colorMoved configuration setting. The <mode> defaults to no if the option is not given and to zebra if the option with no mode is given.
+
+The mode must be one of:
 
 no
 Moved lines are not highlighted.
@@ -236,7 +242,9 @@ Similar to zebra, but additional dimming of uninteresting parts of moved code is
 Turn off move detection. This can be used to override configuration settings. It is the same as --color-moved=no.
 
 --color-moved-ws=<modes>
-This configures how whitespace is ignored when performing the move detection for --color-moved. It can be set by the diff.colorMovedWS configuration setting. These modes can be given as a comma separated list:
+This configures how whitespace is ignored when performing the move detection for --color-moved. It can be set by the diff.colorMovedWS configuration setting.
+
+These modes can be given as a comma separated list:
 
 no
 Do not ignore whitespace when performing move detection.
@@ -257,7 +265,9 @@ Initially ignore any whitespace in the move detection, then group the moved code
 Do not ignore whitespace when performing move detection. This can be used to override configuration settings. It is the same as --color-moved-ws=no.
 
 --word-diff[=<mode>]
-Show a word diff, using the <mode> to delimit changed words. By default, words are delimited by whitespace; see --word-diff-regex below. The <mode> defaults to plain, and must be one of:
+Show a word diff, using the <mode> to delimit changed words. By default, words are delimited by whitespace; see --word-diff-regex below.
+
+The <mode> defaults to plain, and must be one of:
 
 color
 Highlight changed words using only colors. Implies --color.
@@ -308,7 +318,9 @@ Instead of showing the full 40-byte hexadecimal object name in diff-raw format o
 
 -B[<n>][/<m>]
 --break-rewrites[=[<n>][/<m>]]
-Break complete rewrite changes into pairs of delete and create. This serves two purposes:
+Break complete rewrite changes into pairs of delete and create.
+
+This serves two purposes:
 
 It affects the way a change that amounts to a total rewrite of a file not as a series of deletion and insertion mixed together with a very few lines that happen to match textually as the context, but as a single deletion of everything old followed by a single insertion of everything new, and the number m controls this aspect of the -B option (defaults to 60%). -B/70% specifies that less than 30% of the original should remain in the result for Git to consider it a total rewrite (i.e. otherwise the resulting patch will be a series of deletion and insertion mixed together with context lines).
 
@@ -857,7 +869,7 @@ A string that interpolates %(fieldname) from a branch ref being shown and the ob
 
 const tagFlagsStr = `-a
 --annotate
-Make an unsigned, annotated tag object
+Make an unsigned, annotated tag object.
 
 -s
 --sign
@@ -872,7 +884,7 @@ Make a GPG-signed tag, using the given key.
 
 -f
 --force
-Replace an existing tag with the given name (instead of failing)
+Replace an existing tag with the given name (instead of failing).
 
 -d
 --delete
@@ -993,7 +1005,7 @@ Do not set up "upstream" configuration, even if the branch.autoSetupMerge config
 
 --guess
 --no-guess
-If <branch> is not found but there does exist a tracking branch in exactly one remote (call it <remote>) with a matching name, treat as equivalent to
+If <branch> is not found but there does exist a tracking branch in exactly one remote (call it <remote>) with a matching name, treat as equivalent to.
 
 -l
 Create the new branch’s reflog; see git-branch[1] for details.
