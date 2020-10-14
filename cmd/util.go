@@ -338,6 +338,14 @@ func SuggestionPrompt(prefix string, completer func(d prompt.Document) []prompt.
 			Key: prompt.ControlC,
 			Fn:  exit,
 		}),
+		prompt.OptionAddASCIICodeBind(prompt.ASCIICodeBind{
+			ASCIICode: []byte{0x1b, 0x62},
+			Fn:        prompt.GoLeftWord,
+		}),
+		prompt.OptionAddASCIICodeBind(prompt.ASCIICodeBind{
+			ASCIICode: []byte{0x1b, 0x66},
+			Fn:        prompt.GoRightWord,
+		}),
 	)
 	branchName := strings.TrimSpace(result)
 	if strings.HasPrefix(result, "origin/") {
@@ -362,7 +370,7 @@ func HandleExit() {
 		fmt.Println(v)
 		fmt.Println(string(debug.Stack()))
 		fmt.Println("OS:", runtime.GOOS, runtime.GOARCH)
-		fmt.Println("bit version v0.6.0")
+		fmt.Println("bit version v0.6.1")
 		printGitVersion()
 
 	}
