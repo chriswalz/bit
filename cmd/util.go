@@ -238,6 +238,11 @@ func FileChangesList() []FileChange {
 	if err != nil {
 		//fmt.Println(err)
 	}
+	var changes []FileChange
+	// if user has an older version of git porcelain=v2 is not supported. don't show CL suggestions for now 2.7
+	if strings.Contains(string(msg), "option `porcelain' takes no value") {
+		return changes
+	}
 	list := strings.Split(string(msg), "\n")
 	statusMap := map[string]string{
 		"M.": "Added",
@@ -246,7 +251,6 @@ func FileChangesList() []FileChange {
 		".M": "Not Staged",
 		"?":  "Untracked",
 	}
-	var changes []FileChange
 	for i := 0; i < len(list)-1; i++ {
 		cols := strings.Fields(strings.TrimSpace(list[i]))
 		b := FileChange{
@@ -581,5 +585,6 @@ func fileExists(filename string) bool {
 }
 
 func isBranchCompletionCommand(command string) bool {
+
 	return command == "checkout" || command == "switch" || command == "co" || command == "merge"
 }
