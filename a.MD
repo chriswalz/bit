@@ -100,3 +100,7 @@ git log --pretty=format:"* [%s](https://github.com/chriswalz/bit/commit/%H)" 09f
 deleting tags from local and origin is painful
 
 COMP_POINT=25 COMP_LINE="bit status" bitcomplete
+
+apt-get install language-pack-es
+locale -e
+LC_ALL=es_MX.utf8 git status
