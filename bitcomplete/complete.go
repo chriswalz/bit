@@ -19,9 +19,13 @@ func main() {
 	i, err := strconv.Atoi(comp_point)
 	if err != nil {
 		fmt.Println("COMP_LINE", comp_line, "COMP_POINT", comp_point, "err:", err)
+		return
 	}
 	if i > len(comp_line) {
-		os.Setenv("COMP_POINT", strconv.Itoa(len(comp_line)))
+		err := os.Setenv("COMP_POINT", strconv.Itoa(len(comp_line)))
+		if err != nil {
+			fmt.Println(err)
+		}
 	}
 
 	branchCompletion := &complete.Command{
