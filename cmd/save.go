@@ -41,7 +41,7 @@ func save(msg string) {
 			RunInTerminalWithColor("git", []string{"commit", "-a", "--amend", "--no-edit"}) // amend if already ahead
 		} else {
 			RunInTerminalWithColor("git", []string{"status", "-sb", "--untracked-files=no"})
-			resp := AskMultLine("Please provide a description of your changes")
+			resp := AskMultiLine("Please provide a description of your changes")
 			RunInTerminalWithColor("git", []string{"commit", "-a", "-m " + resp})
 		}
 	} else {

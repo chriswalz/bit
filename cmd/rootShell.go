@@ -9,7 +9,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-
 // ShellCmd represents the base command when called without any subcommands
 var ShellCmd = &cobra.Command{
 	Use:   "bit",
@@ -57,8 +56,8 @@ func CreateSuggestionMap(cmd *cobra.Command) (map[string][]prompt.Suggest, map[s
 		"switch":   branchListSuggestions,
 		"co":       branchListSuggestions,
 		"merge":    branchListSuggestions,
-		"rebase":    branchListSuggestions,
-		"log":    branchListSuggestions,
+		"rebase":   branchListSuggestions,
+		"log":      branchListSuggestions,
 		"add":      GitAddSuggestions(),
 		"release": {
 			{Text: "bump", Description: "Increment SemVer from tags and release"},

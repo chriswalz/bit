@@ -57,9 +57,9 @@ func TestToStructuredBranchList(t *testing.T) {
 		[]struct {
 			raw                     string
 			expectedFirstBranchName string
-			expectedAuthor string
-			expectedRelativeDate string
-			expectedAbsoluteDate string
+			expectedAuthor          string
+			expectedRelativeDate    string
+			expectedAbsoluteDate    string
 		}{
 			{
 				`'Fri Sep 11 01:19:12 2020 -0400; John Doe; bf84c09; origin/other-branch; (3 days ago)'

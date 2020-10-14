@@ -48,7 +48,7 @@ func AskConfirm(q string) bool {
 	return ans
 }
 
-func AskMultLine(q string) string {
+func AskMultiLine(q string) string {
 	text := ""
 	prompt := &survey.Multiline{
 		Message: q,
@@ -115,7 +115,7 @@ func BranchListSuggestions() []prompt.Suggest {
 	for _, branch := range branches {
 		suggestions = append(suggestions, prompt.Suggest{
 			Text:        branch.Name,
-			Description:  fmt.Sprintf("%s  %s  %s", branch.Author, branch.RelativeDate, branch.AbsoluteDate),
+			Description: fmt.Sprintf("%s  %s  %s", branch.Author, branch.RelativeDate, branch.AbsoluteDate),
 		})
 	}
 	return suggestions
@@ -231,7 +231,6 @@ func HandleExit() {
 
 	}
 }
-
 
 func AllBitSubCommands(rootCmd *cobra.Command) ([]*cobra.Command, map[string]*cobra.Command) {
 	bitCmds := rootCmd.Commands()

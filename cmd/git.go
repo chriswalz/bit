@@ -196,4 +196,3 @@ func tagCurrentBranch(version string) error {
 	}
 	return err
 }
-
