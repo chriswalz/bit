@@ -362,7 +362,7 @@ func HandleExit() {
 		fmt.Println(v)
 		fmt.Println(string(debug.Stack()))
 		fmt.Println("OS:", runtime.GOOS, runtime.GOARCH)
-		fmt.Println("bit version v0.6.0")
+		fmt.Println("bit version v0.6.1")
 		printGitVersion()
 
 	}
