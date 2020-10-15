@@ -183,6 +183,15 @@ Thanks to [Gitless](https://gitless.com/), [git-extras](https://github.com/tj/gi
 - https://archive.faabli.com/archive/2020-10-09 
 
 ## Changelog 
+v0.6
+- [X] fix: improved git compatibility for older versions of git 
+- [X] feature: emacs key binds 
+- [X] feature: relative and absolute branch times
+- [X] feature: completions for rebase & log
+- [X] enhancement: smarter suggestions
+- [X] fix: show proper descriptions for some flags
+- [X] fix: prevent panic on classical tab completion for some users
+
 v0.5
 
 - [X] `bit switch`, `bit co`, `bit checkout` will show prompt 
