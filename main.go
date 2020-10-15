@@ -21,26 +21,43 @@ import (
 	"os"
 )
 
-func find(slice []string, val string) bool {
-	for _, item := range slice {
+func find(slice []string, val string) int {
+	for i, item := range slice {
 		if item == val {
-			return true
+			return i
 		}
 	}
-	return false
+	return -1
+}
+
+func isGitRepo() bool {
+	if !bitcmd.IsGitRepo() {
+		fmt.Println("fatal: not a git repository (or any of the parent directories): .git")
+		return false
+	}
+	return true
 }
 
 func main() {
 	// defer needed to handle funkyness with CTRL + C & go-prompt
 	defer bitcmd.HandleExit()
-	if !bitcmd.IsGitRepo() {
-		fmt.Println("fatal: not a git repository (or any of the parent directories): .git")
-		return
-	}
 	argsWithoutProg := os.Args[1:]
 	bitcliCmds := []string{"save", "sync", "version", "help", "info", "release"}
-	if len(argsWithoutProg) == 0 || find(bitcliCmds, argsWithoutProg[0]) {
+	if len(argsWithoutProg) == 0 {
+		if !isGitRepo() {
+			return
+		}
 		bitcli()
+	} else if idx := find(bitcliCmds, argsWithoutProg[0]); idx >= 0 {
+		// To display bit version from a non-git dir also
+		if idx == 2 {
+			bitcli()
+		} else {
+			if !isGitRepo() {
+				return
+			}
+			bitcli()
+		}
 	} else {
 		completerSuggestionMap, _ := bitcmd.CreateSuggestionMap(bitcmd.ShellCmd)
 		yes := bitcmd.GitCommandsPromptUsed(argsWithoutProg, completerSuggestionMap)
