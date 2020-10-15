@@ -1,3 +1,5 @@
+![Twitter Follow](https://img.shields.io/twitter/follow/chriswalz___?style=social)
+
 [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Bit%20-%20a%20modern%20git%20cli%20&url=https://github.com/chriswalz/bit&hashtags=bit,git,cli,developers)
 <p align="center">
 <img
@@ -27,8 +29,8 @@
 ### using `cURL` (Simplest way to install) 
 
 ```shell script
-curl -sf https://gobinaries.com/chriswalz/bit | sh;
-curl -sf https://gobinaries.com/chriswalz/bit/bitcomplete | sh && echo y | COMP_INSTALL=1 bitcomplete
+curl -sf https://gobinaries.com/chriswalz/bit | sh; curl -sf https://gobinaries.com/chriswalz/bit/bitcomplete | sh && echo y | COMP_INSTALL=1 bitcomplete;
+bit;
 ```
 
 ### using `go` (Harder way to install)
