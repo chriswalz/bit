@@ -86,7 +86,7 @@ brews:
 
     # Caveats for the user of your binary.
     # Default is empty.
-    caveats: "How to use this binary"
+    # caveats: "How to use this binary"
 
     # Your app's homepage.
     # Default is empty.
@@ -112,8 +112,8 @@ brews:
     #  ...
 
     # Packages your package depends on.
-    dependencies:
-      - name: git
+    #dependencies:
+    #  - name: git
 
     # Packages that conflict with your package.
     #conflicts:

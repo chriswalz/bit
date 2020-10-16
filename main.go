@@ -34,6 +34,11 @@ func main() {
 	// defer needed to handle funkyness with CTRL + C & go-prompt
 	defer bitcmd.HandleExit()
 	if !bitcmd.IsGitRepo() {
+		if len(os.Args) == 2 && os.Args[1] == "--version" {
+			fmt.Println("bit version v0.6.6")
+			bitcmd.PrintGitVersion()
+			return
+		}
 		fmt.Println("fatal: not a git repository (or any of the parent directories): .git")
 		return
 	}

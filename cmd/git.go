@@ -173,7 +173,7 @@ func AllGitAliases() (cc []*cobra.Command) {
 	return cc
 }
 
-func printGitVersion() {
+func PrintGitVersion() {
 	msg, err := exec.Command("git", "--version").CombinedOutput()
 	if err != nil {
 		//fmt.Println(err)
