@@ -15,44 +15,47 @@ sync origin master
 sync local-branch
 `,
 	Run: func(cmd *cobra.Command, args []string) {
-		RunInTerminalWithColor("git", []string{"fetch"})
+		upstream := "origin"
+		tbranch := CurrentBranch()
+		if len(args) == 1 {
+			tbranch = args[0]
+		}
+		if len(args) == 2 {
+			upstream = args[0]
+			tbranch = args[1]
+		}
+		RunInTerminalWithColor("git", []string{"fetch", upstream, tbranch})
 
 		// if possibly squashed
 		if IsDiverged() {
 			RunInTerminalWithColor("git", []string{"status", "-sb", "--untracked-files=no"})
-			yes := AskConfirm("Force (destructive) push to origin/" + CurrentBranch() + "?")
+			yes := AskConfirm("Force (destructive) push to " + upstream + "/" + tbranch + "?")
 			if yes {
-				RunInTerminalWithColor("git", []string{"push", "--force-with-lease"})
+				RunInTerminalWithColor("git", []string{"push", upstream, tbranch, "--force-with-lease"})
 			}
 			return
 		}
 		if !CloudBranchExists() {
-			RunInTerminalWithColor("git", []string{"push", "--set-upstream", "origin", CurrentBranch()})
+			RunInTerminalWithColor("git", []string{"push", "--set-upstream", upstream, tbranch})
 			save("")
-			RunInTerminalWithColor("git", []string{"push"})
+			RunInTerminalWithColor("git", []string{"push", upstream, tbranch})
 			return
 		}
 		save("")
-		if !CloudBranchExists() {
-			RunInTerminalWithColor("git", []string{"push", "--set-upstream", "origin", CurrentBranch()})
-		}
 		if IsAheadOfCurrent() {
-			RunInTerminalWithColor("git", []string{"push"})
+			RunInTerminalWithColor("git", []string{"push", upstream, tbranch})
 		} else {
-			RunInTerminalWithColor("git", []string{"pull", "-r"})
-			if len(args) > 0 {
-				RunInTerminalWithColor("git", append([]string{"pull", "-r"}, args...))
-			}
-			RunInTerminalWithColor("git", []string{"push"})
+			RunInTerminalWithColor("git", []string{"pull", "-r", upstream, tbranch})
+			RunInTerminalWithColor("git", []string{"push", upstream, tbranch})
 		}
 
-		// After syncing with current branch and user wants to sync with another branch
+		// After syncing with current tbranch and user wants to sync with another tbranch
 
-		if CurrentBranch() == "master" && len(args) == 1 && strings.HasSuffix(args[0], "master") {
-			yes := AskConfirm("Squash & merge this branch into master?")
+		if CurrentBranch() == "master" && !strings.HasSuffix(tbranch, "master") {
+			yes := AskConfirm("Squash & merge " + args[0] +" into master?")
 
 			if yes {
-				RunInTerminalWithColor("git", []string{"merge", "--squash"})
+				RunInTerminalWithColor("git", []string{"merge", upstream, tbranch, "--squash"})
 				return
 			}
 			fmt.Printf("Cancelling...")
@@ -66,7 +69,7 @@ sync local-branch
 		}
 
 	},
-	//Args: cobra.MaximumNArgs(1),
+	Args: cobra.MaximumNArgs(2),
 }
 
 func init() {
