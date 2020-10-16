@@ -55,7 +55,7 @@ brews:
     # Gitea is not supported yet, but the support coming
     tap:
       owner: chriswalz
-      name: bit
+      name: homebrew-bit
       # Optionally a token can be provided, if it differs from the token provided to GoReleaser
       # token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
 
