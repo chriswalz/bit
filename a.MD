@@ -109,3 +109,6 @@ LC_ALL=es_MX.utf8 git status
 https://github.com/chriswalz/bit/releases/download/v0.6.5/bit_0.6.5_Darwin_x86_64.tar.gz
 
 https://github.com/chriswalz/bit/releases/v0.6.5/bit_0.6.5_Darwin_x86_64.tar.gz
+
+brew untap chriswalz/homebrew-bit;
+brew tap chriswalz/homebrew-bitl
