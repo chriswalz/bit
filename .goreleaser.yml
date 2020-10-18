@@ -32,8 +32,7 @@ changelog:
       - '^test:'
 # .goreleaser.yml
 brews:
-  -
-    # Name template of the recipe
+  - # Name template of the recipe
     # Default to project name
     #name: myproject
 

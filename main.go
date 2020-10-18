@@ -18,33 +18,45 @@ package main
 import (
 	"fmt"
 	bitcmd "github.com/chriswalz/bit/cmd"
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 	"os"
 )
 
-func find(slice []string, val string) bool {
-	for _, item := range slice {
+func find(slice []string, val string) int {
+	for i, item := range slice {
 		if item == val {
-			return true
+			return i
 		}
 	}
-	return false
+	return -1
 }
 
 func main() {
 	// defer needed to handle funkyness with CTRL + C & go-prompt
 	defer bitcmd.HandleExit()
+	log.Logger = log.With().Caller().Logger().Output(zerolog.ConsoleWriter{Out: os.Stderr})
+	argsWithoutProg := os.Args[1:]
+
+	zerolog.SetGlobalLevel(zerolog.InfoLevel)
+	debugIndex := find(argsWithoutProg, "--debug")
+	if debugIndex != -1 {
+		zerolog.SetGlobalLevel(zerolog.DebugLevel)
+		argsWithoutProg = append(argsWithoutProg[:debugIndex], argsWithoutProg[debugIndex+1:]...)
+	}
+
 	if !bitcmd.IsGitRepo() {
 		if len(os.Args) == 2 && os.Args[1] == "--version" {
-			fmt.Println("bit version v0.6.6")
+			fmt.Println("bit version v0.6.11")
 			bitcmd.PrintGitVersion()
 			return
 		}
 		fmt.Println("fatal: not a git repository (or any of the parent directories): .git")
 		return
 	}
-	argsWithoutProg := os.Args[1:]
+
 	bitcliCmds := []string{"save", "sync", "version", "help", "info", "release"}
-	if len(argsWithoutProg) == 0 || find(bitcliCmds, argsWithoutProg[0]) {
+	if len(argsWithoutProg) == 0 || find(bitcliCmds, argsWithoutProg[0]) != -1 {
 		bitcli()
 	} else {
 		completerSuggestionMap, _ := bitcmd.CreateSuggestionMap(bitcmd.ShellCmd)
