@@ -14,7 +14,7 @@ import (
 var ShellCmd = &cobra.Command{
 	Use:   "bit",
 	Short: "Bit is a Git CLI that predicts what you want to do",
-	Long:  `v0.6.14`,
+	Long:  `v0.7.0`,
 	Run: func(cmd *cobra.Command, args []string) {
 		completerSuggestionMap, bitCmdMap := CreateSuggestionMap(cmd)
 
@@ -141,7 +141,7 @@ func GitCommandsPromptUsed(args []string, suggestionMap map[string][]prompt.Sugg
 	// expected usage format
 	//   bit (checkout|switch|co) [-b] branch-name
 	if args[len(args)-1] == "--version" {
-		fmt.Println("bit version v0.6.14")
+		fmt.Println("bit version v0.7.0")
 	}
 	if isBranchCompletionCommand(sub) {
 		branchName := ""
