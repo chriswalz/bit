@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/rs/zerolog/log"
 	"os"
 	"strings"
 
@@ -13,7 +14,7 @@ import (
 var ShellCmd = &cobra.Command{
 	Use:   "bit",
 	Short: "Bit is a Git CLI that predicts what you want to do",
-	Long:  `v0.6.6`,
+	Long:  `v0.6.11`,
 	Run: func(cmd *cobra.Command, args []string) {
 		completerSuggestionMap, bitCmdMap := CreateSuggestionMap(cmd)
 
@@ -27,7 +28,7 @@ var ShellCmd = &cobra.Command{
 		}
 		parsedArgs, err := parseCommandLine(resp)
 		if err != nil {
-			fmt.Println(err)
+			log.Debug().Err(err)
 			return
 		}
 		if bitCmdMap[subCommand] == nil {
@@ -42,6 +43,10 @@ var ShellCmd = &cobra.Command{
 		cmd.SetArgs(parsedArgs)
 		cmd.Execute()
 	},
+}
+
+func init() {
+	ShellCmd.PersistentFlags().Bool("debug", false, "Print debugging information")
 }
 
 func CreateSuggestionMap(cmd *cobra.Command) (map[string][]prompt.Suggest, map[string]*cobra.Command) {
@@ -74,7 +79,7 @@ func CreateSuggestionMap(cmd *cobra.Command) (map[string][]prompt.Suggest, map[s
 // This is called by main.main(). It only needs to happen once to the ShellCmd.
 func Execute() {
 	if err := ShellCmd.Execute(); err != nil {
-		fmt.Println(err)
+		log.Info().Err(err)
 		os.Exit(1)
 	}
 }
@@ -123,7 +128,7 @@ func RunGitCommandWithArgs(args []string) {
 	var err error
 	err = RunInTerminalWithColor("git", args)
 	if err != nil {
-		//fixme fmt.Println("Command may not exist", err)  use debug level logging
+		log.Debug().Msg("Command may not exist: " + err.Error())
 	}
 	return
 }
@@ -136,7 +141,7 @@ func GitCommandsPromptUsed(args []string, suggestionMap map[string][]prompt.Sugg
 	// expected usage format
 	//   bit (checkout|switch|co) [-b] branch-name
 	if args[len(args)-1] == "--version" {
-		fmt.Println("bit version v0.6.6")
+		log.Debug().Msg("bit version v0.6.11")
 	}
 	if isBranchCompletionCommand(sub) {
 		branchName := ""
