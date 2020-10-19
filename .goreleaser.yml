@@ -17,15 +17,6 @@ build:
     - amd64
     - arm64
     - 386
-  sort: asc
-  filters:
-    exclude:
-      - '^docs:'
-      - '^refactor'
-checksum:
-  name_template: 'checksums.txt'
-snapshot:
-  name_template: "{{ .Tag }}-next"
 changelog:
   sort: asc
   filters:
