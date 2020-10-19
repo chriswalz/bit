@@ -7,6 +7,8 @@ import (
 	"github.com/chriswalz/bit/cmd"
 	"github.com/posener/complete/v2"
 	"github.com/posener/complete/v2/predict"
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 	"github.com/thoas/go-funk"
 	"os"
 	"strconv"
@@ -18,6 +20,9 @@ func main() {
 	compPoint := os.Getenv("COMP_POINT")
 	doInstall := os.Getenv("COMP_INSTALL") == "1"
 	doUninstall := os.Getenv("COMP_UNINSTALL") == "1"
+
+	log.Logger = log.With().Caller().Logger().Output(zerolog.ConsoleWriter{Out: os.Stderr})
+	zerolog.SetGlobalLevel(zerolog.InfoLevel)
 
 	if !doInstall && !doUninstall {
 		i, err := strconv.Atoi(compPoint)

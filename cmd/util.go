@@ -230,7 +230,7 @@ func HandleExit() {
 		fmt.Println(v)
 		fmt.Println(string(debug.Stack()))
 		fmt.Println("OS:", runtime.GOOS, runtime.GOARCH)
-		fmt.Println("bit version v0.6.11")
+		fmt.Println("bit version v0.6.14")
 		PrintGitVersion()
 
 	}
@@ -404,4 +404,11 @@ func isBranchCompletionCommand(command string) bool {
 	return command == "checkout" || command == "switch" || command == "co" || command == "merge"
 }
 
-
+func Find(slice []string, val string) int {
+	for i, item := range slice {
+		if item == val {
+			return i
+		}
+	}
+	return -1
+}

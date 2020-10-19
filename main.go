@@ -23,31 +23,25 @@ import (
 	"os"
 )
 
-func find(slice []string, val string) int {
-	for i, item := range slice {
-		if item == val {
-			return i
-		}
-	}
-	return -1
-}
-
 func main() {
 	// defer needed to handle funkyness with CTRL + C & go-prompt
 	defer bitcmd.HandleExit()
+
+	// set debug level
 	log.Logger = log.With().Caller().Logger().Output(zerolog.ConsoleWriter{Out: os.Stderr})
 	argsWithoutProg := os.Args[1:]
 
 	zerolog.SetGlobalLevel(zerolog.InfoLevel)
-	debugIndex := find(argsWithoutProg, "--debug")
+	debugIndex := bitcmd.Find(argsWithoutProg, "--debug")
 	if debugIndex != -1 {
 		zerolog.SetGlobalLevel(zerolog.DebugLevel)
 		argsWithoutProg = append(argsWithoutProg[:debugIndex], argsWithoutProg[debugIndex+1:]...)
 	}
 
+	// verify is git repo
 	if !bitcmd.IsGitRepo() {
 		if len(os.Args) == 2 && os.Args[1] == "--version" {
-			fmt.Println("bit version v0.6.11")
+			fmt.Println("bit version v0.6.14")
 			bitcmd.PrintGitVersion()
 			return
 		}
@@ -56,7 +50,7 @@ func main() {
 	}
 
 	bitcliCmds := []string{"save", "sync", "version", "help", "info", "release"}
-	if len(argsWithoutProg) == 0 || find(bitcliCmds, argsWithoutProg[0]) != -1 {
+	if len(argsWithoutProg) == 0 || bitcmd.Find(bitcliCmds, argsWithoutProg[0]) != -1 {
 		bitcli()
 	} else {
 		completerSuggestionMap, _ := bitcmd.CreateSuggestionMap(bitcmd.ShellCmd)
