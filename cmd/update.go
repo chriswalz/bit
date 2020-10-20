@@ -16,14 +16,14 @@ var updateCmd = &cobra.Command{
 	Use:   "update",
 	Short: "Updates bit to the latest or specified version",
 	Long:  `bit update
-bit update v0.7.3 (note: v is required)`,
+bit update v0.7.4 (note: v is required)`,
 	Run: func(cmd *cobra.Command, args []string) {
 		targetVersion := ""
 		if len(args) == 1 {
 			targetVersion = args[0][1:]
 		}
 
-		currentVersion := "v0.7.3"
+		currentVersion := "v0.7.4"
 
 		// open-source edition
 		p := &update.Manager{
@@ -43,8 +43,8 @@ bit update v0.7.3 (note: v is required)`,
 		}
 
 		// no updates
-		if currentVersion == release.Version {
-			fmt.Println("No updates available, you're good :)")
+		if release == nil || currentVersion == release.Version {
+			fmt.Println("No updates available, update to date!")
 			return
 		}
 

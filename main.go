@@ -41,7 +41,7 @@ func main() {
 	// verify is git repo
 	if !bitcmd.IsGitRepo() {
 		if len(os.Args) == 2 && os.Args[1] == "--version" {
-			fmt.Println("bit version v0.7.3")
+			fmt.Println("bit version v0.7.4")
 			bitcmd.PrintGitVersion()
 			return
 		}
