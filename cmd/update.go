@@ -23,7 +23,7 @@ bit update v0.7.4 (note: v is required)`,
 			targetVersion = args[0][1:]
 		}
 
-		currentVersion := "v0.7.4"
+		currentVersion := "v0.7.5"
 
 		// open-source edition
 		p := &update.Manager{

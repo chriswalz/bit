@@ -39,9 +39,9 @@ func main() {
 	}
 
 	// verify is git repo
-	if !bitcmd.IsGitRepo() {
+	if !bitcmd.IsGitRepo() && os.Args[1] != "update" {
 		if len(os.Args) == 2 && os.Args[1] == "--version" {
-			fmt.Println("bit version v0.7.4")
+			fmt.Println("bit version v0.7.5")
 			bitcmd.PrintGitVersion()
 			return
 		}
