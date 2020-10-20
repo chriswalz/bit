@@ -39,14 +39,26 @@ func main() {
 	}
 
 	// verify is git repo
-	if !bitcmd.IsGitRepo() && os.Args[1] != "update" {
-		if len(os.Args) == 2 && os.Args[1] == "--version" {
+	if len(os.Args) >= 2 {
+		if os.Args[1] == "--version" {
 			fmt.Println("bit version v0.7.5")
 			bitcmd.PrintGitVersion()
 			return
 		}
-		fmt.Println("fatal: not a git repository (or any of the parent directories): .git")
-		return
+	} else {
+
+	}
+	if !bitcmd.IsGitRepo() {
+		if len(os.Args) >= 2 && os.Args[1] == "update" {
+			// do nothing here, proceed to update path
+		} else if len(os.Args) == 2 && os.Args[1] == "--version" {
+			fmt.Println("bit version v0.7.5")
+			bitcmd.PrintGitVersion()
+			return
+		} else {
+			fmt.Println("fatal: not a git repository (or any of the parent directories): .git")
+			return
+		}
 	}
 
 	bitcliCmds := []string{"save", "sync", "help", "info", "release", "update"}

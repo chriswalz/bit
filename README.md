@@ -23,8 +23,17 @@
 - new commands like `bit sync` that vastly simplify your workflow 
 - commands from **git-extras** such as `bit release` & `bit info`
 - **fully compatible with git** allowing you to fallback to git if need be.  
+- update using `bit update`
+- get insight into how bit works using `bit --debug`
+
+--- **Coming Soon** ---
+- checkout pull requests from github
+- improved `bit sync`
+- more completions!
 
 ## Install / Update
+
+**new versions** of bit can now update using `bit update`
 
 ### using `cURL` (Simplest way to install) 
 
