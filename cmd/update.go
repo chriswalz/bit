@@ -18,7 +18,7 @@ var updateCmd = &cobra.Command{
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		version := "v0.7.0"
+		version := "v0.7.1"
 
 		// open-source edition
 		p := &update.Manager{
