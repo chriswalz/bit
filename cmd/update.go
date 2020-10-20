@@ -14,11 +14,16 @@ import (
 // updateCmd represents the update command
 var updateCmd = &cobra.Command{
 	Use:   "update",
-	Short: "Updates bit to the latest version",
-	Long:  ``,
+	Short: "Updates bit to the latest or specified version",
+	Long:  `bit update
+bit update v0.7.3 (note: v is required)`,
 	Run: func(cmd *cobra.Command, args []string) {
+		targetVersion := ""
+		if len(args) == 1 {
+			targetVersion = args[0][1:]
+		}
 
-		version := "v0.7.1"
+		currentVersion := "v0.7.3"
 
 		// open-source edition
 		p := &update.Manager{
@@ -26,19 +31,19 @@ var updateCmd = &cobra.Command{
 			Store: &github.Store{
 				Owner:   "chriswalz",
 				Repo:    "bit",
-				Version: version[1:],
+				Version: currentVersion[1:],
 			},
 		}
 
 		// fetch latest or specified release
-		release, err := getLatestOrSpecified(p, version[1:])
+		release, err := getLatestOrSpecified(p, targetVersion)
 		if err != nil {
-			fmt.Println(errors.Wrap(err, "fetching latest release").Error())
+			fmt.Println(errors.Wrap(err, "fetching latest or specified release").Error())
 			return
 		}
 
 		// no updates
-		if version == release.Version {
+		if currentVersion == release.Version {
 			fmt.Println("No updates available, you're good :)")
 			return
 		}
@@ -71,10 +76,10 @@ var updateCmd = &cobra.Command{
 			return
 		}
 
-		fmt.Printf("Updated bit %s to %s in %s", version, release.Version, dst)
+		fmt.Printf("Updated bit %s to %s in %s", currentVersion, release.Version, dst)
 
 	},
-	Args: cobra.NoArgs,
+	Args: cobra.MaximumNArgs(1),
 }
 
 func init() {
