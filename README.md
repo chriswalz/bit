@@ -38,13 +38,17 @@
 ### using `cURL` (Simplest way to install) 
 
 ```shell script
-export PREFIX=/opt/bit/git && mkdir -p ${PREFIX}  ## optional: override default install location /usr/local/bin
 curl -sf https://gobinaries.com/chriswalz/bit | sh; curl -sf https://gobinaries.com/chriswalz/bit/bitcomplete | sh && echo y | COMP_INSTALL=1 bitcomplete;
 echo "Type bit then press <ENTER> to show interactive prompt"
 bit;
 ```
 
-`bit checkout` & `bit switch` will also show interactive prompts
+To overwrite installation location
+
+`export PREFIX=/opt/bit/git && mkdir -p ${PREFIX}  ## optional: override default install location /usr/local/bin`
+
+
+`bit`, `bit checkout` & `bit switch` will show interactive prompts after you press ENTER
 
 ### using `go` (Harder way to install)
 *Caveats: GOPATH and GOBIN need to be set. Verify with `go env`. If they are not set, add this to your .bashrc or .bash_profile etc. AND open new terminal*
