@@ -6,10 +6,10 @@
     src="https://user-images.githubusercontent.com/6971318/95147815-cd1d6a80-074f-11eb-8265-56466ac628f8.gif"
     width="600px" border="0" alt="bit">
 <br>
+<img alt="GitHub release (latest SemVer)" src="https://img.shields.io/github/v/release/chriswalz/bit?color=gree">
 <a href="https://goreportcard.com/report/github.com/chriswalz/bit"><img src="https://goreportcard.com/badge/github.com/chriswalz/bit" alt="Version"></a>
 <a href="#"><img src="https://img.shields.io/github/go-mod/go-version/chriswalz/bit" alt="Version"></a>
 <a href="#"><img src="https://img.shields.io/github/stars/chriswalz/bit?style=social" alt="Version"></a>
-<a href="https://github.com/chriswalz/bit/tags"><img src="https://img.shields.io/github/v/tag/chriswalz/bit?sort=semver" alt="Version"></a>
 </p>
 
 
@@ -35,7 +35,9 @@
 
 **new versions** of bit can now update using `bit update`
 
-### using `cURL` (Simplest way to install) 
+### using `cURL` (Simplest way to install)
+
+Like bit? [Sponsor](https://github.com/sponsors/chriswalz) bit for as little as $5 
 
 ```shell script
 curl -sf https://gobinaries.com/chriswalz/bit | sh; curl -sf https://gobinaries.com/chriswalz/bit/bitcomplete | sh && echo y | COMP_INSTALL=1 bitcomplete;
