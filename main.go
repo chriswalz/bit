@@ -41,7 +41,7 @@ func main() {
 	// verify is git repo
 	if len(os.Args) >= 2 {
 		if os.Args[1] == "--version" {
-			fmt.Println("bit version v0.7.5")
+			fmt.Println("bit version v0.7.7")
 			bitcmd.PrintGitVersion()
 			return
 		}
@@ -52,7 +52,7 @@ func main() {
 		if len(os.Args) >= 2 && os.Args[1] == "update" {
 			// do nothing here, proceed to update path
 		} else if len(os.Args) == 2 && os.Args[1] == "--version" {
-			fmt.Println("bit version v0.7.5")
+			fmt.Println("bit version v0.7.7")
 			bitcmd.PrintGitVersion()
 			return
 		} else {
