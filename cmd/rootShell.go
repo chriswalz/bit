@@ -143,7 +143,7 @@ func GitCommandsPromptUsed(args []string, suggestionMap map[string][]prompt.Sugg
 	if args[len(args)-1] == "--version" {
 		fmt.Println("bit version v0.7.0")
 	}
-	if isBranchCompletionCommand(sub) {
+	if isBranchChangeCommand(sub) {
 		branchName := ""
 		if len(args) < 2 {
 			branchName = SuggestionPrompt("> bit "+sub+" ", branchCommandCompleter(suggestionMap))

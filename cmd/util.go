@@ -400,8 +400,11 @@ func fileExists(filename string) bool {
 }
 
 func isBranchCompletionCommand(command string) bool {
-
 	return command == "checkout" || command == "switch" || command == "co" || command == "merge"
+}
+
+func isBranchChangeCommand(command string) bool {
+	return command == "checkout" || command == "switch" || command == "co"
 }
 
 func Find(slice []string, val string) int {
