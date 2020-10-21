@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/rs/zerolog/log"
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/c-bata/go-prompt"
@@ -54,12 +55,14 @@ func CreateSuggestionMap(cmd *cobra.Command) (map[string][]prompt.Suggest, map[s
 	allBitCmds := AllBitAndGitSubCommands(cmd)
 	//commonCommands := CobraCommandToSuggestions(CommonCommandsList())
 	branchListSuggestions := BranchListSuggestions()
+	prs := GitHubPRSuggestions()
+	branchesAndPRsSuggestions := append(branchListSuggestions, prs...)
 	completerSuggestionMap := map[string][]prompt.Suggest{
 		"":         {},
 		"shell":    CobraCommandToSuggestions(allBitCmds),
-		"checkout": branchListSuggestions,
-		"switch":   branchListSuggestions,
-		"co":       branchListSuggestions,
+		"checkout": branchesAndPRsSuggestions,
+		"switch":   branchesAndPRsSuggestions,
+		"co":       branchesAndPRsSuggestions,
 		"merge":    branchListSuggestions,
 		"rebase":   branchListSuggestions,
 		"log":      branchListSuggestions,
@@ -149,6 +152,19 @@ func GitCommandsPromptUsed(args []string, suggestionMap map[string][]prompt.Sugg
 			branchName = SuggestionPrompt("> bit "+sub+" ", branchCommandCompleter(suggestionMap))
 		} else {
 			branchName = strings.TrimSpace(args[len(args)-1])
+		}
+
+		// fixme this is a magic string
+		if strings.HasPrefix(branchName, ">PR-") {
+			fmt.Println(branchName)
+			split := strings.Split(branchName, "#")
+			prNumber, err := strconv.Atoi(split[len(split)-1])
+			if err != nil {
+				log.Debug().Err(err)
+				return true
+			}
+			checkoutPullRequest(prNumber)
+			return true
 		}
 
 		if strings.HasPrefix(branchName, "origin/") {

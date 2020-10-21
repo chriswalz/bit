@@ -6,6 +6,7 @@ import (
 	"github.com/c-bata/go-prompt"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
+	"github.com/thoas/go-funk"
 	"os"
 	"os/exec"
 	"regexp"
@@ -153,6 +154,17 @@ func GitResetSuggestions() []prompt.Suggest {
 		}
 	}
 	return suggestions
+}
+
+func GitHubPRSuggestions() []prompt.Suggest {
+	prs := ListGHPullRequests()
+	suggestions := funk.Map(prs, func(pr *PullRequest) prompt.Suggest {
+		return prompt.Suggest{
+			Text:        fmt.Sprintf(">PR-%s-#%d", pr.AuthorBranch, pr.Number),
+			Description: fmt.Sprintf("%s, %s", pr.Title, pr.State),
+		}
+	})
+	return suggestions.([]prompt.Suggest)
 }
 
 func CobraCommandToSuggestions(cmds []*cobra.Command) []prompt.Suggest {
