@@ -52,14 +52,14 @@ func GHCliExistsAndLoggedIn() bool {
 		log.Debug().Msg("GitHub CLI doesn't exist")
 		return false
 	}
-	msg , err := execCommand("gh", "auth", "status").CombinedOutput()
-	if err != nil {
-		log.Debug().Err(err)
-		return false
-	}
-	if strings.Contains(string(msg), "You are not logged into any GitHub") {
-		log.Debug().Msg("not logged into to Github")
-		return false
-	}
+	//msg , err := execCommand("gh", "auth", "status").CombinedOutput()
+	//if err != nil {
+	//	log.Debug().Msg(string(msg) + err.Error())
+	//	return false
+	//}
+	//if strings.Contains(string(msg), "You are not logged into any GitHub") {
+	//	log.Debug().Msg("not logged into to Github")
+	//	return false
+	//}
 	return true
 }

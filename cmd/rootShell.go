@@ -51,7 +51,7 @@ func init() {
 	ShellCmd.PersistentFlags().Bool("debug", false, "Print debugging information")
 }
 
-func CreateSuggestionMap(cmd *cobra.Command) (map[string][]prompt.Suggest, map[string]*cobra.Command) {
+func CreateSuggestionMap(cmd *cobra.Command) (map[string]func() []prompt.Suggest, map[string]*cobra.Command) {
 	start := time.Now()
 	_, bitCmdMap := AllBitSubCommands(cmd)
 	log.Debug().Msg((time.Now().Sub(start)).String())
@@ -63,24 +63,25 @@ func CreateSuggestionMap(cmd *cobra.Command) (map[string][]prompt.Suggest, map[s
 	branchListSuggestions := BranchListSuggestions()
 	log.Debug().Msg((time.Now().Sub(start)).String())
 	start = time.Now()
-	prs := GitHubPRSuggestions()
-	log.Debug().Msg((time.Now().Sub(start)).String())
-	branchesAndPRsSuggestions := append(branchListSuggestions, prs...)
-	completerSuggestionMap := map[string][]prompt.Suggest{
-		"":         {},
-		"shell":    CobraCommandToSuggestions(allBitCmds),
-		"checkout": branchesAndPRsSuggestions,
-		"switch":   branchesAndPRsSuggestions,
-		"co":       branchesAndPRsSuggestions,
-		"merge":    branchListSuggestions,
-		"rebase":   branchListSuggestions,
-		"log":      branchListSuggestions,
-		"add":      GitAddSuggestions(),
-		"release": {
+	//prs := GitHubPRSuggestions()
+	//log.Debug().Msg((time.Now().Sub(start)).String())
+	//branchesAndPRsSuggestions := append(branchListSuggestions, prs...)
+	completerSuggestionMap := map[string]func() []prompt.Suggest{
+		"":         memoize([]prompt.Suggest{}),
+		"shell":    memoize(CobraCommandToSuggestions(allBitCmds)),
+		"checkout": memoize(branchListSuggestions),
+		"switch":   memoize(branchListSuggestions),
+		"co":       memoize(branchListSuggestions),
+		"merge":    memoize(branchListSuggestions),
+		"rebase":   memoize(branchListSuggestions),
+		"log":      memoize(branchListSuggestions),
+		"add":      memoize(GitAddSuggestions()),
+		"release": memoize([]prompt.Suggest{
 			{Text: "bump", Description: "Increment SemVer from tags and release"},
 			{Text: "<version>", Description: "Name of release version e.g. v0.1.2"},
-		},
-		"reset": GitResetSuggestions(),
+		}),
+		"reset": memoize(GitResetSuggestions()),
+		"pr": lazyLoad(GitHubPRSuggestions),
 		//"_any": commonCommands,
 	}
 	return completerSuggestionMap, bitCmdMap
@@ -96,19 +97,25 @@ func Execute() {
 	}
 }
 
-func shellCommandCompleter(suggestionMap map[string][]prompt.Suggest) func(d prompt.Document) []prompt.Suggest {
+func shellCommandCompleter(suggestionMap map[string]func() []prompt.Suggest) func(d prompt.Document) []prompt.Suggest {
 	return func(d prompt.Document) []prompt.Suggest {
 		return promptCompleter(suggestionMap, d.Text)
 	}
 }
 
-func branchCommandCompleter(suggestionMap map[string][]prompt.Suggest) func(d prompt.Document) []prompt.Suggest {
+func branchCommandCompleter(suggestionMap map[string]func() []prompt.Suggest) func(d prompt.Document) []prompt.Suggest {
 	return func(d prompt.Document) []prompt.Suggest {
 		return promptCompleter(suggestionMap, "checkout "+d.Text)
 	}
 }
 
-func promptCompleter(suggestionMap map[string][]prompt.Suggest, text string) []prompt.Suggest {
+func prCommandCompleter(suggestionMap map[string]func() []prompt.Suggest) func(d prompt.Document) []prompt.Suggest {
+	return func(d prompt.Document) []prompt.Suggest {
+		return promptCompleter(suggestionMap, "pr "+d.Text)
+	}
+}
+
+func promptCompleter(suggestionMap map[string]func() []prompt.Suggest, text string) []prompt.Suggest {
 	var suggestions []prompt.Suggest
 	split := strings.Split(text, " ")
 	filterFlags := make([]string, 0, len(split))
@@ -119,7 +126,7 @@ func promptCompleter(suggestionMap map[string][]prompt.Suggest, text string) []p
 	}
 	prev := filterFlags[0] // in git commit -m "hello"  commit is prev
 	if len(prev) == len(text) {
-		suggestions = suggestionMap["shell"]
+		suggestions = suggestionMap["shell"]()
 		return prompt.FilterHasPrefix(suggestions, prev, true)
 	}
 	curr := filterFlags[1] // in git commit -m "hello"  "hello" is curr
@@ -128,7 +135,7 @@ func promptCompleter(suggestionMap map[string][]prompt.Suggest, text string) []p
 	} else if strings.HasPrefix(curr, "-") {
 		suggestions = FlagSuggestionsForCommand(prev, "-")
 	} else if suggestionMap[prev] != nil {
-		suggestions = suggestionMap[prev]
+		suggestions = suggestionMap[prev]()
 		if isBranchCompletionCommand(prev) {
 			return prompt.FilterContains(suggestions, curr, true)
 		}
@@ -145,7 +152,7 @@ func RunGitCommandWithArgs(args []string) {
 	return
 }
 
-func GitCommandsPromptUsed(args []string, suggestionMap map[string][]prompt.Suggest) bool {
+func GitCommandsPromptUsed(args []string, suggestionMap map[string]func() []prompt.Suggest) bool {
 	sub := args[0]
 	// handle checkout,switch,co commands as checkout
 	// if "-b" flag is not provided and branch does not exist
@@ -157,23 +164,26 @@ func GitCommandsPromptUsed(args []string, suggestionMap map[string][]prompt.Sugg
 	}
 	if isBranchChangeCommand(sub) {
 		branchName := ""
-		if len(args) < 2 {
+		if sub == "pr" {
+			branchName = SuggestionPrompt("> bit "+sub+" ", prCommandCompleter(suggestionMap))
+
+			// fixme this is a magic string
+			if strings.HasPrefix(branchName, ">PR-") {
+				fmt.Println(branchName)
+				split := strings.Split(branchName, "#")
+				prNumber, err := strconv.Atoi(split[len(split)-1])
+				if err != nil {
+					log.Debug().Err(err)
+					return true
+				}
+				checkoutPullRequest(prNumber)
+				return true
+			}
+
+		} else if len(args) < 2 {
 			branchName = SuggestionPrompt("> bit "+sub+" ", branchCommandCompleter(suggestionMap))
 		} else {
 			branchName = strings.TrimSpace(args[len(args)-1])
-		}
-
-		// fixme this is a magic string
-		if strings.HasPrefix(branchName, ">PR-") {
-			fmt.Println(branchName)
-			split := strings.Split(branchName, "#")
-			prNumber, err := strconv.Atoi(split[len(split)-1])
-			if err != nil {
-				log.Debug().Err(err)
-				return true
-			}
-			checkoutPullRequest(prNumber)
-			return true
 		}
 
 		if strings.HasPrefix(branchName, "origin/") {
@@ -264,4 +274,20 @@ func parseCommandLine(command string) ([]string, error) {
 	}
 
 	return args, nil
+}
+
+func memoize(suggestions []prompt.Suggest) func() []prompt.Suggest {
+	return func () []prompt.Suggest {
+		return suggestions
+	}
+}
+
+func lazyLoad(suggestionFunc func() []prompt.Suggest) func() []prompt.Suggest {
+	var suggestions []prompt.Suggest
+	return func () []prompt.Suggest {
+		if suggestions == nil {
+			suggestions = suggestionFunc()
+		}
+		return suggestions
+	}
 }
