@@ -6,6 +6,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/c-bata/go-prompt"
 	"github.com/spf13/cobra"
@@ -51,11 +52,19 @@ func init() {
 }
 
 func CreateSuggestionMap(cmd *cobra.Command) (map[string][]prompt.Suggest, map[string]*cobra.Command) {
+	start := time.Now()
 	_, bitCmdMap := AllBitSubCommands(cmd)
+	log.Debug().Msg((time.Now().Sub(start)).String())
+	start = time.Now()
 	allBitCmds := AllBitAndGitSubCommands(cmd)
+	log.Debug().Msg((time.Now().Sub(start)).String())
 	//commonCommands := CobraCommandToSuggestions(CommonCommandsList())
+	start = time.Now()
 	branchListSuggestions := BranchListSuggestions()
+	log.Debug().Msg((time.Now().Sub(start)).String())
+	start = time.Now()
 	prs := GitHubPRSuggestions()
+	log.Debug().Msg((time.Now().Sub(start)).String())
 	branchesAndPRsSuggestions := append(branchListSuggestions, prs...)
 	completerSuggestionMap := map[string][]prompt.Suggest{
 		"":         {},

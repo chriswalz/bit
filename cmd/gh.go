@@ -16,7 +16,7 @@ type PullRequest struct {
 }
 
 func ListGHPullRequests() []*PullRequest {
-	if !GHCliExists() {
+	if !GHCliExistsAndLoggedIn() {
 		return []*PullRequest{}
 	}
 	msg, err := execCommand("gh", "pr", "list").CombinedOutput()
@@ -37,7 +37,7 @@ func ListGHPullRequests() []*PullRequest {
 }
 
 func checkoutPullRequest(pr int) {
-	if !GHCliExists() {
+	if !GHCliExistsAndLoggedIn() {
 		return
 	}
 	_, err := execCommand("gh", "pr", "checkout", strconv.Itoa(pr)).CombinedOutput()
@@ -46,10 +46,19 @@ func checkoutPullRequest(pr int) {
 	}
 }
 
-func GHCliExists() bool {
+func GHCliExistsAndLoggedIn() bool {
 	_, err := exec.LookPath("gh")
 	if err != nil {
 		log.Debug().Msg("GitHub CLI doesn't exist")
+		return false
+	}
+	msg , err := execCommand("gh", "auth", "status").CombinedOutput()
+	if err != nil {
+		log.Debug().Err(err)
+		return false
+	}
+	if strings.Contains(string(msg), "You are not logged into any GitHub") {
+		log.Debug().Msg("not logged into to Github")
 		return false
 	}
 	return true
