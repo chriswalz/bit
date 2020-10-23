@@ -6,6 +6,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/c-bata/go-prompt"
@@ -63,25 +64,32 @@ func CreateSuggestionMap(cmd *cobra.Command) (map[string]func() []prompt.Suggest
 	branchListSuggestions := BranchListSuggestions()
 	log.Debug().Msg((time.Now().Sub(start)).String())
 	start = time.Now()
-	//prs := GitHubPRSuggestions()
-	//log.Debug().Msg((time.Now().Sub(start)).String())
-	//branchesAndPRsSuggestions := append(branchListSuggestions, prs...)
+	combraCommandSuggestions := CobraCommandToSuggestions(allBitCmds)
+	log.Debug().Msg((time.Now().Sub(start)).String())
+	start = time.Now()
+	gitAddSuggestions := GitAddSuggestions()
+	log.Debug().Msg((time.Now().Sub(start)).String())
+	start = time.Now()
+	gitResetSuggestions := GitResetSuggestions()
+	log.Debug().Msg((time.Now().Sub(start)).String())
+	start = time.Now()
+
 	completerSuggestionMap := map[string]func() []prompt.Suggest{
 		"":         memoize([]prompt.Suggest{}),
-		"shell":    memoize(CobraCommandToSuggestions(allBitCmds)),
+		"shell":    memoize(combraCommandSuggestions),
 		"checkout": memoize(branchListSuggestions),
 		"switch":   memoize(branchListSuggestions),
 		"co":       memoize(branchListSuggestions),
 		"merge":    memoize(branchListSuggestions),
 		"rebase":   memoize(branchListSuggestions),
 		"log":      memoize(branchListSuggestions),
-		"add":      memoize(GitAddSuggestions()),
+		"add":      memoize(gitAddSuggestions),
 		"release": memoize([]prompt.Suggest{
 			{Text: "bump", Description: "Increment SemVer from tags and release"},
 			{Text: "<version>", Description: "Name of release version e.g. v0.1.2"},
 		}),
-		"reset": memoize(GitResetSuggestions()),
-		"pr": lazyLoad(GitHubPRSuggestions),
+		"reset": memoize(gitResetSuggestions),
+		"pr": asyncLoad(GitHubPRSuggestions),
 		//"_any": commonCommands,
 	}
 	return completerSuggestionMap, bitCmdMap
@@ -288,6 +296,20 @@ func lazyLoad(suggestionFunc func() []prompt.Suggest) func() []prompt.Suggest {
 		if suggestions == nil {
 			suggestions = suggestionFunc()
 		}
+		return suggestions
+	}
+}
+
+func asyncLoad(suggestionFunc func() []prompt.Suggest) func() []prompt.Suggest {
+	var suggestions []prompt.Suggest
+	var wg sync.WaitGroup
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		suggestions = suggestionFunc()
+	}()
+	return func () []prompt.Suggest {
+		wg.Wait()
 		return suggestions
 	}
 }
