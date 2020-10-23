@@ -61,7 +61,7 @@ func main() {
 		}
 	}
 
-	bitcliCmds := []string{"save", "sync", "help", "info", "release", "update"}
+	bitcliCmds := []string{"save", "sync", "help", "info", "release", "update", "pr"}
 	if len(argsWithoutProg) == 0 || bitcmd.Find(bitcliCmds, argsWithoutProg[0]) != -1 {
 		bitcli()
 	} else {

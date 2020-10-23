@@ -161,7 +161,7 @@ func GitHubPRSuggestions() []prompt.Suggest {
 	prs := ListGHPullRequests()
 	suggestions := funk.Map(prs, func(pr *PullRequest) prompt.Suggest {
 		return prompt.Suggest{
-			Text:        fmt.Sprintf(">PR-%s-#%d", pr.AuthorBranch, pr.Number),
+			Text:        fmt.Sprintf("PR:%s-#%d", pr.AuthorBranch, pr.Number),
 			Description: fmt.Sprintf("%s, %s", pr.Title, pr.State),
 		}
 	})

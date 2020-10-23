@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/rs/zerolog/log"
 	"os"
-	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -89,7 +88,7 @@ func CreateSuggestionMap(cmd *cobra.Command) (map[string]func() []prompt.Suggest
 			{Text: "<version>", Description: "Name of release version e.g. v0.1.2"},
 		}),
 		"reset": memoize(gitResetSuggestions),
-		"pr": asyncLoad(GitHubPRSuggestions),
+		"pr": lazyLoad(GitHubPRSuggestions),
 		//"_any": commonCommands,
 	}
 	return completerSuggestionMap, bitCmdMap
@@ -173,21 +172,8 @@ func GitCommandsPromptUsed(args []string, suggestionMap map[string]func() []prom
 	if isBranchChangeCommand(sub) {
 		branchName := ""
 		if sub == "pr" {
-			branchName = SuggestionPrompt("> bit "+sub+" ", prCommandCompleter(suggestionMap))
-
-			// fixme this is a magic string
-			if strings.HasPrefix(branchName, ">PR-") {
-				fmt.Println(branchName)
-				split := strings.Split(branchName, "#")
-				prNumber, err := strconv.Atoi(split[len(split)-1])
-				if err != nil {
-					log.Debug().Err(err)
-					return true
-				}
-				checkoutPullRequest(prNumber)
-				return true
-			}
-
+			runPr(suggestionMap)
+			return true
 		} else if len(args) < 2 {
 			branchName = SuggestionPrompt("> bit "+sub+" ", branchCommandCompleter(suggestionMap))
 		} else {
