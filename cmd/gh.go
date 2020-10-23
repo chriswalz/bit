@@ -17,7 +17,9 @@ type PullRequest struct {
 
 func ListGHPullRequests() []*PullRequest {
 	if !GHCliExistsAndLoggedIn() {
-		return []*PullRequest{}
+		return []*PullRequest{
+			{AuthorBranch: "Either no PRs or GH CLI not installed"},
+		}
 	}
 	msg, err := execCommand("gh", "pr", "list", "--limit=200", "--state=all").CombinedOutput()
 	if err != nil {
