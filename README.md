@@ -32,7 +32,6 @@
 
 
 --- **Coming Soon** ---
-- checkout pull requests from github
 - improved `bit sync`
 - more completions!
 
