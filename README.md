@@ -23,8 +23,13 @@
 - new commands like `bit sync` that vastly simplify your workflow 
 - commands from **git-extras** such as `bit release` & `bit info`
 - **fully compatible with git** allowing you to fallback to git if need be.  
-- update using `bit update`
 - get insight into how bit works using `bit --debug`
+
+--- **New** ---
+
+- [X] `bit pr` view and checkout pull requests from Github (Requires GitHub CLI) 
+- [X] easily update bit using `bit update`
+
 
 --- **Coming Soon** ---
 - checkout pull requests from github
@@ -111,7 +116,7 @@ Synchronize your changes to origin branch (Beta)
 
 `bit sync`
 
-You have access to ALL git commands as well. 90% of the time the above commands will have you covered. 
+You have access to ALL git commands as well.  
 
 `bit commit -m "I can still use git commands"`, `bit pull -r origin master`
 
@@ -125,7 +130,9 @@ Switched to a new branch 'example-branch'
 
 [Makes some changes]
 
-`bit save "add important feature"`
+`bit save "add important feature"` 
+
+*for multiline commits simply don't put the final quote until you're done typing*
 
 [fix an error for important feature]
 
@@ -138,7 +145,6 @@ Switched to a new branch 'example-branch'
 [two days later confirm your branch is in sync with origin]
 
 `bit sync`
-
 
 
 

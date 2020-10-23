@@ -142,6 +142,18 @@ func TestFlagSuggestionsForCommand(t *testing.T) {
 	}
 }
 
+func TestListGHPullRequests(t *testing.T) {
+	expect := PullRequest{
+		Title:  "Update Go install",
+		Number: 32,
+		State:  "open",
+	}
+	prs := ListGHPullRequests()
+	assert.Contains(t, prs[1].Title, expect.Title)
+	assert.Equal(t, prs[1].Number, expect.Number)
+	//assert.Contains(t, prs[1].State, expect.State)
+}
+
 func BenchmarkAllBitAndGitSubCommands(b *testing.B) {
 	for n := 0; n < b.N; n++ {
 		AllBitAndGitSubCommands(ShellCmd)
