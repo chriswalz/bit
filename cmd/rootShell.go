@@ -5,7 +5,6 @@ import (
 	"github.com/rs/zerolog/log"
 	"os"
 	"strings"
-	"sync"
 	"time"
 
 	"github.com/c-bata/go-prompt"
@@ -16,7 +15,7 @@ import (
 var ShellCmd = &cobra.Command{
 	Use:   "bit",
 	Short: "Bit is a Git CLI that predicts what you want to do",
-	Long:  `v0.7.7`,
+	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		completerSuggestionMap, bitCmdMap := CreateSuggestionMap(cmd)
 
@@ -34,7 +33,7 @@ var ShellCmd = &cobra.Command{
 			return
 		}
 		if bitCmdMap[subCommand] == nil {
-			yes := GitCommandsPromptUsed(parsedArgs, completerSuggestionMap)
+			yes := GitCommandsPromptUsed(parsedArgs, completerSuggestionMap, cmd.Version)
 			if yes {
 				return
 			}
@@ -159,7 +158,7 @@ func RunGitCommandWithArgs(args []string) {
 	return
 }
 
-func GitCommandsPromptUsed(args []string, suggestionMap map[string]func() []prompt.Suggest) bool {
+func GitCommandsPromptUsed(args []string, suggestionMap map[string]func() []prompt.Suggest, version string) bool {
 	sub := args[0]
 	// handle checkout,switch,co commands as checkout
 	// if "-b" flag is not provided and branch does not exist
@@ -167,7 +166,7 @@ func GitCommandsPromptUsed(args []string, suggestionMap map[string]func() []prom
 	// expected usage format
 	//   bit (checkout|switch|co) [-b] branch-name
 	if args[len(args)-1] == "--version" {
-		fmt.Println("bit version v0.7.7")
+		fmt.Println("bit version " + version)
 	}
 	if isBranchChangeCommand(sub) {
 		branchName := ""
@@ -205,97 +204,6 @@ func GitCommandsPromptUsed(args []string, suggestionMap map[string]func() []prom
 	return false
 }
 
-func parseCommandLine(command string) ([]string, error) {
-	var args []string
-	state := "start"
-	current := ""
-	quote := "\""
-	escapeNext := true
-	for i := 0; i < len(command); i++ {
-		c := command[i]
-
-		if state == "quotes" {
-			if string(c) != quote {
-				current += string(c)
-			} else {
-				args = append(args, current)
-				current = ""
-				state = "start"
-			}
-			continue
-		}
-
-		if escapeNext {
-			current += string(c)
-			escapeNext = false
-			continue
-		}
-
-		if c == '\\' {
-			escapeNext = true
-			continue
-		}
-
-		if c == '"' || c == '\'' {
-			state = "quotes"
-			quote = string(c)
-			continue
-		}
-
-		if state == "arg" {
-			if c == ' ' || c == '\t' {
-				args = append(args, current)
-				current = ""
-				state = "start"
-			} else {
-				current += string(c)
-			}
-			continue
-		}
-
-		if c != ' ' && c != '\t' {
-			state = "arg"
-			current += string(c)
-		}
-	}
-
-	if state == "quotes" {
-		return []string{}, fmt.Errorf("Unclosed quote in command line: %s", command)
-	}
-
-	if current != "" {
-		args = append(args, current)
-	}
-
-	return args, nil
-}
-
-func memoize(suggestions []prompt.Suggest) func() []prompt.Suggest {
-	return func () []prompt.Suggest {
-		return suggestions
-	}
-}
-
-func lazyLoad(suggestionFunc func() []prompt.Suggest) func() []prompt.Suggest {
-	var suggestions []prompt.Suggest
-	return func () []prompt.Suggest {
-		if suggestions == nil {
-			suggestions = suggestionFunc()
-		}
-		return suggestions
-	}
-}
-
-func asyncLoad(suggestionFunc func() []prompt.Suggest) func() []prompt.Suggest {
-	var suggestions []prompt.Suggest
-	var wg sync.WaitGroup
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		suggestions = suggestionFunc()
-	}()
-	return func () []prompt.Suggest {
-		wg.Wait()
-		return suggestions
-	}
+func GetVersion() string {
+	return ShellCmd.Version
 }

@@ -23,9 +23,14 @@ import (
 	"os"
 )
 
+// this should be overwritten at compile time
+var version string = "v0.8.0"
+
 func main() {
 	// defer needed to handle funkyness with CTRL + C & go-prompt
 	defer bitcmd.HandleExit()
+	bitcmd.ShellCmd.Version = version
+
 
 	// set debug level
 	log.Logger = log.With().Caller().Logger().Output(zerolog.ConsoleWriter{Out: os.Stderr})
@@ -41,7 +46,7 @@ func main() {
 	// verify is git repo
 	if len(os.Args) >= 2 {
 		if os.Args[1] == "--version" {
-			fmt.Println("bit version v0.7.7")
+			fmt.Println("bit version " + version)
 			bitcmd.PrintGitVersion()
 			return
 		}
@@ -52,7 +57,7 @@ func main() {
 		if len(os.Args) >= 2 && os.Args[1] == "update" {
 			// do nothing here, proceed to update path
 		} else if len(os.Args) == 2 && os.Args[1] == "--version" {
-			fmt.Println("bit version v0.7.7")
+			fmt.Println("bit version " + version)
 			bitcmd.PrintGitVersion()
 			return
 		} else {
@@ -66,7 +71,7 @@ func main() {
 		bitcli()
 	} else {
 		completerSuggestionMap, _ := bitcmd.CreateSuggestionMap(bitcmd.ShellCmd)
-		yes := bitcmd.GitCommandsPromptUsed(argsWithoutProg, completerSuggestionMap)
+		yes := bitcmd.GitCommandsPromptUsed(argsWithoutProg, completerSuggestionMap, version)
 		if yes {
 			return
 		}
