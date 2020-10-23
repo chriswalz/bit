@@ -84,7 +84,7 @@ func CreateSuggestionMap(cmd *cobra.Command) (map[string]func() []prompt.Suggest
 		"log":      memoize(branchListSuggestions),
 		"add":      memoize(gitAddSuggestions),
 		"release": memoize([]prompt.Suggest{
-			{Text: "bump", Description: "Increment SemVer from tags and release"},
+			{Text: "bump", Description: "Increment SemVer from tags and release e.g. if latest is v0.1.2 it's bumped to v0.1.3 "},
 			{Text: "<version>", Description: "Name of release version e.g. v0.1.2"},
 		}),
 		"reset": memoize(gitResetSuggestions),
