@@ -23,8 +23,13 @@
 - new commands like `bit sync` that vastly simplify your workflow 
 - commands from **git-extras** such as `bit release` & `bit info`
 - **fully compatible with git** allowing you to fallback to git if need be.  
-- update using `bit update`
 - get insight into how bit works using `bit --debug`
+
+--- **New** ---
+
+- [X] `bit pr` view and checkout pull requests from Github (Requires GitHub CLI) 
+- [X] easily update bit using `bit update`
+
 
 --- **Coming Soon** ---
 - checkout pull requests from github

@@ -19,7 +19,7 @@ func ListGHPullRequests() []*PullRequest {
 	if !GHCliExistsAndLoggedIn() {
 		return []*PullRequest{}
 	}
-	msg, err := execCommand("gh", "pr", "list").CombinedOutput()
+	msg, err := execCommand("gh", "pr", "list", "--limit=200", "--state=all").CombinedOutput()
 	if err != nil {
 		log.Debug().Err(err)
 	}
@@ -49,7 +49,7 @@ func checkoutPullRequest(pr int) {
 func GHCliExistsAndLoggedIn() bool {
 	_, err := exec.LookPath("gh")
 	if err != nil {
-		log.Debug().Msg("GitHub CLI doesn't exist")
+		log.Debug().Msg("GitHub CLI doesn't exist,")
 		return false
 	}
 	//msg , err := execCommand("gh", "auth", "status").CombinedOutput()
