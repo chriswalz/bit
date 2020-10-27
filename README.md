@@ -212,8 +212,14 @@ Thanks to [Gitless](https://gitless.com/), [git-extras](https://github.com/tj/gi
 - https://gocn.vip/topics/11063
 - https://golangweekly.com/issues/333
 - https://archive.faabli.com/archive/2020-10-09 
+- https://www.wykop.pl/wpis/52945683/unknownews-wolanie-nie-dziala-zapisz-sie-lepiej-na/
 
-## Changelog 
+## Changelog
+v0.8
+- [X] feature: checkout Pull Requests from github (requires `gh pr list` to work)
+- [X] enhancement: install with homebrew: `brew install bit-git`
+v0.7
+- [X] feature: update your cli with `bit update`
 v0.6
 - [X] fix: improved git compatibility for older versions of git 
 - [X] feature: emacs key binds 
