@@ -69,6 +69,13 @@ GO111MODULE=on go get github.com/chriswalz/bit/bitcomplete@latest;
 COMP_INSTALL=1 bitcomplete;
 ```
 
+### using `Homebrew` (For MacOS users)
+
+```shell script
+brew install bit-git
+bit
+```
+
 #### using `go` (For Windows Users) 
 ```shell script
 go env -w GO111MODULE=on
