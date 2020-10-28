@@ -54,7 +54,7 @@ func main() {
 
 	}
 	if !bitcmd.IsGitRepo() {
-		if len(os.Args) >= 2 && os.Args[1] == "update" {
+		if len(os.Args) >= 2 && (os.Args[1] == "update" || os.Args[1] == "clone") {
 			// do nothing here, proceed to update path
 		} else if len(os.Args) == 2 && os.Args[1] == "--version" {
 			fmt.Println("bit version " + version)
