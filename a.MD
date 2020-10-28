@@ -124,3 +124,5 @@ delete tag local and on origin
 bit save -e 
 
 combine bit & bitcomplete into one binary?
+
+basic usage tracking
