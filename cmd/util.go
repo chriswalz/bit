@@ -192,19 +192,54 @@ type FileChange struct {
 	Status string
 }
 
+type PromptTheme struct {
+	PrefixTextColor prompt.Color
+	SelectedSuggestionBGColor prompt.Color
+	SuggestionBGColor prompt.Color
+	SuggestionTextColor prompt.Color
+	SelectedSuggestionTextColor prompt.Color
+	DescriptionBGColor prompt.Color
+	DescriptionTextColor prompt.Color
+}
+
+var DefaultTheme = PromptTheme{
+	PrefixTextColor: prompt.Yellow, // fine
+	SelectedSuggestionBGColor: prompt.Yellow,
+	SuggestionBGColor: prompt.Yellow,
+	SuggestionTextColor: prompt.DarkGray,
+	SelectedSuggestionTextColor: prompt.Blue,
+	DescriptionBGColor: prompt.Black,
+	DescriptionTextColor: prompt.White,
+}
+
+var InvertedTheme = PromptTheme{
+	PrefixTextColor: prompt.Blue, // fine
+	SelectedSuggestionBGColor: prompt.Blue,
+	SuggestionBGColor: prompt.Blue,
+	SuggestionTextColor: prompt.LightGray,
+	SelectedSuggestionTextColor: prompt.Yellow,
+	DescriptionBGColor: prompt.White,
+	DescriptionTextColor: prompt.Black,
+}
+
 func SuggestionPrompt(prefix string, completer func(d prompt.Document) []prompt.Suggest) string {
+	theme := DefaultTheme
+	themeName := os.Getenv("BIT_THEME")
+	if strings.EqualFold(themeName, "inverted") {
+		theme = InvertedTheme
+	}
 	result := prompt.Input(prefix, completer,
 		prompt.OptionTitle(""),
 		prompt.OptionHistory([]string{""}),
-		prompt.OptionPrefixTextColor(prompt.Yellow), // fine
+		prompt.OptionPrefixTextColor(theme.PrefixTextColor), // fine
+		prompt.OptionSelectedSuggestionBGColor(theme.SelectedSuggestionBGColor),
+		prompt.OptionSuggestionBGColor(theme.SuggestionBGColor),
+		prompt.OptionSuggestionTextColor(theme.SuggestionTextColor),
+		prompt.OptionSelectedSuggestionTextColor(theme.SelectedSuggestionTextColor),
+		prompt.OptionDescriptionBGColor(theme.DescriptionBGColor),
+		prompt.OptionDescriptionTextColor(theme.DescriptionTextColor),
 		//prompt.OptionPreviewSuggestionBGColor(prompt.Yellow),
 		//prompt.OptionPreviewSuggestionTextColor(prompt.Yellow),
-		prompt.OptionSelectedSuggestionBGColor(prompt.Yellow),
-		prompt.OptionSuggestionBGColor(prompt.Yellow),
-		prompt.OptionSuggestionTextColor(prompt.DarkGray),
-		prompt.OptionSelectedSuggestionTextColor(prompt.Blue),
-		prompt.OptionDescriptionBGColor(prompt.Black),
-		prompt.OptionDescriptionTextColor(prompt.White),
 		prompt.OptionShowCompletionAtStart(),
 		prompt.OptionCompletionOnDown(),
 		prompt.OptionSwitchKeyBindMode(prompt.EmacsKeyBind),
