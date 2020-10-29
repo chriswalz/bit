@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/AlecAivazis/survey/v2"
 	"github.com/spf13/cobra"
 	"strings"
 )
@@ -20,11 +21,33 @@ sync local-branch
 		// if possibly squashed
 		if IsDiverged() {
 			RunInTerminalWithColor("git", []string{"status", "-sb", "--untracked-files=no"})
-			yes := AskConfirm("Force (destructive) push to origin/" + CurrentBranch() + "?")
-			if yes {
-				RunInTerminalWithColor("git", []string{"push", "--force-with-lease"})
+
+			ans := ""
+			optionMap := map[string]string{
+				"rebase": "Rebase on origin/upstream",
+				"force": "Force (destructive) push to origin/" + CurrentBranch(),
+				"cancel": "Cancel",
 			}
-			return
+			prompt := &survey.Select{
+				Message: "Branch is diverged from origin/upstream – handle by...",
+				Options: []string{
+					optionMap["rebase"],
+					optionMap["force"],
+					optionMap["cancel"],
+				},
+			}
+			fmt.Println()
+			survey.AskOne(prompt, &ans)
+			if ans == optionMap["rebase"] {
+				RunInTerminalWithColor("git", []string{"pull", "-r"})
+				return
+			} else if ans == optionMap["force"] {
+				RunInTerminalWithColor("git", []string{"push", "--force-with-lease"})
+				// dont return user may have additional changes to save
+			} else {
+				fmt.Println("Canceling...")
+				return
+			}
 		}
 		if !CloudBranchExists() {
 			RunInTerminalWithColor("git", []string{"push", "--set-upstream", "origin", CurrentBranch()})
