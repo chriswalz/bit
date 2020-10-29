@@ -213,11 +213,14 @@ Thanks to [Gitless](https://gitless.com/), [git-extras](https://github.com/tj/gi
 - https://golangweekly.com/issues/333
 - https://archive.faabli.com/archive/2020-10-09 
 - https://www.wykop.pl/wpis/52945683/unknownews-wolanie-nie-dziala-zapisz-sie-lepiej-na/
+- https://blog.csdn.net/a419240016/article/details/109178001
 
 ## Changelog
 v0.8
 - [X] feature: checkout Pull Requests from github (requires `gh pr list` to work)
 - [X] enhancement: install with homebrew: `brew install bit-git`
+- [X] enhancement: invert color theme using `BIT_THEME=inverted` useful for light terminal backgrounds
+- [X] fix: bit clone outside a git repo
 v0.7
 - [X] feature: update your cli with `bit update`
 v0.6
