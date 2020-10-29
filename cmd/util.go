@@ -213,13 +213,16 @@ var DefaultTheme = PromptTheme{
 }
 
 var InvertedTheme = PromptTheme{
-	PrefixTextColor: prompt.Blue, // fine
-	SelectedSuggestionBGColor: prompt.Blue,
+	PrefixTextColor: prompt.Blue,
+	SelectedSuggestionBGColor: prompt.LightGray,
+	SelectedSuggestionTextColor: prompt.White,
 	SuggestionBGColor: prompt.Blue,
-	SuggestionTextColor: prompt.LightGray,
-	SelectedSuggestionTextColor: prompt.Yellow,
-	DescriptionBGColor: prompt.White,
+	SuggestionTextColor: prompt.White,
+	DescriptionBGColor: prompt.LightGray,
 	DescriptionTextColor: prompt.Black,
+}
+
+var MonochromeTheme= PromptTheme{
 }
 
 func SuggestionPrompt(prefix string, completer func(d prompt.Document) []prompt.Suggest) string {
@@ -227,6 +230,9 @@ func SuggestionPrompt(prefix string, completer func(d prompt.Document) []prompt.
 	themeName := os.Getenv("BIT_THEME")
 	if strings.EqualFold(themeName, "inverted") {
 		theme = InvertedTheme
+	}
+	if strings.EqualFold(themeName, "monochrome") {
+		theme = MonochromeTheme 
 	}
 	result := prompt.Input(prefix, completer,
 		prompt.OptionTitle(""),
