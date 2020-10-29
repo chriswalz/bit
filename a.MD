@@ -135,3 +135,7 @@ already exists
 usr/local/bin/bit
 symlink
 realpath /usr/local/Cellar/bit-git/0.9.2
+
+
+show recently edited files when checking out a branch
+git log --name-status -10 path/to/dir

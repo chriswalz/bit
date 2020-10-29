@@ -217,7 +217,7 @@ type PromptTheme struct {
 }
 
 var DefaultTheme = PromptTheme{
-	PrefixTextColor:             prompt.Yellow, // fine
+	PrefixTextColor:             prompt.Yellow,
 	SelectedSuggestionBGColor:   prompt.Yellow,
 	SuggestionBGColor:           prompt.Yellow,
 	SuggestionTextColor:         prompt.DarkGray,

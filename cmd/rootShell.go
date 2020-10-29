@@ -72,6 +72,8 @@ func CreateSuggestionMap(cmd *cobra.Command) (map[string]func() []prompt.Suggest
 	gitResetSuggestions := GitResetSuggestions()
 	log.Debug().Msg((time.Now().Sub(start)).String())
 	start = time.Now()
+	gitmoji := GitmojiSuggestions()
+	log.Debug().Msg((time.Now().Sub(start)).String())
 
 	completerSuggestionMap := map[string]func() []prompt.Suggest{
 		"":         memoize([]prompt.Suggest{}),
@@ -87,8 +89,10 @@ func CreateSuggestionMap(cmd *cobra.Command) (map[string]func() []prompt.Suggest
 			{Text: "bump", Description: "Increment SemVer from tags and release e.g. if latest is v0.1.2 it's bumped to v0.1.3 "},
 			{Text: "<version>", Description: "Name of release version e.g. v0.1.2"},
 		}),
-		"reset": memoize(gitResetSuggestions),
-		"pr":    lazyLoad(GitHubPRSuggestions),
+		"reset":   memoize(gitResetSuggestions),
+		"pr":      lazyLoad(GitHubPRSuggestions),
+		"gitmoji": memoize(gitmoji),
+		"save":    memoize(gitmoji),
 		//"_any": commonCommands,
 	}
 	return completerSuggestionMap, bitCmdMap
@@ -115,9 +119,9 @@ func branchCommandCompleter(suggestionMap map[string]func() []prompt.Suggest) fu
 	}
 }
 
-func prCommandCompleter(suggestionMap map[string]func() []prompt.Suggest) func(d prompt.Document) []prompt.Suggest {
+func specificCommandCompleter(subCmd string, suggestionMap map[string]func() []prompt.Suggest) func(d prompt.Document) []prompt.Suggest {
 	return func(d prompt.Document) []prompt.Suggest {
-		return promptCompleter(suggestionMap, "pr "+d.Text)
+		return promptCompleter(suggestionMap, subCmd+" "+d.Text)
 	}
 }
 
@@ -142,7 +146,7 @@ func promptCompleter(suggestionMap map[string]func() []prompt.Suggest, text stri
 		suggestions = FlagSuggestionsForCommand(prev, "-")
 	} else if suggestionMap[prev] != nil {
 		suggestions = suggestionMap[prev]()
-		if isBranchCompletionCommand(prev) {
+		if isBranchCompletionCommand(prev) || prev == "gitmoji" {
 			return prompt.FilterContains(suggestions, curr, true)
 		}
 	}

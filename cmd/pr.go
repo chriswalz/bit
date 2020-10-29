@@ -29,7 +29,7 @@ func init() {
 }
 
 func runPr(suggestionMap map[string]func() []prompt.Suggest) {
-	branchName := SuggestionPrompt("> bit pr ", prCommandCompleter(suggestionMap))
+	branchName := SuggestionPrompt("> bit pr ", specificCommandCompleter("pr", suggestionMap))
 
 	split := strings.Split(branchName, "#")
 	prNumber, err := strconv.Atoi(split[len(split)-1])
