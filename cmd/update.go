@@ -77,7 +77,7 @@ bit update v0.7.4 (note: v is required)`,
 		}
 
 		fmt.Println("Bit is supported through donations. Consider donating here: ❤ https://github.com/sponsors/chriswalz ")
-		fmt.Printf("Updated bit %s to %s in %s", currentVersion, release.Version, dst)
+		fmt.Printf("Updated bit %s to %s in %s\n", currentVersion, release.Version, dst)
 
 	},
 	Args: cobra.MaximumNArgs(1),
