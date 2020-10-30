@@ -98,7 +98,7 @@ func refreshBranch() error {
 	if strings.Contains(strings.TrimSpace(string(msg)), "up to date") {
 		return nil
 	}
-	fmt.Println("Branch was fast-forwarded")
+	fmt.Println("Branch was fast-forwarded by bit")
 	return nil
 }
 
@@ -107,7 +107,7 @@ func refreshOnBranch(branchName string) error {
 	if err != nil {
 		return err
 	}
-	log.Debug().Msg("Branch was fast-forwarded")
+	log.Debug().Msg("Branch was fast-forwarded by bit.")
 	return nil
 }
 
