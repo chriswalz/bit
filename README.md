@@ -226,13 +226,17 @@ v0.9
 - [X] enhancement: improve bit sync behavior including `bit sync <upstream> <branch>`
 - [X] enhancement: bit sync provides a rebase option for diverged branches`
 - [X] fix: enable compatibility with non-english languages 
+
 v0.8
 - [X] feature: checkout Pull Requests from github (requires `gh pr list` to work)
 - [X] enhancement: install with homebrew: `brew install bit-git`
 - [X] enhancement: Color themes `BIT_THEME=inverted` or `BIT_THEME=monochrome` light terminal backgrounds
 - [X] fix: bit clone outside a git repo
+- [X] enhancement: bit is now a single binary
+
 v0.7
 - [X] feature: update your cli with `bit update`
+
 v0.6
 - [X] fix: improved git compatibility for older versions of git 
 - [X] feature: emacs key binds 
