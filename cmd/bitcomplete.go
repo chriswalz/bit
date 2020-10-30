@@ -1,10 +1,9 @@
 // Package main is complete tool for the go command line
-package main
+package cmd
 
 import (
 	"fmt"
 	"github.com/c-bata/go-prompt"
-	"github.com/chriswalz/bit/cmd"
 	"github.com/posener/complete/v2"
 	"github.com/posener/complete/v2/predict"
 	"github.com/rs/zerolog"
@@ -15,11 +14,16 @@ import (
 	"strings"
 )
 
-func main() {
+func Bitcomplete() {
 	compLine := os.Getenv("COMP_LINE")
 	compPoint := os.Getenv("COMP_POINT")
 	doInstall := os.Getenv("COMP_INSTALL") == "1"
 	doUninstall := os.Getenv("COMP_UNINSTALL") == "1"
+
+	bitcompletionNotNeeded :=  compLine == "" && compPoint == "" && !doInstall && !doUninstall
+	if bitcompletionNotNeeded {
+		return
+	}
 
 	log.Logger = log.With().Caller().Logger().Output(zerolog.ConsoleWriter{Out: os.Stderr})
 	zerolog.SetGlobalLevel(zerolog.InfoLevel)
@@ -40,7 +44,7 @@ func main() {
 
 	branchCompletion := &complete.Command{
 		Args: complete.PredictFunc(func(prefix string) []string {
-			branches := cmd.BranchListSuggestions()
+			branches := BranchListSuggestions()
 			completion := make([]string, len(branches))
 			for i, v := range branches {
 				completion[i] = v.Text
@@ -49,10 +53,10 @@ func main() {
 		}),
 	}
 
-	cmds := cmd.AllBitAndGitSubCommands(cmd.ShellCmd)
+	cmds := AllBitAndGitSubCommands(ShellCmd)
 	completionSubCmdMap := map[string]*complete.Command{}
 	for _, v := range cmds {
-		flagSuggestions := append(cmd.FlagSuggestionsForCommand(v.Name(), "--"), cmd.FlagSuggestionsForCommand(v.Name(), "-")...)
+		flagSuggestions := append(FlagSuggestionsForCommand(v.Name(), "--"), FlagSuggestionsForCommand(v.Name(), "-")...)
 		flags := funk.Map(flagSuggestions, func(x prompt.Suggest) (string, complete.Predictor) {
 			if strings.HasPrefix(x.Text, "--") {
 				return x.Text[2:], predict.Nothing
@@ -72,6 +76,7 @@ func main() {
 		if v.Name() == "release" {
 			completionSubCmdMap[v.Name()].Sub = map[string]*complete.Command{
 				"bump": {},
+				"test": {},
 			}
 		}
 	}
