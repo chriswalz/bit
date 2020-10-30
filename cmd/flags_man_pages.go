@@ -1495,8 +1495,7 @@ Transmit the given string to the server, which passes them to the pre-receive as
 Path to the git-receive-pack program on the remote end. Sometimes useful when pushing to a remote repository over ssh, and you do not have the program in a directory on the default $PATH.
 
 --[no-]force-with-lease
---force-with-lease=<refname>
---force-with-lease=<refname>:<expect>
+--force-with-lease
 Usually, "git push" refuses to update a remote ref that is not an ancestor of the local ref used to overwrite it.
 
 This option overrides this restriction if the current value of the remote ref is the expected value. "git push" fails otherwise.
