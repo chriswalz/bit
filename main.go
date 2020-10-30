@@ -27,6 +27,8 @@ import (
 var version string = "v0.8.0"
 
 func main() {
+	bitcmd.Bitcomplete()
+
 	// defer needed to handle funkyness with CTRL + C & go-prompt
 	defer bitcmd.HandleExit()
 	bitcmd.ShellCmd.Version = version
@@ -66,7 +68,7 @@ func main() {
 		}
 	}
 
-	bitcliCmds := []string{"save", "sync", "help", "info", "release", "update", "pr"}
+	bitcliCmds := []string{"save", "sync", "help", "info", "release", "update", "pr", "complete"}
 	if len(argsWithoutProg) == 0 || bitcmd.Find(bitcliCmds, argsWithoutProg[0]) != -1 {
 		bitcli()
 	} else {
