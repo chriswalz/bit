@@ -75,7 +75,7 @@ sync local-branch
 
 		// After syncing with current branch and user wants to sync with another tbranch
 
-		if CurrentBranch() == "master" && !strings.HasSuffix(tbranch, "master") {
+		if currentBranch == "master" && !strings.HasSuffix(tbranch, "master") {
 			yes := AskConfirm("Squash & merge " + args[0] +" into master?")
 
 			if yes {
@@ -84,6 +84,11 @@ sync local-branch
 			}
 			fmt.Println("Cancelling...")
 			//RunInTerminalWithColor("git", []string{"stash", "pop"}) deprecated switch stashing
+			return
+		}
+
+		if tbranch == "master" {
+			RunInTerminalWithColor("git", []string{"pull", "--rebase", upstream, tbranch})
 			return
 		}
 
