@@ -108,6 +108,10 @@ Platform Support:
 - WSL/Windows Subsystem for Linux (Windows)
 - gnome-terminal (Ubuntu)
 
+Customization: 
+- `BIT_THEME=inverted`
+- `BIT_THEME=monochrome`
+
 ## Bit specific command Usage 
 
 Create a new commit
@@ -219,7 +223,7 @@ Thanks to [Gitless](https://gitless.com/), [git-extras](https://github.com/tj/gi
 v0.8
 - [X] feature: checkout Pull Requests from github (requires `gh pr list` to work)
 - [X] enhancement: install with homebrew: `brew install bit-git`
-- [X] enhancement: invert color theme using `BIT_THEME=inverted` useful for light terminal backgrounds
+- [X] enhancement: Color themes `BIT_THEME=inverted` or `BIT_THEME=monochrome` light terminal backgrounds
 - [X] fix: bit clone outside a git repo
 v0.7
 - [X] feature: update your cli with `bit update`
