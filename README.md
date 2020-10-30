@@ -23,7 +23,7 @@
 - new commands like `bit sync` that vastly simplify your workflow 
 - commands from **git-extras** such as `bit release` & `bit info`
 - **fully compatible with git** allowing you to fallback to git if need be.  
-- get insight into how bit works using `bit --debug`
+- get insight into how bit works using `bit --debug`.
 
 --- **New** ---
 
