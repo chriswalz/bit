@@ -222,6 +222,10 @@ Thanks to [Gitless](https://gitless.com/), [git-extras](https://github.com/tj/gi
 - https://blog.csdn.net/a419240016/article/details/109178001
 
 ## Changelog
+v0.9
+- [X] enhancement: improve bit sync behavior including `bit sync <upstream> <branch>`
+- [X] enhancement: bit sync provides a rebase option for diverged branches`
+- [X] fix: enable compatibility with non-english languages 
 v0.8
 - [X] feature: checkout Pull Requests from github (requires `gh pr list` to work)
 - [X] enhancement: install with homebrew: `brew install bit-git`
