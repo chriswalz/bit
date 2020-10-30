@@ -29,6 +29,7 @@
 
 - [X] `bit pr` view and checkout pull requests from Github (Requires GitHub CLI) 
 - [X] easily update bit using `bit update`
+- [X] single binary (no more bitcomplete) add classical tab completion with `bit complete`
 
 
 --- **Coming Soon** ---
@@ -44,7 +45,8 @@
 Like bit? [Sponsor](https://github.com/sponsors/chriswalz) bit for as little as $5 
 
 ```shell script
-curl -sf https://gobinaries.com/chriswalz/bit | sh; curl -sf https://gobinaries.com/chriswalz/bit/bitcomplete | sh && echo y | COMP_INSTALL=1 bitcomplete;
+curl -sf https://gobinaries.com/chriswalz/bit;
+bit complete;
 echo "Type bit then press <ENTER> to show interactive prompt"
 bit;
 ```
@@ -65,14 +67,14 @@ export GOBIN=$(go env GOPATH)/bin
 
 ```shell script
 GO111MODULE=on go get github.com/chriswalz/bit@latest;
-GO111MODULE=on go get github.com/chriswalz/bit/bitcomplete@latest;
-COMP_INSTALL=1 bitcomplete;
+bit complete
 ```
 
 ### using `Homebrew` (For MacOS users)
 
 ```shell script
 brew install bit-git
+bit complete
 bit
 ```
 
