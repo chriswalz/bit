@@ -129,3 +129,9 @@ basic usage tracking
 
 add bit --version suggestion (add global flag suggestions)
 bit update not behaving with homebrew 
+
+brew Symlink
+already exists 
+usr/local/bin/bit
+symlink
+realpath /usr/local/Cellar/bit-git/0.9.2

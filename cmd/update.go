@@ -7,6 +7,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/tj/go-update"
 	"github.com/tj/go-update/stores/github"
+	"os"
 	"os/exec"
 	"path/filepath"
 	"runtime"
@@ -77,6 +78,17 @@ bit update v0.7.4 (note: v is required)`,
 			fmt.Println(errors.Wrap(err, "looking up executable path"))
 			return
 		}
+
+		// if path is a symlink - get resolved path
+		fi, err := os.Lstat(path)
+		if err == nil && fi.Mode() & os.ModeSymlink == os.ModeSymlink {
+			// Bit path is a symlink
+			fmt.Println("bit is symlinked. If you used homebrew try:\nbrew upgrade bit-git")
+			//path = resolvedSymlink
+			return
+		}
+		log.Debug().Msg("bit is not symlinked")
+
 		dst := filepath.Dir(path)
 
 		// install it
