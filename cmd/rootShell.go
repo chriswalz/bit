@@ -199,7 +199,7 @@ func HijackGitCommandOccurred(args []string, suggestionMap map[string]func() []p
 			return true
 		}
 
-		RunInTerminalWithColor("git", []string{"checkout", "-b", branchName})
+		RunInTerminalWithColor("git", []string{"checkout", "-b",  branchName})
 		return true
 	}
 	return false

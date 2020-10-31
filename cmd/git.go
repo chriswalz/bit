@@ -183,8 +183,11 @@ func checkoutBranch(branch string) bool {
 	if err != nil {
 		log.Debug().Err(err)
 	}
+	if strings.Contains(string(msg), "did not match any file") {
+		return false
+	}
 	fmt.Println(string(msg))
-	return !strings.Contains(string(msg), "did not match any file")
+	return true
 }
 
 func tagCurrentBranch(version string) error {
