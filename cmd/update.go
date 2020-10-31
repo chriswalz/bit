@@ -3,12 +3,14 @@ package cmd
 import (
 	"fmt"
 	"github.com/pkg/errors"
+	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 	"github.com/tj/go-update"
 	"github.com/tj/go-update/stores/github"
 	"os/exec"
 	"path/filepath"
 	"runtime"
+	"strings"
 )
 
 // updateCmd represents the update command
@@ -20,10 +22,17 @@ bit update v0.7.4 (note: v is required)`,
 	Run: func(cmd *cobra.Command, args []string) {
 		targetVersion := ""
 		if len(args) == 1 {
-			targetVersion = args[0][1:]
+			targetVersion = args[0]
+		}
+		if !strings.HasPrefix(targetVersion, "v") {
+			targetVersion = "v" + targetVersion
+		}
+		currentVersion := GetVersion()
+		if !strings.HasPrefix(currentVersion, "v") {
+			targetVersion = "v" + currentVersion
 		}
 
-		currentVersion := GetVersion()
+		log.Debug().Msg(currentVersion + " -> " + targetVersion)
 
 		// open-source edition
 		p := &update.Manager{
@@ -36,7 +45,7 @@ bit update v0.7.4 (note: v is required)`,
 		}
 
 		// fetch latest or specified release
-		release, err := getLatestOrSpecified(p, targetVersion)
+		release, err := getLatestOrSpecified(p, targetVersion[1:])
 		if err != nil {
 			fmt.Println(errors.Wrap(err, "fetching latest or specified release").Error())
 			return
