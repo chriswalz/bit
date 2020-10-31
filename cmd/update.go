@@ -29,7 +29,7 @@ bit update v0.7.4 (note: v is required)`,
 		}
 		currentVersion := GetVersion()
 		if !strings.HasPrefix(currentVersion, "v") {
-			targetVersion = "v" + currentVersion
+			currentVersion = "v" + currentVersion
 		}
 
 		log.Debug().Msg(currentVersion + " -> " + targetVersion)
