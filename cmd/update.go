@@ -53,7 +53,7 @@ bit update v0.7.4 (note: v is required)`,
 
 		// no updates
 		if release == nil || currentVersion == release.Version {
-			fmt.Println("No updates available, update to date!")
+			fmt.Println("No updates available, you're up to date!")
 			return
 		}
 
