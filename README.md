@@ -3,7 +3,7 @@
 [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Bit%20-%20a%20modern%20git%20cli%20&url=https://github.com/chriswalz/bit&hashtags=bit,git,cli,developers)
 <p align="center">
 <img
-    src="https://user-images.githubusercontent.com/6971318/95147815-cd1d6a80-074f-11eb-8265-56466ac628f8.gif"
+    src="https://user-images.githubusercontent.com/6971318/97790948-af52f200-1ba3-11eb-8b9e-a614e44da12c.gif"
     width="600px" border="0" alt="bit">
 <br>
 <img alt="GitHub release (latest SemVer)" src="https://img.shields.io/github/v/release/chriswalz/bit?color=gree">
