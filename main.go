@@ -71,6 +71,7 @@ func main() {
 			return
 		}
 		bitcmd.RunGitCommandWithArgs(argsWithoutProg)
+		_ = bitcmd.PostGitCommandHijackOccurred(argsWithoutProg, completerSuggestionMap, version)
 	}
 }
 
