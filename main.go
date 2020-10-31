@@ -47,21 +47,15 @@ func main() {
 
 	// verify is git repo
 	if len(os.Args) >= 2 {
-		if os.Args[1] == "--version" {
+		if os.Args[1] == "--version" || os.Args[1] == "version" {
 			fmt.Println("bit version " + version)
 			bitcmd.PrintGitVersion()
 			return
 		}
-	} else {
-
 	}
 	if !bitcmd.IsGitRepo() {
-		if len(os.Args) >= 2 && (os.Args[1] == "update" || os.Args[1] == "clone") {
+		if len(os.Args) >= 2 && (os.Args[1] == "update" || os.Args[1] == "clone" || os.Args[1] == "complete") {
 			// do nothing here, proceed to update path
-		} else if len(os.Args) == 2 && os.Args[1] == "--version" {
-			fmt.Println("bit version " + version)
-			bitcmd.PrintGitVersion()
-			return
 		} else {
 			fmt.Println("fatal: not a git repository (or any of the parent directories): .git")
 			return
@@ -73,7 +67,7 @@ func main() {
 		bitcli()
 	} else {
 		completerSuggestionMap, _ := bitcmd.CreateSuggestionMap(bitcmd.ShellCmd)
-		yes := bitcmd.GitCommandsPromptUsed(argsWithoutProg, completerSuggestionMap, version)
+		yes := bitcmd.HijackGitCommandOccurred(argsWithoutProg, completerSuggestionMap, version)
 		if yes {
 			return
 		}

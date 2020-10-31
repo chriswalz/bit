@@ -76,5 +76,6 @@ func AllGitSubCommands() []*cobra.Command {
 		{Use: "imap-send", Short: "Send a collection of patches from stdin to an IMAP folder"},
 		{Use: "p4", Short: "Import from and submit to Perforce repositories"},
 		{Use: "fast-export", Short: "Git data exporter"},
+		{Use: "version", Short: "Print bit and git version"},
 	}
 }

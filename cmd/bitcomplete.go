@@ -83,6 +83,9 @@ func Bitcomplete() {
 
 	gogo := &complete.Command{
 		Sub: completionSubCmdMap,
+		Flags: map[string]complete.Predictor{
+			"version": predict.Nothing,
+		},
 	}
 
 	gogo.Complete("bit")

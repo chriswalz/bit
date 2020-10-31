@@ -33,7 +33,7 @@ var ShellCmd = &cobra.Command{
 			return
 		}
 		if bitCmdMap[subCommand] == nil {
-			yes := GitCommandsPromptUsed(parsedArgs, completerSuggestionMap, cmd.Version)
+			yes := HijackGitCommandOccurred(parsedArgs, completerSuggestionMap, cmd.Version)
 			if yes {
 				return
 			}
@@ -158,15 +158,16 @@ func RunGitCommandWithArgs(args []string) {
 	return
 }
 
-func GitCommandsPromptUsed(args []string, suggestionMap map[string]func() []prompt.Suggest, version string) bool {
+func HijackGitCommandOccurred(args []string, suggestionMap map[string]func() []prompt.Suggest, version string) bool {
 	sub := args[0]
 	// handle checkout,switch,co commands as checkout
 	// if "-b" flag is not provided and branch does not exist
 	// user would be prompted asking whether to create a branch or not
 	// expected usage format
 	//   bit (checkout|switch|co) [-b] branch-name
-	if args[len(args)-1] == "--version" {
+	if args[len(args)-1] == "--version" || args[len(args)-1] == "version" {
 		fmt.Println("bit version " + version)
+		return false
 	}
 	if isBranchChangeCommand(sub) {
 		branchName := ""

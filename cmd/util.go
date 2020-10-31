@@ -177,6 +177,10 @@ func CobraCommandToSuggestions(cmds []*cobra.Command) []prompt.Suggest {
 			Description: branch.Short,
 		})
 	}
+	suggestions = append(suggestions, prompt.Suggest{
+		Text:        "--version",
+		Description: "Print current version of bit",
+	})
 	return suggestions
 }
 

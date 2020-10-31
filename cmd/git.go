@@ -175,11 +175,7 @@ func AllGitAliases() (cc []*cobra.Command) {
 }
 
 func PrintGitVersion() {
-	msg, err := execCommand("git", "--version").CombinedOutput()
-	if err != nil {
-		log.Debug().Err(err)
-	}
-	log.Debug().Msg(string(msg))
+	RunInTerminalWithColor("git", []string{"--version"})
 }
 
 func checkoutBranch(branch string) bool {

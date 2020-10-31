@@ -126,3 +126,6 @@ bit save -e
 combine bit & bitcomplete into one binary?
 
 basic usage tracking
+
+add bit --version suggestion (add global flag suggestions)
+bit update not behaving with homebrew 
