@@ -87,7 +87,7 @@ func CreateSuggestionMap(cmd *cobra.Command) (map[string]func() []prompt.Suggest
 			{Text: "<version>", Description: "Name of release version e.g. v0.1.2"},
 		}),
 		"reset": memoize(gitResetSuggestions),
-		"pr": lazyLoad(GitHubPRSuggestions),
+		"pr":    lazyLoad(GitHubPRSuggestions),
 		//"_any": commonCommands,
 	}
 	return completerSuggestionMap, bitCmdMap
@@ -199,7 +199,7 @@ func HijackGitCommandOccurred(args []string, suggestionMap map[string]func() []p
 			return true
 		}
 
-		RunInTerminalWithColor("git", []string{"checkout", "-b",  branchName})
+		RunInTerminalWithColor("git", []string{"checkout", "-b", branchName})
 		return true
 	}
 	return false

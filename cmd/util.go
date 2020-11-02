@@ -63,7 +63,7 @@ func AskMultiLine(q string) string {
 	return text
 }
 
-func BranchList() []Branch {
+func BranchList() []*Branch {
 	rawBranchData, err := branchListRaw()
 	if err != nil {
 		log.Debug().Err(err)
@@ -71,11 +71,12 @@ func BranchList() []Branch {
 	return toStructuredBranchList(rawBranchData)
 }
 
-func toStructuredBranchList(rawBranchData string) []Branch {
+func toStructuredBranchList(rawBranchData string) []*Branch {
 
 	list := strings.Split(strings.TrimSpace(rawBranchData), "\n")
 
-	var branches []Branch
+	var m = map[string]*Branch{}
+	var branches []*Branch
 	for _, line := range list {
 		// first character of each should start with ' which all commits have based on expected raw formatting
 		if !strings.HasPrefix(line, `'`) {
@@ -83,18 +84,27 @@ func toStructuredBranchList(rawBranchData string) []Branch {
 		}
 
 		cols := strings.Split(line[1:], "; ")
-		b := Branch{
+		b := &Branch{
 			Author:       cols[1],
-			Name:         cols[3],
+			FullName:     cols[3],
 			RelativeDate: cols[4],
 			AbsoluteDate: cols[0],
 		}
-		if b.Name == "origin/master" || b.Name == "origin/HEAD" {
+		if b.FullName == "origin/master" || b.FullName == "origin/HEAD" {
 			continue
 		}
+		if !strings.HasPrefix(b.FullName, "origin/") {
+			m[b.FullName] = b
+		}
+
 		branches = append(branches, b)
 	}
-	return branches
+	return funk.Filter(branches, func(b *Branch) bool {
+		if strings.HasPrefix(b.FullName, "origin/") && m[b.FullName[7:]] != nil {
+			return false
+		}
+		return true
+	}).([]*Branch)
 }
 
 func GenBumpedSemVersion() string {
@@ -120,7 +130,7 @@ func BranchListSuggestions() []prompt.Suggest {
 	var suggestions []prompt.Suggest
 	for _, branch := range branches {
 		suggestions = append(suggestions, prompt.Suggest{
-			Text:        branch.Name,
+			Text:        branch.FullName,
 			Description: fmt.Sprintf("%s  %s  %s", branch.Author, branch.RelativeDate, branch.AbsoluteDate),
 		})
 	}
@@ -186,7 +196,7 @@ func CobraCommandToSuggestions(cmds []*cobra.Command) []prompt.Suggest {
 
 type Branch struct {
 	Author       string
-	Name         string
+	FullName     string
 	RelativeDate string
 	AbsoluteDate string
 }
@@ -197,37 +207,36 @@ type FileChange struct {
 }
 
 type PromptTheme struct {
-	PrefixTextColor prompt.Color
-	SelectedSuggestionBGColor prompt.Color
-	SuggestionBGColor prompt.Color
-	SuggestionTextColor prompt.Color
+	PrefixTextColor             prompt.Color
+	SelectedSuggestionBGColor   prompt.Color
+	SuggestionBGColor           prompt.Color
+	SuggestionTextColor         prompt.Color
 	SelectedSuggestionTextColor prompt.Color
-	DescriptionBGColor prompt.Color
-	DescriptionTextColor prompt.Color
+	DescriptionBGColor          prompt.Color
+	DescriptionTextColor        prompt.Color
 }
 
 var DefaultTheme = PromptTheme{
-	PrefixTextColor: prompt.Yellow, // fine
-	SelectedSuggestionBGColor: prompt.Yellow,
-	SuggestionBGColor: prompt.Yellow,
-	SuggestionTextColor: prompt.DarkGray,
+	PrefixTextColor:             prompt.Yellow, // fine
+	SelectedSuggestionBGColor:   prompt.Yellow,
+	SuggestionBGColor:           prompt.Yellow,
+	SuggestionTextColor:         prompt.DarkGray,
 	SelectedSuggestionTextColor: prompt.Blue,
-	DescriptionBGColor: prompt.Black,
-	DescriptionTextColor: prompt.White,
+	DescriptionBGColor:          prompt.Black,
+	DescriptionTextColor:        prompt.White,
 }
 
 var InvertedTheme = PromptTheme{
-	PrefixTextColor: prompt.Blue,
-	SelectedSuggestionBGColor: prompt.LightGray,
+	PrefixTextColor:             prompt.Blue,
+	SelectedSuggestionBGColor:   prompt.LightGray,
 	SelectedSuggestionTextColor: prompt.White,
-	SuggestionBGColor: prompt.Blue,
-	SuggestionTextColor: prompt.White,
-	DescriptionBGColor: prompt.LightGray,
-	DescriptionTextColor: prompt.Black,
+	SuggestionBGColor:           prompt.Blue,
+	SuggestionTextColor:         prompt.White,
+	DescriptionBGColor:          prompt.LightGray,
+	DescriptionTextColor:        prompt.Black,
 }
 
-var MonochromeTheme= PromptTheme{
-}
+var MonochromeTheme = PromptTheme{}
 
 func SuggestionPrompt(prefix string, completer func(d prompt.Document) []prompt.Suggest) string {
 	theme := DefaultTheme
@@ -236,7 +245,7 @@ func SuggestionPrompt(prefix string, completer func(d prompt.Document) []prompt.
 		theme = InvertedTheme
 	}
 	if strings.EqualFold(themeName, "monochrome") {
-		theme = MonochromeTheme 
+		theme = MonochromeTheme
 	}
 	result := prompt.Input(prefix, completer,
 		prompt.OptionTitle(""),
@@ -541,14 +550,14 @@ func parseCommandLine(command string) ([]string, error) {
 }
 
 func memoize(suggestions []prompt.Suggest) func() []prompt.Suggest {
-	return func () []prompt.Suggest {
+	return func() []prompt.Suggest {
 		return suggestions
 	}
 }
 
 func lazyLoad(suggestionFunc func() []prompt.Suggest) func() []prompt.Suggest {
 	var suggestions []prompt.Suggest
-	return func () []prompt.Suggest {
+	return func() []prompt.Suggest {
 		if suggestions == nil {
 			suggestions = suggestionFunc()
 		}
@@ -564,7 +573,7 @@ func asyncLoad(suggestionFunc func() []prompt.Suggest) func() []prompt.Suggest {
 		defer wg.Done()
 		suggestions = suggestionFunc()
 	}()
-	return func () []prompt.Suggest {
+	return func() []prompt.Suggest {
 		wg.Wait()
 		return suggestions
 	}
