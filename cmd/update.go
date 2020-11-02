@@ -18,7 +18,7 @@ import (
 var updateCmd = &cobra.Command{
 	Use:   "update",
 	Short: "Updates bit to the latest or specified version",
-	Long:  `bit update
+	Long: `bit update
 bit update v0.7.4 (note: v is required)`,
 	Run: func(cmd *cobra.Command, args []string) {
 		targetVersion := ""
@@ -81,7 +81,7 @@ bit update v0.7.4 (note: v is required)`,
 
 		// if path is a symlink - get resolved path
 		fi, err := os.Lstat(path)
-		if err == nil && fi.Mode() & os.ModeSymlink == os.ModeSymlink {
+		if err == nil && fi.Mode()&os.ModeSymlink == os.ModeSymlink {
 			// Bit path is a symlink
 			fmt.Println("bit is symlinked. If you used homebrew try:\nbrew upgrade bit-git")
 			//path = resolvedSymlink

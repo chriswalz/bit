@@ -35,7 +35,7 @@ sync local-branch
 			ans := ""
 			optionMap := map[string]string{
 				"rebase": "Rebase on origin/upstream",
-				"force": "Force (destructive) push to " + upstream + "/" + currentBranch,
+				"force":  "Force (destructive) push to " + upstream + "/" + currentBranch,
 				"cancel": "Cancel",
 			}
 			prompt := &survey.Select{
@@ -76,7 +76,7 @@ sync local-branch
 		// After syncing with current branch and user wants to sync with another tbranch
 
 		if currentBranch == "master" && !strings.HasSuffix(tbranch, "master") {
-			yes := AskConfirm("Squash & merge " + args[0] +" into master?")
+			yes := AskConfirm("Squash & merge " + args[0] + " into master?")
 
 			if yes {
 				RunInTerminalWithColor("git", []string{"merge", upstream, tbranch, "--squash"})

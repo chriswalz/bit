@@ -33,7 +33,6 @@ func main() {
 	defer bitcmd.HandleExit()
 	bitcmd.ShellCmd.Version = version
 
-
 	// set debug level
 	log.Logger = log.With().Caller().Logger().Output(zerolog.ConsoleWriter{Out: os.Stderr})
 	argsWithoutProg := os.Args[1:]

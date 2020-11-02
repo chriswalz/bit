@@ -9,10 +9,10 @@ import (
 )
 
 type PullRequest struct {
-	Title string
-	Number int
+	Title        string
+	Number       int
 	AuthorBranch string
-	State string
+	State        string
 }
 
 func ListGHPullRequests() []*PullRequest {
@@ -26,14 +26,14 @@ func ListGHPullRequests() []*PullRequest {
 		log.Debug().Err(err)
 	}
 	prsraw := strings.Split(strings.TrimSpace(string(msg)), "\n")
-	return funk.Map(prsraw, func (raw string) *PullRequest {
+	return funk.Map(prsraw, func(raw string) *PullRequest {
 		fields := strings.Split(raw, "\t")
 		number, _ := strconv.Atoi(fields[0])
 		return &PullRequest{
-			Number:  number,
-			Title: fields[1],
+			Number:       number,
+			Title:        fields[1],
 			AuthorBranch: fields[2],
-			State: fields[3],
+			State:        fields[3],
 		}
 	}).([]*PullRequest)
 }

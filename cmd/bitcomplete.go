@@ -20,7 +20,7 @@ func Bitcomplete() {
 	doInstall := os.Getenv("COMP_INSTALL") == "1"
 	doUninstall := os.Getenv("COMP_UNINSTALL") == "1"
 
-	bitcompletionNotNeeded :=  compLine == "" && compPoint == "" && !doInstall && !doUninstall
+	bitcompletionNotNeeded := compLine == "" && compPoint == "" && !doInstall && !doUninstall
 	if bitcompletionNotNeeded {
 		return
 	}
