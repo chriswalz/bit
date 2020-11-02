@@ -53,7 +53,7 @@ func main() {
 		}
 	}
 	if !bitcmd.IsGitRepo() {
-		if len(os.Args) >= 2 && (os.Args[1] == "update" || os.Args[1] == "clone" || os.Args[1] == "complete") {
+		if len(os.Args) >= 2 && (os.Args[1] == "update" || os.Args[1] == "clone" || os.Args[1] == "complete" || os.Args[1] == "init" || os.Args[1] == "send-email" || os.Args[1] == "svn" || os.Args[1] == "config" || os.Args[1] == "bugreport") {
 			// do nothing here, proceed to update path
 		} else {
 			fmt.Println("fatal: not a git repository (or any of the parent directories): .git")
