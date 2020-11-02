@@ -206,8 +206,11 @@ func tagCurrentBranch(version string) error {
 func execCommand(name string, arg ...string) *exec.Cmd {
 	log.Debug().Msg(name + " " + strings.Join(arg, " "))
 	c := exec.Command(name, arg...)
-	// exec commands are parsed by bit without getting printed.
-	// parsing assumes english
-	c.Env = append(c.Env, "LANG=C")
+
+	if name == "git" {
+		// exec commands are parsed by bit without getting printed.
+		// parsing git assumes english
+		c.Env = append(c.Env, "LANG=C")
+	}
 	return c
 }
