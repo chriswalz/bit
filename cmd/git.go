@@ -51,11 +51,16 @@ func IsBehindCurrent() bool {
 }
 
 func NothingToCommit() bool {
-	msg, err := execCommand("git", "status").CombinedOutput()
+	// git diff-index HEAD --
+	msg, err := execCommand("git", "diff-index", "HEAD", "--").CombinedOutput()
 	if err != nil {
 		log.Debug().Err(err)
 	}
-	return strings.Contains(string(msg), "nothing to commit")
+	changedFiles := strings.Split(strings.TrimSpace(string(msg)), "\n")
+	if len(changedFiles) == 1 && changedFiles[0] == "" {
+		return true
+	}
+	return false
 }
 
 func IsDiverged() bool {
