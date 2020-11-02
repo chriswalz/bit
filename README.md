@@ -45,7 +45,7 @@
 Like bit? [Sponsor](https://github.com/sponsors/chriswalz) bit for as little as $5 
 
 ```shell script
-curl -sf https://gobinaries.com/chriswalz/bit;
+curl -sf https://gobinaries.com/chriswalz/bit | sh;
 bit complete;
 echo "Type bit then press <ENTER> to show interactive prompt"
 bit;
