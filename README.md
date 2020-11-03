@@ -87,6 +87,11 @@ go get github.com/chriswalz/bit@latest;
 bit
 ```
 
+#### using `Chocolatey` (For Windows Users) 
+```shell script
+choco install bit-git
+```
+
 #### using `zinit` 
 ```shell script
 zinit ice lucit wait"0" as"program" from"gh-r" pick"bit"
