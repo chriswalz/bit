@@ -78,6 +78,8 @@ bit complete
 bit
 ```
 
+Not working? Try `brew doctor`
+
 #### using `go` (For Windows Users) 
 ```shell script
 go env -w GO111MODULE=on
@@ -116,17 +118,22 @@ Customization:
 
 ## Bit specific command Usage 
 
-Create a new commit
+Create a new commit *(roughly equivalent to `git commit -am "commit message"`)*
 
 `bit save [commit message]`
 
 Save your changes to the current branch [amends current commit when ahead of origin]
+*(roughly equivalent to `git commit -a` or conditionally `git commit -a --amend --no-edit`)*
 
 `bit save` 
 
 Synchronize your changes to origin branch (Beta)
+*(roughly equivalent to `git pull -r; git push`)*
 
 `bit sync`
+
+*(roughly equivalent to `git pull -r; git push; git pull -r origin master; git push`)*
+`bit sync origin master`
 
 You have access to ALL git commands as well.  
 
@@ -154,11 +161,13 @@ Switched to a new branch 'example-branch'
 
 `bit sync`
 
-[two days later confirm your branch is in sync with origin]
+[two days later confirm your branch is in sync with origin branch]
 
 `bit sync`
 
+[rebase your changes from origin master]
 
+`bit sync origin master`
 
 ## Features
 
