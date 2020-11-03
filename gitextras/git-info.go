@@ -36,7 +36,7 @@ most_recent_commit() {
 
 submodules() {
   # short sha1
-  git submodule status | sed 's/\([^abcdef0-9]\{0,2\}\)\([abcdef0-9]\{7\}\)\([abcdef0-9]\{33\}\)\(.*\)/\1\2\4/'
+  git submodule status | sed 's/\([^a-f\d]\{0,2\}\)\([a-f\d]\{7\}\)\([a-f\d]\{33\}\)\(.*\)/\1\2\4/'
 }
 
 local_branches() {
