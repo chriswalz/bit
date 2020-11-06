@@ -2,10 +2,11 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/rs/zerolog/log"
-	"github.com/spf13/cobra"
 	"os/exec"
 	"strings"
+
+	"github.com/rs/zerolog/log"
+	"github.com/spf13/cobra"
 )
 
 func CloudBranchExists() bool {
@@ -13,8 +14,8 @@ func CloudBranchExists() bool {
 	if err != nil {
 		log.Debug().Err(err)
 	}
-	//log.Println("msg:", string(msg))
-	//log.Println("err:", err)
+	// log.Println("msg:", string(msg))
+	// log.Println("err:", err)
 	return !strings.Contains(string(msg), "There is no tracking information for the current branch")
 }
 

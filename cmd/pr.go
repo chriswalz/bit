@@ -1,11 +1,12 @@
 package cmd
 
 import (
+	"strconv"
+	"strings"
+
 	"github.com/c-bata/go-prompt"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
-	"strconv"
-	"strings"
 )
 
 // prCmd represents the pr command
@@ -15,7 +16,7 @@ var prCmd = &cobra.Command{
 	Long: `bit pr
 bit pr`,
 	Run: func(cmd *cobra.Command, args []string) {
-		var suggestionMap = map[string]func() []prompt.Suggest{
+		suggestionMap := map[string]func() []prompt.Suggest{
 			"pr": lazyLoad(GitHubPRSuggestions),
 		}
 		runPr(suggestionMap)

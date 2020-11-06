@@ -1,11 +1,12 @@
 package cmd
 
 import (
-	"github.com/rs/zerolog/log"
-	"github.com/thoas/go-funk"
 	"os/exec"
 	"strconv"
 	"strings"
+
+	"github.com/rs/zerolog/log"
+	"github.com/thoas/go-funk"
 )
 
 type PullRequest struct {

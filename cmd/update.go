@@ -2,16 +2,17 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/pkg/errors"
-	"github.com/rs/zerolog/log"
-	"github.com/spf13/cobra"
-	"github.com/tj/go-update"
-	"github.com/tj/go-update/stores/github"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"runtime"
 	"strings"
+
+	"github.com/pkg/errors"
+	"github.com/rs/zerolog/log"
+	"github.com/spf13/cobra"
+	"github.com/tj/go-update"
+	"github.com/tj/go-update/stores/github"
 )
 
 // updateCmd represents the update command
@@ -84,7 +85,7 @@ bit update v0.7.4 (note: v is required)`,
 		if err == nil && fi.Mode()&os.ModeSymlink == os.ModeSymlink {
 			// Bit path is a symlink
 			fmt.Println("bit is symlinked. If you used homebrew try:\nbrew upgrade bit-git")
-			//path = resolvedSymlink
+			// path = resolvedSymlink
 			return
 		}
 		log.Debug().Msg("bit is not symlinked")
@@ -99,7 +100,6 @@ bit update v0.7.4 (note: v is required)`,
 
 		fmt.Println("Bit is supported through donations. Consider donating here: ❤ https://github.com/sponsors/chriswalz ")
 		fmt.Printf("Updated bit %s to %s in %s\n", currentVersion, release.Version, dst)
-
 	},
 	Args: cobra.MaximumNArgs(1),
 }
@@ -120,7 +120,6 @@ func getLatestOrSpecified(s update.Store, version string) (*update.Release, erro
 // getLatest returns the latest release, error, or nil when there is none.
 func getLatest(s update.Store) (*update.Release, error) {
 	releases, err := s.LatestReleases()
-
 	if err != nil {
 		return nil, errors.Wrap(err, "fetching releases")
 	}

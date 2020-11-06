@@ -2,10 +2,11 @@ package cmd
 
 import (
 	"fmt"
+	"testing"
+
 	"github.com/c-bata/go-prompt"
 	"github.com/spf13/cobra"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func toString(list []*cobra.Command) []string {
@@ -151,7 +152,7 @@ func TestListGHPullRequests(t *testing.T) {
 	prs := ListGHPullRequests()
 	assert.Contains(t, prs[1].Title, expect.Title)
 	assert.Equal(t, prs[1].Number, expect.Number)
-	//assert.Contains(t, prs[1].State, expect.State)
+	// assert.Contains(t, prs[1].State, expect.State)
 }
 
 func BenchmarkAllBitAndGitSubCommands(b *testing.B) {

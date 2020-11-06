@@ -2,8 +2,9 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/spf13/cobra"
 	"strings"
+
+	"github.com/spf13/cobra"
 )
 
 // saveCmd represents the save command
@@ -18,7 +19,7 @@ var saveCmd = &cobra.Command{
 		}
 		save(msg)
 	},
-	//Args: cobra.MaximumNArgs(1),
+	// Args: cobra.MaximumNArgs(1),
 }
 
 // add comment
@@ -36,7 +37,7 @@ func save(msg string) {
 	}
 
 	if msg == "" {
-		//if ahead of master
+		// if ahead of master
 		if IsAheadOfCurrent() || !CloudBranchExists() {
 			RunInTerminalWithColor("git", []string{"commit", "-a", "--amend", "--no-edit"}) // amend if already ahead
 		} else {

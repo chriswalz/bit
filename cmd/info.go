@@ -2,10 +2,11 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/chriswalz/bit/gitextras"
-	"github.com/spf13/cobra"
 	"os"
 	"path/filepath"
+
+	"github.com/chriswalz/bit/gitextras"
+	"github.com/spf13/cobra"
 )
 
 // infoCmd represents the info command
@@ -25,7 +26,7 @@ var infoCmd = &cobra.Command{
 		fmt.Println("\nCommits | Files")
 		RunInTerminalWithColor("/bin/sh", []string{`-c`, `git log --pretty=format: --name-only | sort | uniq -c | sort -rg | awk 'NR > 1 { print }' | head -15`})
 	},
-	//Args: cobra.MaximumNArgs(1),
+	// Args: cobra.MaximumNArgs(1),
 }
 
 func init() {
