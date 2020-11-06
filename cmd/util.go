@@ -2,11 +2,6 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/AlecAivazis/survey/v2"
-	"github.com/c-bata/go-prompt"
-	"github.com/rs/zerolog/log"
-	"github.com/spf13/cobra"
-	"github.com/thoas/go-funk"
 	"os"
 	"os/exec"
 	"regexp"
@@ -14,6 +9,12 @@ import (
 	"runtime/debug"
 	"strings"
 	"sync"
+
+	"github.com/AlecAivazis/survey/v2"
+	"github.com/c-bata/go-prompt"
+	"github.com/rs/zerolog/log"
+	"github.com/spf13/cobra"
+	"github.com/thoas/go-funk"
 )
 
 func RunInTerminalWithColor(cmdName string, args []string) error {
@@ -72,10 +73,9 @@ func BranchList() []*Branch {
 }
 
 func toStructuredBranchList(rawBranchData string) []*Branch {
-
 	list := strings.Split(strings.TrimSpace(rawBranchData), "\n")
 
-	var m = map[string]*Branch{}
+	m := map[string]*Branch{}
 	var branches []*Branch
 	for _, line := range list {
 		// first character of each should start with ' which all commits have based on expected raw formatting
@@ -257,8 +257,8 @@ func SuggestionPrompt(prefix string, completer func(d prompt.Document) []prompt.
 		prompt.OptionSelectedSuggestionTextColor(theme.SelectedSuggestionTextColor),
 		prompt.OptionDescriptionBGColor(theme.DescriptionBGColor),
 		prompt.OptionDescriptionTextColor(theme.DescriptionTextColor),
-		//prompt.OptionPreviewSuggestionBGColor(prompt.Yellow),
-		//prompt.OptionPreviewSuggestionTextColor(prompt.Yellow),
+		// prompt.OptionPreviewSuggestionBGColor(prompt.Yellow),
+		// prompt.OptionPreviewSuggestionTextColor(prompt.Yellow),
 		prompt.OptionShowCompletionAtStart(),
 		prompt.OptionCompletionOnDown(),
 		prompt.OptionSwitchKeyBindMode(prompt.EmacsKeyBind),
@@ -355,12 +355,12 @@ func FlagSuggestionsForCommand(gitSubCmd string, flagtype string) []prompt.Sugge
 	str = flagMap[gitSubCmd]
 	if str == "" {
 		return []prompt.Suggest{}
-		//str = parseManPage(gitSubCmd)
+		// str = parseManPage(gitSubCmd)
 	}
 
 	list := strings.Split(str, ".\n\n")
 
-	//list := strings.Split(strings.Split(op[1], "CONFIGURATION")[0], "\n\n")
+	// list := strings.Split(strings.Split(op[1], "CONFIGURATION")[0], "\n\n")
 	var suggestions []prompt.Suggest
 	for i := 0; i < len(list)-1; i++ {
 		line := list[i]
@@ -453,9 +453,9 @@ func parseManPage(subCmd string) string {
 	splitA := strings.Split(string(msg), "\n\nOPTIONS")
 	splitB := regexp.MustCompile(`\.\n\n[A-Z]+`).Split(splitA[1], 2)
 	rawFlagSection := splitB[0]
-	//removeTabs := strings.ReplaceAll(rawFlagSection, "\t", "%%%")
-	//removeTabs := strings.ReplaceAll(rawFlagSection, "\n\t", "")
-	//removeTabs = strings.ReplaceAll(removeTabs, "%%%", "\n\n\t")
+	// removeTabs := strings.ReplaceAll(rawFlagSection, "\t", "%%%")
+	// removeTabs := strings.ReplaceAll(rawFlagSection, "\n\t", "")
+	// removeTabs = strings.ReplaceAll(removeTabs, "%%%", "\n\n\t")
 	return rawFlagSection
 }
 

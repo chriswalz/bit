@@ -2,10 +2,11 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/rs/zerolog/log"
 	"os"
 	"strings"
 	"time"
+
+	"github.com/rs/zerolog/log"
 
 	"github.com/c-bata/go-prompt"
 	"github.com/spf13/cobra"
@@ -57,7 +58,7 @@ func CreateSuggestionMap(cmd *cobra.Command) (map[string]func() []prompt.Suggest
 	start = time.Now()
 	allBitCmds := AllBitAndGitSubCommands(cmd)
 	log.Debug().Msg((time.Now().Sub(start)).String())
-	//commonCommands := CobraCommandToSuggestions(CommonCommandsList())
+	// commonCommands := CobraCommandToSuggestions(CommonCommandsList())
 	start = time.Now()
 	branchListSuggestions := BranchListSuggestions()
 	log.Debug().Msg((time.Now().Sub(start)).String())
@@ -91,7 +92,6 @@ func CreateSuggestionMap(cmd *cobra.Command) (map[string]func() []prompt.Suggest
 		//"_any": commonCommands,
 	}
 	return completerSuggestionMap, bitCmdMap
-
 }
 
 // Execute adds all child commands to the shell command and sets flags appropriately.

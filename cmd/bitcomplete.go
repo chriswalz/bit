@@ -3,15 +3,16 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+	"strconv"
+	"strings"
+
 	"github.com/c-bata/go-prompt"
 	"github.com/posener/complete/v2"
 	"github.com/posener/complete/v2/predict"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/thoas/go-funk"
-	"os"
-	"strconv"
-	"strings"
 )
 
 func Bitcomplete() {

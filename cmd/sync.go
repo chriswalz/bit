@@ -2,9 +2,10 @@ package cmd
 
 import (
 	"fmt"
+	"strings"
+
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/spf13/cobra"
-	"strings"
 )
 
 // syncCmd represents the sync command
@@ -83,7 +84,7 @@ sync local-branch
 				return
 			}
 			fmt.Println("Cancelling...")
-			//RunInTerminalWithColor("git", []string{"stash", "pop"}) deprecated switch stashing
+			// RunInTerminalWithColor("git", []string{"stash", "pop"}) deprecated switch stashing
 			return
 		}
 
@@ -101,7 +102,7 @@ sync local-branch
 			refreshOnBranch(branch)
 		}
 	},
-	//Args: cobra.MaximumNArgs(1),
+	// Args: cobra.MaximumNArgs(1),
 }
 
 func init() {
