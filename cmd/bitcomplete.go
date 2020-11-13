@@ -88,6 +88,6 @@ func Bitcomplete() {
 			"version": predict.Nothing,
 		},
 	}
-
+	//
 	gogo.Complete("bit")
 }

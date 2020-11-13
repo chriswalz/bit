@@ -22,6 +22,9 @@ var gitmojiCmd = &cobra.Command{
 			emojiAndMsg = SuggestionPrompt("> bit gitmoji ", specificCommandCompleter("gitmoji", suggestionMap))
 		} else {
 			emojiAndMsg = args[0]
+			if len(args) > 0 {
+				emojiAndMsg = strings.Join(args, " ")
+			}
 		}
 
 		if len(emojiAndMsg) < 1 {
@@ -41,7 +44,6 @@ var gitmojiCmd = &cobra.Command{
 		emojiAndMsgWithoutEmojiDescription := strings.ReplaceAll(emojiAndMsg, g.(*Gitmoji).Description, g.(*Gitmoji).Emoji)
 		save(emojiAndMsgWithoutEmojiDescription)
 	},
-	Args: cobra.MaximumNArgs(1),
 }
 
 func init() {
