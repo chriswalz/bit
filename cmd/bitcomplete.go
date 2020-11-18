@@ -2,9 +2,7 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
-	"strconv"
 	"strings"
 
 	"github.com/c-bata/go-prompt"
@@ -28,20 +26,6 @@ func Bitcomplete() {
 
 	log.Logger = log.With().Caller().Logger().Output(zerolog.ConsoleWriter{Out: os.Stderr})
 	zerolog.SetGlobalLevel(zerolog.InfoLevel)
-
-	if !doInstall && !doUninstall {
-		i, err := strconv.Atoi(compPoint)
-		if err != nil {
-			fmt.Println("COMP_LINE", compLine, "COMP_POINT", compPoint, "err:", err)
-			return
-		}
-		if i > len(compLine) {
-			err := os.Setenv("COMP_POINT", strconv.Itoa(len(compLine)))
-			if err != nil {
-				fmt.Println(err)
-			}
-		}
-	}
 
 	branchCompletion := &complete.Command{
 		Args: complete.PredictFunc(func(prefix string) []string {

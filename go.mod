@@ -16,7 +16,7 @@ require (
 	github.com/hooklift/assert v0.1.0 // indirect
 	github.com/klauspost/pgzip v1.2.5 // indirect
 	github.com/pkg/errors v0.8.1
-	github.com/posener/complete/v2 v2.0.1-alpha.12
+	github.com/posener/complete/v2 v2.0.1-alpha.13
 	github.com/rs/zerolog v1.20.0
 	github.com/spf13/cobra v1.1.1
 	github.com/stretchr/testify v1.6.1
