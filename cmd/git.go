@@ -155,7 +155,8 @@ func FileChangesList() []FileChange {
 }
 
 func AllGitAliases() (cc []*cobra.Command) {
-	msg, err := execCommand("git", "config", "--get-regexp", "^alias").CombinedOutput()
+	// fixme exec.Command used instead of execCommand since alias not showing with LANG=C
+	msg, err := exec.Command("git", "config", "--get-regexp", "^alias").CombinedOutput()
 	if err != nil {
 		log.Debug().Err(err).Send()
 		return cc

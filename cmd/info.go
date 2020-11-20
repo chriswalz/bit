@@ -30,5 +30,5 @@ var infoCmd = &cobra.Command{
 }
 
 func init() {
-	ShellCmd.AddCommand(infoCmd)
+	BitCmd.AddCommand(infoCmd)
 }

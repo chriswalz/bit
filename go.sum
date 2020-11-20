@@ -44,6 +44,8 @@ github.com/c-bata/go-prompt v0.2.5/go.mod h1:vFnjEGDIIA/Lib7giyE4E9c50Lvl8j0S+7F
 github.com/c4milo/unpackit v0.0.0-20170704181138-4ed373e9ef1c h1:aprLqMn7gSPT+vdDSl+/E6NLEuArwD/J7IWd8bJt5lQ=
 github.com/c4milo/unpackit v0.0.0-20170704181138-4ed373e9ef1c/go.mod h1:Ie6SubJv/NTO9Q0UBH0QCl3Ve50lu9hjbi5YJUw03TE=
 github.com/cespare/xxhash v1.1.0/go.mod h1:XrSqR1VqqWfGrhpAt58auRo0WTKS1nRRg3ghfAqPWnc=
+github.com/chriswalz/complete/v2 v2.0.5 h1:KnByrxn2nFDfCr36i8148f2vkTI+tAY1yxuYW2z1mzE=
+github.com/chriswalz/complete/v2 v2.0.5/go.mod h1:YhRP+hgjUudSHu7ctT+4wuJKeJsinSiF0fQLbj7ws+g=
 github.com/client9/misspell v0.3.4/go.mod h1:qj6jICC3Q7zFZvVWo7KLAzC3yx5G7kyvSDkc90ppPyw=
 github.com/coreos/bbolt v1.3.2/go.mod h1:iRUV2dpdMOn7Bo10OQBFzIJO9kkE559Wcmn+qkEiiKk=
 github.com/coreos/etcd v3.3.13+incompatible/go.mod h1:uF7uidLiAD3TWHmW31ZFd/JWoc32PjwdhPthX9715RE=
@@ -213,8 +215,6 @@ github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZN
 github.com/posener/autogen v0.0.2/go.mod h1:23ND5WRzjjNM+lOMUvy4WudgDikSK3Sm0rmaXAfnIWo=
 github.com/posener/complete v1.1.1 h1:ccV59UEOTzVDnDUEFdT95ZzHVZ+5+158q8+SJb2QV5w=
 github.com/posener/complete v1.1.1/go.mod h1:em0nMJCgc9GFtwrmVmEMR/ZL6WyhyjMBndrE9hABlRI=
-github.com/posener/complete/v2 v2.0.1-alpha.13 h1:xmeDzuCWM0E+hSq6hv4gZQBmiw+uz0zvXvqI7yFMcsk=
-github.com/posener/complete/v2 v2.0.1-alpha.13/go.mod h1:+ndzg+QjkR+oKXdpgsPCdZTg67phWqV1atTotlxuyDg=
 github.com/posener/script v1.1.5 h1:su+9YHNlevT+Hlq2Xul5skh5kYDIBE+x4xu+5mLDT9o=
 github.com/posener/script v1.1.5/go.mod h1:Rg3ijooqulo05aGLyGsHoLmIOUzHUVK19WVgrYBPU/E=
 github.com/prometheus/client_golang v0.9.1/go.mod h1:7SWBe2y4D6OKWSNQJUaRYU/AaXPKyh/dDVn+NZz0KFw=

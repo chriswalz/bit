@@ -1,10 +1,10 @@
 package cmd
 
 import (
+	"github.com/chriswalz/complete/v2"
 	"strconv"
 	"strings"
 
-	"github.com/c-bata/go-prompt"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 )
@@ -16,19 +16,24 @@ var prCmd = &cobra.Command{
 	Long: `bit pr
 bit pr`,
 	Run: func(cmd *cobra.Command, args []string) {
-		suggestionMap := map[string]func() []prompt.Suggest{
-			"pr": lazyLoad(GitHubPRSuggestions),
+		suggestionTree := &complete.Command{
+			Sub: map[string]*complete.Command{
+				"pr": {
+					Description: "Check out a pull request from Github (requires GH CLI)",
+					Args:        complete.PredictFunc(lazyLoad(GitHubPRSuggestions)),
+				},
+			},
 		}
-		runPr(suggestionMap)
+		runPr(suggestionTree)
 	},
 	Args: cobra.NoArgs,
 }
 
 func init() {
-	ShellCmd.AddCommand(prCmd)
+	BitCmd.AddCommand(prCmd)
 }
 
-func runPr(suggestionMap map[string]func() []prompt.Suggest) {
+func runPr(suggestionMap *complete.Command) {
 	branchName := SuggestionPrompt("> bit pr ", specificCommandCompleter("pr", suggestionMap))
 
 	split := strings.Split(branchName, "#")

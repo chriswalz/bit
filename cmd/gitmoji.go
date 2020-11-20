@@ -3,6 +3,8 @@ package cmd
 import (
 	"fmt"
 	"github.com/c-bata/go-prompt"
+	"github.com/chriswalz/complete/v2"
+	"github.com/chriswalz/complete/v2/predict"
 	"github.com/spf13/cobra"
 	"github.com/thoas/go-funk"
 	"strings"
@@ -16,10 +18,17 @@ var gitmojiCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		emojiAndMsg := ""
 		if len(args) == 0 {
-			var suggestionMap = map[string]func() []prompt.Suggest{
-				"gitmoji": GitmojiSuggestions,
+			gitmojiList := funk.Map(GitmojiSuggestions(), func(s prompt.Suggest) string {
+				return s.Text
+			}).([]string)
+			suggestionTree := &complete.Command{
+				Sub: map[string]*complete.Command{
+					"gitmoji": {
+						Args: predict.Set(gitmojiList),
+					},
+				},
 			}
-			emojiAndMsg = SuggestionPrompt("> bit gitmoji ", specificCommandCompleter("gitmoji", suggestionMap))
+			emojiAndMsg = SuggestionPrompt("> bit gitmoji ", specificCommandCompleter("gitmoji", suggestionTree))
 		} else {
 			emojiAndMsg = args[0]
 			if len(args) > 0 {
@@ -47,7 +56,7 @@ var gitmojiCmd = &cobra.Command{
 }
 
 func init() {
-	ShellCmd.AddCommand(gitmojiCmd)
+	BitCmd.AddCommand(gitmojiCmd)
 }
 
 func GitmojiSuggestions() []prompt.Suggest {

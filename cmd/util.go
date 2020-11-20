@@ -167,16 +167,13 @@ func GitResetSuggestions() []prompt.Suggest {
 	return suggestions
 }
 
-func GitHubPRSuggestions() []prompt.Suggest {
+func GitHubPRSuggestions(prefix string) []string {
 	log.Debug().Msg("Github suggestions retrieving")
 	prs := ListGHPullRequests()
-	suggestions := funk.Map(prs, func(pr *PullRequest) prompt.Suggest {
-		return prompt.Suggest{
-			Text:        fmt.Sprintf("%s:%s-#%d", pr.State, pr.AuthorBranch, pr.Number),
-			Description: fmt.Sprintf("%s", pr.Title),
-		}
+	suggestions := funk.Map(prs, func(pr *PullRequest) string {
+		return fmt.Sprintf("%s:%s-#%d", pr.State, pr.AuthorBranch, pr.Number)
 	})
-	return suggestions.([]prompt.Suggest)
+	return suggestions.([]string)
 }
 
 func CobraCommandToSuggestions(cmds []*cobra.Command) []prompt.Suggest {
@@ -187,11 +184,23 @@ func CobraCommandToSuggestions(cmds []*cobra.Command) []prompt.Suggest {
 			Description: branch.Short,
 		})
 	}
-	suggestions = append(suggestions, prompt.Suggest{
-		Text:        "--version",
-		Description: "Print current version of bit",
-	})
 	return suggestions
+}
+
+func CobraCommandToName(cmds []*cobra.Command) []string {
+	var ss []string
+	for _, cmd := range cmds {
+		ss = append(ss, cmd.Use)
+	}
+	return ss
+}
+
+func CobraCommandToDesc(cmds []*cobra.Command) []string {
+	var ss []string
+	for _, cmd := range cmds {
+		ss = append(ss, cmd.Short)
+	}
+	return ss
 }
 
 type Branch struct {
@@ -315,10 +324,10 @@ func AllBitSubCommands(rootCmd *cobra.Command) ([]*cobra.Command, map[string]*co
 
 func AllBitAndGitSubCommands(rootCmd *cobra.Command) (cc []*cobra.Command) {
 	gitAliases := AllGitAliases()
-	gitCmds := AllGitSubCommands()
-	bitCmds, _ := AllBitSubCommands(rootCmd)
+	//gitCmds := AllGitSubCommands()
+	//bitCmds, _ := AllBitSubCommands(rootCmd)
 	commonCommands := CommonCommandsList()
-	return concatCopyPreAllocate([][]*cobra.Command{commonCommands, gitCmds, bitCmds, gitAliases})
+	return concatCopyPreAllocate([][]*cobra.Command{commonCommands, gitAliases})
 }
 
 func concatCopyPreAllocate(slices [][]*cobra.Command) []*cobra.Command {
@@ -555,13 +564,13 @@ func memoize(suggestions []prompt.Suggest) func() []prompt.Suggest {
 	}
 }
 
-func lazyLoad(suggestionFunc func() []prompt.Suggest) func() []prompt.Suggest {
-	var suggestions []prompt.Suggest
-	return func() []prompt.Suggest {
-		if suggestions == nil {
-			suggestions = suggestionFunc()
+func lazyLoad(predictFunc func(prefix string) []string) func(prefix string) []string {
+	var result []string
+	return func(prefix string) []string {
+		if result == nil {
+			result = predictFunc(prefix)
 		}
-		return suggestions
+		return result
 	}
 }
 

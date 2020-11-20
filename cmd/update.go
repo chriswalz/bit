@@ -105,7 +105,7 @@ bit update v0.7.4 (note: v is required)`,
 }
 
 func init() {
-	ShellCmd.AddCommand(updateCmd)
+	BitCmd.AddCommand(updateCmd)
 }
 
 // getLatestOrSpecified returns the latest or specified release.

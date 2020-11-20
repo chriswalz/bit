@@ -139,3 +139,10 @@ realpath /usr/local/Cellar/bit-git/0.9.2
 
 show recently edited files when checking out a branch
 git log --name-status -10 path/to/dir
+
+Getting tab completions from zsh
+git st$'\t\t' | zsh -i
+
+https://brbsix.github.io/2015/11/29/accessing-tab-completion-programmatically-in-bash/
+
+use macrorecorder?

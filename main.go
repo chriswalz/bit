@@ -31,7 +31,7 @@ func main() {
 
 	// defer needed to handle funkyness with CTRL + C & go-prompt
 	defer bitcmd.HandleExit()
-	bitcmd.ShellCmd.Version = version
+	bitcmd.BitCmd.Version = version
 
 	// set debug level
 	log.Logger = log.With().Caller().Logger().Output(zerolog.ConsoleWriter{Out: os.Stderr})
@@ -65,7 +65,7 @@ func main() {
 	if len(argsWithoutProg) == 0 || bitcmd.Find(bitcliCmds, argsWithoutProg[0]) != -1 {
 		bitcli()
 	} else {
-		completerSuggestionMap, _ := bitcmd.CreateSuggestionMap(bitcmd.ShellCmd)
+		completerSuggestionMap, _ := bitcmd.CreateSuggestionMap(bitcmd.BitCmd)
 		yes := bitcmd.HijackGitCommandOccurred(argsWithoutProg, completerSuggestionMap, version)
 		if yes {
 			return

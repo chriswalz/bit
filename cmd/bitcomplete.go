@@ -6,8 +6,8 @@ import (
 	"strings"
 
 	"github.com/c-bata/go-prompt"
-	"github.com/posener/complete/v2"
-	"github.com/posener/complete/v2/predict"
+	"github.com/chriswalz/complete/v2"
+	"github.com/chriswalz/complete/v2/predict"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/thoas/go-funk"
@@ -27,6 +27,12 @@ func Bitcomplete() {
 	log.Logger = log.With().Caller().Logger().Output(zerolog.ConsoleWriter{Out: os.Stderr})
 	zerolog.SetGlobalLevel(zerolog.InfoLevel)
 
+	bitcomplete, _ := CreateSuggestionMap(BitCmd)
+
+	bitcomplete.Complete("bit")
+}
+
+func retiredCode() {
 	branchCompletion := &complete.Command{
 		Args: complete.PredictFunc(func(prefix string) []string {
 			branches := BranchListSuggestions()
@@ -38,7 +44,7 @@ func Bitcomplete() {
 		}),
 	}
 
-	cmds := AllBitAndGitSubCommands(ShellCmd)
+	cmds := AllBitAndGitSubCommands(BitCmd)
 	completionSubCmdMap := map[string]*complete.Command{}
 	for _, v := range cmds {
 		flagSuggestions := append(FlagSuggestionsForCommand(v.Name(), "--"), FlagSuggestionsForCommand(v.Name(), "-")...)
@@ -66,12 +72,10 @@ func Bitcomplete() {
 		}
 	}
 
-	gogo := &complete.Command{
+	_ = &complete.Command{
 		Sub: completionSubCmdMap,
 		Flags: map[string]complete.Predictor{
 			"version": predict.Nothing,
 		},
 	}
-	//
-	gogo.Complete("bit")
 }

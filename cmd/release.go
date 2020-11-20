@@ -29,5 +29,5 @@ var releaseCmd = &cobra.Command{
 }
 
 func init() {
-	ShellCmd.AddCommand(releaseCmd)
+	BitCmd.AddCommand(releaseCmd)
 }

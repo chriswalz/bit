@@ -106,7 +106,7 @@ sync local-branch
 }
 
 func init() {
-	ShellCmd.AddCommand(syncCmd)
+	BitCmd.AddCommand(syncCmd)
 	// syncCmd.PersistentFlags().String("foo", "", "A help for foo")
 	// syncCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

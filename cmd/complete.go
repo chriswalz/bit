@@ -1,9 +1,8 @@
 package cmd
 
 import (
-	"os"
-
 	"github.com/spf13/cobra"
+	"os"
 )
 
 // completeCmd represents the complete command
@@ -19,5 +18,5 @@ var completeCmd = &cobra.Command{
 }
 
 func init() {
-	ShellCmd.AddCommand(completeCmd)
+	BitCmd.AddCommand(completeCmd)
 }
