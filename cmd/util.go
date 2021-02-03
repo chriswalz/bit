@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/chriswalz/complete/v3"
 	"os"
 	"os/exec"
 	"regexp"
@@ -167,13 +168,13 @@ func GitResetSuggestions() []prompt.Suggest {
 	return suggestions
 }
 
-func GitHubPRSuggestions(prefix string) []string {
+func GitHubPRSuggestions(prefix string) []*complete.CompTree {
 	log.Debug().Msg("Github suggestions retrieving")
 	prs := ListGHPullRequests()
 	suggestions := funk.Map(prs, func(pr *PullRequest) string {
 		return fmt.Sprintf("%s:%s-#%d", pr.State, pr.AuthorBranch, pr.Number)
 	})
-	return suggestions.([]string)
+	return suggestions.([]*complete.CompTree)
 }
 
 func CobraCommandToSuggestions(cmds []*cobra.Command) []prompt.Suggest {
@@ -477,7 +478,7 @@ func fileExists(filename string) bool {
 }
 
 func isBranchCompletionCommand(command string) bool {
-	return command == "checkout" || command == "switch" || command == "co" || command == "pr" || command == "merge"
+	return command == "checkout" || command == "switch" || command == "co" || command == "pr" || command == "merge" || command == "rebase"
 }
 
 func isBranchChangeCommand(command string) bool {

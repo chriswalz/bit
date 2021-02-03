@@ -3,8 +3,7 @@ package cmd
 import (
 	"fmt"
 	"github.com/c-bata/go-prompt"
-	"github.com/chriswalz/complete/v2"
-	"github.com/chriswalz/complete/v2/predict"
+	"github.com/chriswalz/complete/v3"
 	"github.com/spf13/cobra"
 	"github.com/thoas/go-funk"
 	"strings"
@@ -21,10 +20,10 @@ var gitmojiCmd = &cobra.Command{
 			gitmojiList := funk.Map(GitmojiSuggestions(), func(s prompt.Suggest) string {
 				return s.Text
 			}).([]string)
-			suggestionTree := &complete.Command{
-				Sub: map[string]*complete.Command{
+			suggestionTree := &complete.CompTree{
+				Sub: map[string]*complete.CompTree{
 					"gitmoji": {
-						Args: predict.Set(gitmojiList),
+						Args: toAutoCLI(gitmojiList),
 					},
 				},
 			}

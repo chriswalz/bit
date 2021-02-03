@@ -30,6 +30,8 @@
 - [X] `bit pr` view and checkout pull requests from Github (Requires GitHub CLI) 
 - [X] easily update bit using `bit update`
 - [X] single binary (no more bitcomplete) add classical tab completion with `bit complete`
+- [X] much more suggestions available! (Roughly 10x more) 
+- [X] Install with homebrew & macports 
 
 
 --- **Coming Soon** ---

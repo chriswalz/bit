@@ -146,3 +146,21 @@ git st$'\t\t' | zsh -i
 https://brbsix.github.io/2015/11/29/accessing-tab-completion-programmatically-in-bash/
 
 use macrorecorder?
+
+
+-[X] display descriptions for all available suggestions 
+-[X] show common commands first 
+-[X] when "-" display single dash flags 
+-[X] flag filtering not working (e.g. bit push --all doesn't show "--all" suggestion)
+-[X] "bit checkout -2 " doesn't display branches
+-[X] bit co should suggest "commit" (currently displays nothing)
+-[X] bit commit should suggest "commit" (currently displays nothing)
+-[X] bit commit should suggest "commit" (currently displays nothing)
+-[] "bit checkout -2 " is showing double dashes for branches
+-[] maps need to be ordered?
+-[] branches need to remain ordered
+-[] branches need to have descriptions again
+-[] some descriptions are getting cut off // FIXME
+-[] reenable bit pr
+-[] bit version && --version are missing
+-[] "co" suggestion from generation tree needs to be disabled manually

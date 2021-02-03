@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/chriswalz/complete/v2"
+	"github.com/chriswalz/complete/v3"
 	"testing"
 
 	"github.com/c-bata/go-prompt"
@@ -169,14 +169,22 @@ func TestCompletion(t *testing.T) {
 		}{
 			{
 				"bit rebase ",
+				[]string{"master", "rebase-squash"},
+			},
+			{
+				"bit rebase --",
 				[]string{"--continue", "--abort", "--merge"},
 			},
 			{
-				"bit push ",
+				"bit rebase --continue ",
+				[]string{"master", "rebase-squash"},
+			},
+			{
+				"bit push --",
 				[]string{"--force", "--dry-run", "--porcelain", "--delete", "--tags"},
 			},
 			{
-				"bit pull ",
+				"bit pull --",
 				[]string{"--ff-only", "--no-ff", "--no-edit"},
 			},
 		}
