@@ -46,6 +46,6 @@ func save(msg string) {
 			RunInTerminalWithColor("git", []string{"commit", "-a", "-m " + resp})
 		}
 	} else {
-		RunInTerminalWithColor("git", []string{"commit", "-a", "-m " + msg})
+		RunInTerminalWithColor("git", []string{"commit", "-a", "-m" + msg})
 	}
 }
