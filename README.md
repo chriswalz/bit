@@ -78,6 +78,8 @@ bit complete
 bit
 ```
 
+Not working? Try `brew doctor`
+
 ### using `MacPorts` (For MacOS users)
 
 ```shell script
@@ -85,7 +87,6 @@ sudo port selfupdate
 sudo port install bit
 ```
 
-Not working? Try `brew doctor`
 
 #### using `go` (For Windows Users) 
 ```shell script
