@@ -34,7 +34,7 @@ func runPr(suggestionMap map[string]func() []prompt.Suggest) {
 	split := strings.Split(branchName, "#")
 	prNumber, err := strconv.Atoi(split[len(split)-1])
 	if err != nil {
-		log.Debug().Err(err)
+		log.Debug().Err(err).Send()
 		return
 	}
 	checkoutPullRequest(prNumber)

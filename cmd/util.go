@@ -43,7 +43,7 @@ func RunInTerminalWithColorInDir(cmdName string, dir string, args []string) erro
 	}
 
 	err = cmd.Run()
-	log.Debug().Err(err)
+	log.Debug().Err(err).Send()
 	return err
 }
 
@@ -67,7 +67,7 @@ func AskMultiLine(q string) string {
 func BranchList() []*Branch {
 	rawBranchData, err := branchListRaw()
 	if err != nil {
-		log.Debug().Err(err)
+		log.Debug().Err(err).Send()
 	}
 	return toStructuredBranchList(rawBranchData)
 }
@@ -110,7 +110,7 @@ func toStructuredBranchList(rawBranchData string) []*Branch {
 func GenBumpedSemVersion() string {
 	msg, err := exec.Command("/bin/sh", "-c", `git describe --tags --abbrev=0 | awk -F. '{$NF+=1; OFS="."; print $0}'`).CombinedOutput()
 	if err != nil {
-		log.Debug().Err(err)
+		log.Debug().Err(err).Send()
 	}
 	out := string(msg)
 	return strings.TrimSpace(out)
@@ -120,7 +120,7 @@ func AddCommandToShellHistory(cmd string, args []string) {
 	// not possible??
 	msg, err := exec.Command("/bin/bash", "-c", "history").CombinedOutput()
 	if err != nil {
-		log.Debug().Err(err)
+		log.Debug().Err(err).Send()
 	}
 	log.Debug().Msg(string(msg))
 }
@@ -441,14 +441,14 @@ func RunScriptWithString(path string, script string, args ...string) {
 	var err error
 	err = RunInTerminalWithColor("bin/sh", args)
 	if err != nil {
-		log.Debug().Err(err)
+		log.Debug().Err(err).Send()
 	}
 }
 
 func parseManPage(subCmd string) string {
 	msg, err := exec.Command("/bin/bash", "-c", "git help "+subCmd+" | col -b").CombinedOutput()
 	if err != nil {
-		log.Debug().Err(err)
+		log.Debug().Err(err).Send()
 	}
 	splitA := strings.Split(string(msg), "\n\nOPTIONS")
 	splitB := regexp.MustCompile(`\.\n\n[A-Z]+`).Split(splitA[1], 2)
