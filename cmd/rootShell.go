@@ -30,7 +30,7 @@ var ShellCmd = &cobra.Command{
 		}
 		parsedArgs, err := parseCommandLine(resp)
 		if err != nil {
-			log.Debug().Err(err)
+			log.Debug().Err(err).Send()
 			return
 		}
 		if bitCmdMap[subCommand] == nil {
@@ -102,7 +102,7 @@ func CreateSuggestionMap(cmd *cobra.Command) (map[string]func() []prompt.Suggest
 // This is called by main.main(). It only needs to happen once to the ShellCmd.
 func Execute() {
 	if err := ShellCmd.Execute(); err != nil {
-		log.Info().Err(err)
+		log.Info().Err(err).Send()
 		os.Exit(1)
 	}
 }

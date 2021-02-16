@@ -24,7 +24,7 @@ func ListGHPullRequests() []*PullRequest {
 	}
 	msg, err := execCommand("gh", "pr", "list", "--limit=200", "--state=all").CombinedOutput()
 	if err != nil {
-		log.Debug().Err(err)
+		log.Debug().Err(err).Send()
 	}
 	prsraw := strings.Split(strings.TrimSpace(string(msg)), "\n")
 	return funk.Map(prsraw, func(raw string) *PullRequest {
@@ -45,7 +45,7 @@ func checkoutPullRequest(pr int) {
 	}
 	_, err := execCommand("gh", "pr", "checkout", strconv.Itoa(pr)).CombinedOutput()
 	if err != nil {
-		log.Debug().Err(err)
+		log.Debug().Err(err).Send()
 	}
 }
 

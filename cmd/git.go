@@ -12,7 +12,7 @@ import (
 func CloudBranchExists() bool {
 	msg, err := execCommand("git", "pull").CombinedOutput()
 	if err != nil {
-		log.Debug().Err(err)
+		log.Debug().Err(err).Send()
 	}
 	// log.Println("msg:", string(msg))
 	// log.Println("err:", err)
@@ -22,7 +22,7 @@ func CloudBranchExists() bool {
 func CurrentBranch() string {
 	msg, err := execCommand("git", "branch", "--show-current").CombinedOutput()
 	if err != nil {
-		log.Debug().Err(err)
+		log.Debug().Err(err).Send()
 	}
 	return strings.TrimSpace(string(msg))
 }
@@ -46,7 +46,7 @@ func IsGitRepo() bool {
 func IsBehindCurrent() bool {
 	msg, err := execCommand("git", "status", "-sb").CombinedOutput()
 	if err != nil {
-		log.Debug().Err(err)
+		log.Debug().Err(err).Send()
 	}
 	return strings.Contains(string(msg), "behind")
 }
@@ -55,7 +55,7 @@ func NothingToCommit() bool {
 	// git diff-index HEAD --
 	msg, err := execCommand("git", "diff-index", "HEAD", "--").CombinedOutput()
 	if err != nil {
-		log.Debug().Err(err)
+		log.Debug().Err(err).Send()
 	}
 	changedFiles := strings.Split(strings.TrimSpace(string(msg)), "\n")
 	if len(changedFiles) == 1 && changedFiles[0] == "" {
@@ -67,7 +67,7 @@ func NothingToCommit() bool {
 func IsDiverged() bool {
 	msg, err := execCommand("git", "status").CombinedOutput()
 	if err != nil {
-		log.Debug().Err(err)
+		log.Debug().Err(err).Send()
 	}
 	return strings.Contains(string(msg), "have diverged")
 }
@@ -75,7 +75,7 @@ func IsDiverged() bool {
 func StashableChanges() bool {
 	msg, err := execCommand("git", "status").CombinedOutput()
 	if err != nil {
-		log.Debug().Err(err)
+		log.Debug().Err(err).Send()
 	}
 	return strings.Contains(string(msg), "Changes to be committed:") || strings.Contains(string(msg), "Changes not staged for commit:")
 }
@@ -83,7 +83,7 @@ func StashableChanges() bool {
 func MostRecentCommonAncestorCommit(branchA, branchB string) string {
 	msg, err := execCommand("git", "merge-base", branchA, branchB).CombinedOutput()
 	if err != nil {
-		log.Debug().Err(err)
+		log.Debug().Err(err).Send()
 	}
 	return string(msg)
 }
@@ -91,7 +91,7 @@ func MostRecentCommonAncestorCommit(branchA, branchB string) string {
 func StashList() []string {
 	msg, err := execCommand("git", "stash", "list").CombinedOutput()
 	if err != nil {
-		log.Debug().Err(err)
+		log.Debug().Err(err).Send()
 	}
 	return strings.Split(string(msg), "\n")
 }
@@ -125,7 +125,7 @@ func branchListRaw() (string, error) {
 func FileChangesList() []FileChange {
 	msg, err := execCommand("git", "status", "--porcelain=v2").CombinedOutput()
 	if err != nil {
-		log.Debug().Err(err)
+		log.Debug().Err(err).Send()
 	}
 	var changes []FileChange
 	// if user has an older version of git porcelain=v2 is not supported. don't show CL suggestions for now 2.7
@@ -157,7 +157,7 @@ func FileChangesList() []FileChange {
 func AllGitAliases() (cc []*cobra.Command) {
 	msg, err := execCommand("git", "config", "--get-regexp", "^alias").CombinedOutput()
 	if err != nil {
-		log.Debug().Err(err)
+		log.Debug().Err(err).Send()
 		return cc
 	}
 	aliases := strings.Split(strings.TrimSpace(string(msg)), "\n")
@@ -187,7 +187,7 @@ func PrintGitVersion() {
 func checkoutBranch(branch string) bool {
 	msg, err := execCommand("git", "checkout", branch).CombinedOutput()
 	if err != nil {
-		log.Debug().Err(err)
+		log.Debug().Err(err).Send()
 	}
 	if strings.Contains(string(msg), "did not match any file") {
 		return false
