@@ -83,8 +83,9 @@ func promptCompleter(suggestionTree *complete.CompTree, text string) []prompt.Su
 	text = "bit " + text
 	suggestions, err := complete.CompleteLine(text, suggestionTree)
 	if err != nil {
-		log.Err(err)
+		log.Err(err).Send()
 	}
+	// fixme use shlex
 	split := strings.Split(strings.TrimSpace(text), " ")
 	lastToken := split[len(split)-1]
 	// for branches dont undo most recent sorts with alphabetical sort
@@ -99,7 +100,7 @@ func promptCompleter(suggestionTree *complete.CompTree, text string) []prompt.Su
 	var sugg []prompt.Suggest
 	for _, suggestion := range suggestions {
 		name := suggestion.Name
-		if strings.HasPrefix(lastToken, "-") {
+		if strings.HasPrefix(lastToken, "-") && !strings.HasSuffix(text, " ") {
 			name = "-" + suggestion.Name
 			if len(name) > 2 {
 				name = "-" + name

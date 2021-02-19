@@ -8,7 +8,7 @@ require (
 	github.com/bradfitz/iter v0.0.0-20191230175014-e8f45d346db8 // indirect
 	github.com/c-bata/go-prompt v0.2.5
 	github.com/c4milo/unpackit v0.0.0-20170704181138-4ed373e9ef1c // indirect
-	github.com/chriswalz/complete/v3 v3.0.10
+	github.com/chriswalz/complete/v3 v3.0.11
 	github.com/dsnet/compress v0.0.1 // indirect
 	github.com/google/go-github v17.0.0+incompatible // indirect
 	github.com/google/go-github/v32 v32.1.0

@@ -126,29 +126,29 @@ func AddCommandToShellHistory(cmd string, args []string) {
 	log.Debug().Msg(string(msg))
 }
 
-func BranchListSuggestions() []prompt.Suggest {
+func BranchListSuggestions() []complete.Suggestion {
 	branches := BranchList()
-	var suggestions []prompt.Suggest
+	var suggestions []complete.Suggestion
 	for _, branch := range branches {
-		suggestions = append(suggestions, prompt.Suggest{
-			Text:        branch.FullName,
-			Description: fmt.Sprintf("%s  %s  %s", branch.Author, branch.RelativeDate, branch.AbsoluteDate),
+		suggestions = append(suggestions, complete.Suggestion{
+			Name: branch.FullName,
+			Desc: fmt.Sprintf("%s  %s  %s", branch.Author, branch.RelativeDate, branch.AbsoluteDate),
 		})
 	}
 	return suggestions
 }
 
-func GitAddSuggestions() []prompt.Suggest {
+func GitAddSuggestions() []complete.Suggestion {
 	fileChanges := FileChangesList()
-	var suggestions []prompt.Suggest
-	suggestions = append(suggestions, prompt.Suggest{
-		Text:        "-u",
-		Description: "Add modified and deleted files and exclude untracked files.",
+	var suggestions []complete.Suggestion
+	suggestions = append(suggestions, complete.Suggestion{
+		Name: "-u",
+		Desc: "Add modified and deleted files and exclude untracked files.",
 	})
 	for _, fc := range fileChanges {
-		suggestions = append(suggestions, prompt.Suggest{
-			Text:        fc.Name,
-			Description: fc.Status + " ~~~",
+		suggestions = append(suggestions, complete.Suggestion{
+			Name: fc.Name,
+			Desc: fc.Status + " ~~~",
 		})
 	}
 	return suggestions
@@ -168,13 +168,18 @@ func GitResetSuggestions() []prompt.Suggest {
 	return suggestions
 }
 
-func GitHubPRSuggestions(prefix string) []*complete.CompTree {
-	log.Debug().Msg("Github suggestions retrieving")
-	prs := ListGHPullRequests()
-	suggestions := funk.Map(prs, func(pr *PullRequest) string {
-		return fmt.Sprintf("%s:%s-#%d", pr.State, pr.AuthorBranch, pr.Number)
-	})
-	return suggestions.([]*complete.CompTree)
+func GitHubPRSuggestions(prefix string) func(prefix string) []complete.Suggestion {
+	return func(prefix string) []complete.Suggestion {
+		log.Debug().Msg("Github suggestions retrieving")
+		prs := ListGHPullRequests()
+		suggestions := funk.Map(prs, func(pr *PullRequest) complete.Suggestion {
+			return complete.Suggestion{
+				Name: fmt.Sprintf("%s:%s-#%d", pr.State, pr.AuthorBranch, pr.Number),
+				Desc: pr.Title,
+			}
+		})
+		return suggestions.([]complete.Suggestion)
+	}
 }
 
 func CobraCommandToSuggestions(cmds []*cobra.Command) []prompt.Suggest {
@@ -565,9 +570,9 @@ func memoize(suggestions []prompt.Suggest) func() []prompt.Suggest {
 	}
 }
 
-func lazyLoad(predictFunc func(prefix string) []string) func(prefix string) []string {
-	var result []string
-	return func(prefix string) []string {
+func lazyLoad(predictFunc func(prefix string) []complete.Suggestion) func(prefix string) []complete.Suggestion {
+	var result []complete.Suggestion
+	return func(prefix string) []complete.Suggestion {
 		if result == nil {
 			result = predictFunc(prefix)
 		}

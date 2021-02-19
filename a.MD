@@ -156,11 +156,14 @@ use macrorecorder?
 -[X] bit co should suggest "commit" (currently displays nothing)
 -[X] bit commit should suggest "commit" (currently displays nothing)
 -[X] bit commit should suggest "commit" (currently displays nothing)
--[] "bit checkout -2 " is showing double dashes for branches
+-[X] branches need to remain ordered
+-[X] bit version && --version are missing
+-[X] branches need to have descriptions again
+-[X] reenable bit pr & have correct descriptions
 -[] maps need to be ordered?
--[] branches need to remain ordered
--[] branches need to have descriptions again
--[] some descriptions are getting cut off // FIXME
--[] reenable bit pr
--[] bit version && --version are missing
 -[] "co" suggestion from generation tree needs to be disabled manually
+-[] some descriptions are getting cut off // FIXME
+
+-[X] "bit checkout -2 " is showing double dashes for branches
+-[] use schlex 
+-[] verify tab completions work

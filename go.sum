@@ -44,8 +44,8 @@ github.com/c-bata/go-prompt v0.2.5/go.mod h1:vFnjEGDIIA/Lib7giyE4E9c50Lvl8j0S+7F
 github.com/c4milo/unpackit v0.0.0-20170704181138-4ed373e9ef1c h1:aprLqMn7gSPT+vdDSl+/E6NLEuArwD/J7IWd8bJt5lQ=
 github.com/c4milo/unpackit v0.0.0-20170704181138-4ed373e9ef1c/go.mod h1:Ie6SubJv/NTO9Q0UBH0QCl3Ve50lu9hjbi5YJUw03TE=
 github.com/cespare/xxhash v1.1.0/go.mod h1:XrSqR1VqqWfGrhpAt58auRo0WTKS1nRRg3ghfAqPWnc=
-github.com/chriswalz/complete/v3 v3.0.10 h1:ABheyCLB5Fj+CeZ8+O8cwod9Udo//MlUtoh9V3O8DY0=
-github.com/chriswalz/complete/v3 v3.0.10/go.mod h1:U4RZv3y+X3pV/uhqcJhlqlnug7IfJNiVVmIZ7+bsf20=
+github.com/chriswalz/complete/v3 v3.0.11 h1:YZu8qsPjAGkFfoMKyil5SyPR5FHbZ4RRqaovifGxBzY=
+github.com/chriswalz/complete/v3 v3.0.11/go.mod h1:U4RZv3y+X3pV/uhqcJhlqlnug7IfJNiVVmIZ7+bsf20=
 github.com/client9/misspell v0.3.4/go.mod h1:qj6jICC3Q7zFZvVWo7KLAzC3yx5G7kyvSDkc90ppPyw=
 github.com/coreos/bbolt v1.3.2/go.mod h1:iRUV2dpdMOn7Bo10OQBFzIJO9kkE559Wcmn+qkEiiKk=
 github.com/coreos/etcd v3.3.13+incompatible/go.mod h1:uF7uidLiAD3TWHmW31ZFd/JWoc32PjwdhPthX9715RE=

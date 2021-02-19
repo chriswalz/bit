@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"github.com/c-bata/go-prompt"
 	"github.com/chriswalz/complete/v3"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
@@ -9,12 +8,10 @@ import (
 	"time"
 )
 
-func toAutoCLI(suggs []string) (m map[string]*complete.CompTree) {
-	m = map[string]*complete.CompTree{}
-	for _, sugg := range suggs {
-		m[sugg] = &complete.CompTree{Desc: ""}
+func toAutoCLI(suggs []complete.Suggestion) func(prefix string) []complete.Suggestion {
+	return func(prefix string) []complete.Suggestion {
+		return suggs
 	}
-	return
 }
 
 func CreateSuggestionMap(cmd *cobra.Command) (*complete.CompTree, map[string]*cobra.Command) {
@@ -41,18 +38,6 @@ func CreateSuggestionMap(cmd *cobra.Command) (*complete.CompTree, map[string]*co
 	gitmojiSuggestions := GitmojiSuggestions()
 	log.Debug().Msg((time.Now().Sub(start)).String())
 
-	branchListText := funk.Map(branchListSuggestions, func(s prompt.Suggest) string {
-		return s.Text
-	}).([]string)
-
-	gitAddList := funk.Map(gitAddSuggestions, func(s prompt.Suggest) string {
-		return s.Text
-	}).([]string)
-
-	gitmojiList := funk.Map(gitmojiSuggestions, func(s prompt.Suggest) string {
-		return s.Text
-	}).([]string)
-
 	st := b
 	st.Sub["version"] = &complete.CompTree{Desc: "Print bit and git version"}
 	if st.Flags == nil {
@@ -60,12 +45,12 @@ func CreateSuggestionMap(cmd *cobra.Command) (*complete.CompTree, map[string]*co
 	}
 	st.Flags["version"] = &complete.CompTree{Desc: "Print bit and git version"}
 	// add dynamic predictions and bit specific commands
-	st.Sub["add"].Args = toAutoCLI(gitAddList)
-	st.Sub["checkout"].Args = toAutoCLI(branchListText)
-	st.Sub["co"].Args = toAutoCLI(branchListText)
-	st.Sub["log"].Args = toAutoCLI(branchListText)
-	st.Sub["merge"].Args = toAutoCLI(branchListText)
-	st.Sub["rebase"].Args = toAutoCLI(branchListText)
+	st.Sub["add"].Dynamic = toAutoCLI(gitAddSuggestions)
+	st.Sub["checkout"].Dynamic = toAutoCLI(branchListSuggestions)
+	st.Sub["co"].Dynamic = toAutoCLI(branchListSuggestions)
+	st.Sub["log"].Dynamic = toAutoCLI(branchListSuggestions)
+	st.Sub["merge"].Dynamic = toAutoCLI(branchListSuggestions)
+	st.Sub["rebase"].Dynamic = toAutoCLI(branchListSuggestions)
 	st.Sub["release"] = &complete.CompTree{Desc: "Commit unstaged changes, bump minor tag, push",
 		Args: map[string]*complete.CompTree{
 			"bump":      {Desc: "increment minor version by 1"},
@@ -73,12 +58,12 @@ func CreateSuggestionMap(cmd *cobra.Command) (*complete.CompTree, map[string]*co
 		},
 	}
 	st.Sub["pr"] = &complete.CompTree{
-		Desc: "Check out a pull request from Github (requires GH CLI)",
-		//Args: complete.PredictFunc(lazyLoad(GitHubPRSuggestions)), FIXME
+		Desc:    "Check out a pull request from Github (requires GH CLI)",
+		Dynamic: lazyLoad(GitHubPRSuggestions("")), // lazyLoad(GitHubPRSuggestions)), FIXME
 	}
 	st.Sub["gitmoji"] = &complete.CompTree{
-		Desc: "(Pre-alpha) Commit using gitmojis",
-		Args: toAutoCLI(gitmojiList),
+		Desc:    "(Pre-alpha) Commit using gitmojis",
+		Dynamic: toAutoCLI(gitmojiSuggestions),
 	}
 	st.Sub["save"] = &complete.CompTree{Desc: "Save your changes to your current branch"}
 	st.Sub["update"] = &complete.CompTree{Desc: "Updates bit to the latest or specified version"}
@@ -94,7 +79,7 @@ func CreateSuggestionMap(cmd *cobra.Command) (*complete.CompTree, map[string]*co
 		},
 	}
 	st.Sub["submodule"] = &complete.CompTree{Desc: "Initialize, update or inspect submodules"}
-	st.Sub["switch"] = &complete.CompTree{Desc: "Switch branches", Args: toAutoCLI(branchListText)}
+	st.Sub["switch"] = &complete.CompTree{Desc: "Switch branches", Dynamic: toAutoCLI(branchListSuggestions)}
 
 	for k, v := range descriptionMap {
 		if st.Sub[k] == nil {
@@ -111,18 +96,19 @@ func CreateSuggestionMap(cmd *cobra.Command) (*complete.CompTree, map[string]*co
 		st.Sub[cmd.Text] = &complete.CompTree{Desc: cmd.Description}
 	}
 
-	funk.ForEach(branchListSuggestions, func(s prompt.Suggest) {
-		if descriptionMap[s.Text] != "" {
+	// fixme is this necessary?
+	funk.ForEach(branchListSuggestions, func(s complete.Suggestion) {
+		if descriptionMap[s.Name] != "" {
 			return
 		}
-		descriptionMap[s.Text] = s.Description
+		descriptionMap[s.Name] = s.Desc
 	})
 
-	funk.ForEach(gitmojiSuggestions, func(s prompt.Suggest) {
-		if descriptionMap[s.Text] != "" {
+	funk.ForEach(gitmojiSuggestions, func(s complete.Suggestion) {
+		if descriptionMap[s.Name] != "" {
 			return
 		}
-		descriptionMap[s.Text] = s.Description
+		descriptionMap[s.Name] = s.Desc
 	})
 
 	// command
