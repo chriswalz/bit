@@ -8,6 +8,7 @@ import (
 	"regexp"
 	"runtime"
 	"runtime/debug"
+	"strconv"
 	"strings"
 	"sync"
 
@@ -109,12 +110,17 @@ func toStructuredBranchList(rawBranchData string) []*Branch {
 }
 
 func GenBumpedSemVersion() string {
-	msg, err := exec.Command("/bin/sh", "-c", `git describe --tags --abbrev=0 | awk -F. '{$NF+=1; OFS="."; print $0}'`).CombinedOutput()
+	msg, err := exec.Command("/bin/sh", "-c", `git for-each-ref --format="%(refname:short)" --sort=-authordate --count=1 refs/tags`).CombinedOutput()
 	if err != nil {
 		log.Debug().Err(err).Send()
 	}
 	out := string(msg)
-	return strings.TrimSpace(out)
+	out = strings.TrimSpace(out)
+	i := strings.LastIndex(out, ".")
+	minor, err := strconv.Atoi(out[i+1:])
+	minor++
+	out = out[:i] + "." + strconv.Itoa(minor)
+	return out
 }
 
 func AddCommandToShellHistory(cmd string, args []string) {
