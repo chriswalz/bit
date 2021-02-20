@@ -165,5 +165,5 @@ use macrorecorder?
 -[] some descriptions are getting cut off // FIXME
 
 -[X] "bit checkout -2 " is showing double dashes for branches
+-[X] verify tab completions work
 -[] use schlex 
--[] verify tab completions work
