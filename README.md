@@ -294,9 +294,14 @@ zinit ice lucit wait"0" as"program" from"gh-r" pick"bit"
 zinit light "chriswalz/bit"
 ```
 
-
-
 *Note*: On Windows only the interactive prompt completion works not classic tab completion
+
+#### using AUR (For Arch Linux Users)
+For building a stable version from source, use the [`bit` package](https://aur.archlinux.org/packages/bit)
+
+For building the latest git version from source, use the [`bit-git` package](https://aur.archlinux.org/packages/bit-git)
+
+*Note*: These Packages are community-driven and not offically published my the bit maintainer.
 
 Verify installation with:
 
