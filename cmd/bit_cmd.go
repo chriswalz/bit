@@ -81,11 +81,14 @@ func specificCommandCompleter(subCmd string, suggestionMap *complete.CompTree) f
 
 func promptCompleter(suggestionTree *complete.CompTree, text string) []prompt.Suggest {
 	text = "bit " + text
+
+	var sugg []prompt.Suggest
+
 	suggestions, err := complete.CompleteLine(text, suggestionTree)
 	if err != nil {
-		log.Err(err).Send()
+		log.Debug().Err(err).Send()
+		return sugg
 	}
-	// fixme use shlex
 	split := strings.Split(strings.TrimSpace(text), " ")
 	lastToken := split[len(split)-1]
 	// for branches dont undo most recent sorts with alphabetical sort
@@ -95,9 +98,6 @@ func promptCompleter(suggestionTree *complete.CompTree, text string) []prompt.Su
 		})
 	}
 
-	//firstNonFlagIndex := -1
-	//j := 0
-	var sugg []prompt.Suggest
 	for _, suggestion := range suggestions {
 		name := suggestion.Name
 		if strings.HasPrefix(lastToken, "-") && !strings.HasSuffix(text, " ") {
@@ -111,9 +111,6 @@ func promptCompleter(suggestionTree *complete.CompTree, text string) []prompt.Su
 			Description: suggestion.Desc,
 		})
 	}
-	//if firstNonFlagIndex > 0 {
-	//	sugg = append(sugg[firstNonFlagIndex:], sugg[:firstNonFlagIndex]...)
-	//}
 
 	if text == "bit " {
 		sugg = append(CobraCommandToSuggestions(CommonCommandsList()), sugg...)
