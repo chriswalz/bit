@@ -36,11 +36,8 @@ func IsAheadOfCurrent() bool {
 }
 
 func IsGitRepo() bool {
-	_, err := execCommand("git", "status").CombinedOutput()
-	if err != nil {
-		return false
-	}
-	return true
+	out, _ := execCommand("git", "rev-parse", "--is-inside-work-tree").CombinedOutput()
+	return strings.TrimSpace(string(out)) == "true"
 }
 
 func IsBehindCurrent() bool {
