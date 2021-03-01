@@ -1,8 +1,10 @@
 package cmd
 
 import (
-	"log"
+	"fmt"
+	"os/exec"
 
+	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 )
 
@@ -12,14 +14,23 @@ var releaseCmd = &cobra.Command{
 	Short: "Commit unstaged changes, bump minor tag, push",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
+		var err error
 		version := args[0]
 		if version == "bump" {
-			version = GenBumpedSemVersion()
+			rawGitTagOutput, err := exec.Command("/bin/sh", "-c", `git for-each-ref --format="%(refname:short)" --sort=-authordate --count=1 refs/tags`).CombinedOutput()
+			if err != nil {
+				log.Debug().Err(err).Send()
+			}
+			version, err = GenBumpedSemVersion(string(rawGitTagOutput))
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
 		}
 		save("")
-		err := tagCurrentBranch(version)
+		err = tagCurrentBranch(version)
 		if err != nil {
-			log.Println(err)
+			fmt.Println(err)
 			return
 		}
 		RunInTerminalWithColor("git", []string{"push", "--force-with-lease"})

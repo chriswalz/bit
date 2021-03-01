@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"github.com/chriswalz/complete/v3"
 	"os"
@@ -109,18 +110,21 @@ func toStructuredBranchList(rawBranchData string) []*Branch {
 	}).([]*Branch)
 }
 
-func GenBumpedSemVersion() string {
-	msg, err := exec.Command("/bin/sh", "-c", `git for-each-ref --format="%(refname:short)" --sort=-authordate --count=1 refs/tags`).CombinedOutput()
-	if err != nil {
-		log.Debug().Err(err).Send()
-	}
-	out := string(msg)
+func GenBumpedSemVersion(out string) (string, error) {
 	out = strings.TrimSpace(out)
+
+	// 0.0.1
+	if len(out) <= 0 {
+		return "", errors.New("no tags exists. Consider running `bit release 0.0.1`")
+	}
 	i := strings.LastIndex(out, ".")
 	minor, err := strconv.Atoi(out[i+1:])
+	if err != nil {
+		return "", err
+	}
 	minor++
 	out = out[:i] + "." + strconv.Itoa(minor)
-	return out
+	return out, nil
 }
 
 func AddCommandToShellHistory(cmd string, args []string) {
