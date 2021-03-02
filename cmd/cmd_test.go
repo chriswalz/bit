@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"github.com/chriswalz/complete/v3"
+	"strings"
 	"testing"
 
 	"github.com/c-bata/go-prompt"
@@ -204,7 +205,7 @@ func TestCompletion(t *testing.T) {
 			},
 		}
 	for _, e := range expects {
-		reality, err := complete.CompleteLine(e.line, suggestionsTree)
+		reality, err := complete.CompleteLine(e.line, suggestionsTree, strings.HasPrefix)
 		assert.Equal(t, err, nil)
 
 		for _, p := range e.predictions {

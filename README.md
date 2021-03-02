@@ -165,6 +165,7 @@ Thanks to [Gitless](https://gitless.com/), [git-extras](https://github.com/tj/gi
 ## Changelog
 v1.0
 - [X] enhancement: significantly more autocompletions
+- [X] enhancement: use fuzzy search for branch suggestions
 - [X] refactor: completions now represented in tree data structure
 - [X] fix: bit save no longer shows debug error outside debug mode
 - [X] fix: use --is-inside-work-tree to determine whether inside a git repo
