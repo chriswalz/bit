@@ -47,7 +47,7 @@ var gitmojiCmd = &cobra.Command{
 			return
 		}
 		emojiAndMsgWithoutEmojiDescription := strings.ReplaceAll(emojiAndMsg, g.(*Gitmoji).Description, g.(*Gitmoji).Emoji)
-		save(emojiAndMsgWithoutEmojiDescription)
+		save([]string{"-m " + emojiAndMsgWithoutEmojiDescription})
 	},
 }
 

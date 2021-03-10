@@ -27,7 +27,7 @@ var releaseCmd = &cobra.Command{
 				return
 			}
 		}
-		save("")
+		save([]string{})
 		err = tagCurrentBranch(version)
 		if err != nil {
 			fmt.Println(err)

@@ -65,7 +65,12 @@ func CreateSuggestionMap(cmd *cobra.Command) (*complete.CompTree, map[string]*co
 		Desc:    "(Pre-alpha) Commit using gitmojis",
 		Dynamic: toAutoCLI(gitmojiSuggestions),
 	}
-	st.Sub["save"] = &complete.CompTree{Desc: "Save your changes to your current branch"}
+	st.Sub["save"] = &complete.CompTree{
+		Desc: "Save your changes to your current branch",
+		Flags: map[string]*complete.CompTree{
+			"no-verify": {Desc: "bypass pre-commit and commit-msg hooks"},
+		},
+	}
 	st.Sub["update"] = &complete.CompTree{Desc: "Updates bit to the latest or specified version"}
 	st.Sub["complete"] = &complete.CompTree{Desc: "Add classical tab completion to bit"}
 	st.Sub["sync"] = &complete.CompTree{Desc: "Synchronizes local changes with changes on origin or specified branch"}

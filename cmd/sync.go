@@ -62,11 +62,11 @@ sync local-branch
 		}
 		if !CloudBranchExists() {
 			RunInTerminalWithColor("git", []string{"push", "--set-upstream", upstream, currentBranch})
-			save("")
+			save([]string{})
 			RunInTerminalWithColor("git", []string{"push", upstream, currentBranch})
 			return
 		}
-		save("")
+		save([]string{})
 		if IsAheadOfCurrent() {
 			RunInTerminalWithColor("git", []string{"push", upstream, currentBranch})
 		} else {

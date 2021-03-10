@@ -2,9 +2,8 @@ package cmd
 
 import (
 	"fmt"
-	"strings"
-
 	"github.com/spf13/cobra"
+	"strings"
 )
 
 // saveCmd represents the save command
@@ -13,13 +12,13 @@ var saveCmd = &cobra.Command{
 	Short: "Save your changes to your current branch",
 	Long:  `E.g. bit save; bit save "commit message"`,
 	Run: func(cmd *cobra.Command, args []string) {
-		msg := ""
-		if len(args) > 0 {
-			msg = strings.Join(args, " ")
+		if len(args) >= 1 && !strings.HasPrefix(args[0], "-") {
+			args = append([]string{"-m", args[0]}, args[1:]...)
 		}
-		save(msg)
+		save(args)
 	},
-	// Args: cobra.MaximumNArgs(1),
+	Args:               cobra.MinimumNArgs(0),
+	DisableFlagParsing: true,
 }
 
 // add comment
@@ -30,22 +29,40 @@ func init() {
 	// saveCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
-func save(msg string) {
+func getFlagValue(args []string, flagName string) *string {
+	for i, arg := range args {
+		if arg == flagName {
+			return &args[i+1]
+		}
+	}
+	return nil
+
+}
+
+func save(args []string) {
 	if NothingToCommit() {
 		fmt.Println("nothing to save or commit")
 		return
 	}
+	msg := getFlagValue(args, "-m")
+	if msg == nil {
+		getFlagValue(args, "--message")
+	}
 
-	if msg == "" {
+	if msg == nil {
 		// if ahead of master
 		if IsAheadOfCurrent() || !CloudBranchExists() {
-			RunInTerminalWithColor("git", []string{"commit", "-a", "--amend", "--no-edit"}) // amend if already ahead
+			// amend if already ahead
+			extraArgs := []string{"-a", "--amend", "--no-edit"}
+			RunInTerminalWithColor("git", append(append([]string{"commit"}, args...), extraArgs...))
 		} else {
 			RunInTerminalWithColor("git", []string{"status", "-sb", "--untracked-files=no"})
 			resp := AskMultiLine("Please provide a description of your changes")
-			RunInTerminalWithColor("git", []string{"commit", "-a", "-m " + resp})
+			extraArgs := []string{"-a", "-m " + resp}
+			RunInTerminalWithColor("git", append(append([]string{"commit"}, args...), extraArgs...))
 		}
 	} else {
-		RunInTerminalWithColor("git", []string{"commit", "-a", "-m" + msg})
+		extraArgs := []string{"-a"}
+		RunInTerminalWithColor("git", append(append([]string{"commit"}, args...), extraArgs...))
 	}
 }
