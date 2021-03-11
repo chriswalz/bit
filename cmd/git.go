@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 	"os/exec"
 	"strings"
 
@@ -205,6 +206,7 @@ func tagCurrentBranch(version string) error {
 func execCommand(name string, arg ...string) *exec.Cmd {
 	log.Debug().Msg(name + " " + strings.Join(arg, " "))
 	c := exec.Command(name, arg...)
+	c.Env = os.Environ()
 
 	if name == "git" {
 		// exec commands are parsed by bit without getting printed.
