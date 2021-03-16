@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 	"os/exec"
 	"strings"
 
@@ -207,6 +208,8 @@ func execCommand(name string, arg ...string) *exec.Cmd {
 	c := exec.Command(name, arg...)
 
 	if name == "git" {
+		// inherits the current process's environment.
+		c.Env = os.Environ()
 		// exec commands are parsed by bit without getting printed.
 		// parsing git assumes english
 		c.Env = append(c.Env, "LANG=C")
