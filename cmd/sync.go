@@ -53,7 +53,12 @@ sync local-branch
 				RunInTerminalWithColor("git", []string{"pull", "-r", upstream, currentBranch})
 				return
 			} else if ans == optionMap["force"] {
-				RunInTerminalWithColor("git", []string{"push", upstream, currentBranch, "--force-with-lease"})
+				err := RunInTerminalWithColor("git", []string{"push", upstream, currentBranch, "--force-with-lease"})
+				if err != nil {
+					fmt.Println("Force push failed")
+					fmt.Println(err)
+					return
+				}
 				// dont return user may have additional changes to save
 			} else {
 				fmt.Println("Canceling...")
