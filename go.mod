@@ -3,7 +3,7 @@ module github.com/chriswalz/bit
 go 1.16
 
 require (
-	github.com/AlecAivazis/survey/v2 v2.2.2
+	github.com/AlecAivazis/survey/v2 v2.2.9
 	github.com/apex/log v1.9.0 // indirect
 	github.com/bradfitz/iter v0.0.0-20191230175014-e8f45d346db8 // indirect
 	github.com/c-bata/go-prompt v0.2.6
@@ -18,7 +18,7 @@ require (
 	github.com/hooklift/assert v0.1.0 // indirect
 	github.com/klauspost/pgzip v1.2.5 // indirect
 	github.com/lithammer/fuzzysearch v1.1.1
-	github.com/pkg/errors v0.8.1
+	github.com/pkg/errors v0.9.1
 	github.com/rs/zerolog v1.20.0
 	github.com/spf13/cobra v1.1.3
 	github.com/stretchr/testify v1.7.0
