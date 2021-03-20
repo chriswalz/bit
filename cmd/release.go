@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"fmt"
-	"os/exec"
+	exec "golang.org/x/sys/execabs"
 
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"

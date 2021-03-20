@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"os/exec"
+	exec "golang.org/x/sys/execabs"
 	"strconv"
 	"strings"
 

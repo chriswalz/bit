@@ -2,8 +2,8 @@ package cmd
 
 import (
 	"fmt"
+	exec "golang.org/x/sys/execabs"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"runtime"
 	"strings"

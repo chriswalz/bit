@@ -25,5 +25,6 @@ require (
 	github.com/thoas/go-funk v0.7.0
 	github.com/tj/go-update v2.2.4+incompatible
 	github.com/ulikunitz/xz v0.5.8 // indirect
+	golang.org/x/sys v0.0.0-20210319071255-635bc2c9138d
 
 )
