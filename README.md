@@ -170,6 +170,8 @@ v1.0
 - [X] fix: bit save no longer shows debug error outside debug mode
 - [X] fix: use --is-inside-work-tree to determine whether inside a git repo
 - [X] fix: gracefully handle bad release tags for `bit release bump`
+- [X] fix: bit pr not listing PR in some cases
+- [X] security: fix vuln on Windows where an exe in a malicious repository could run arbitrary code. Special thanks to RyotaK - https://github.com/Ry0taK for identifying this issue
 
 v0.9
 - [X] enhancement: improve bit sync behavior including `bit sync <upstream> <branch>`
