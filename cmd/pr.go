@@ -19,8 +19,8 @@ bit pr`,
 		suggestionTree := &complete.CompTree{
 			Sub: map[string]*complete.CompTree{
 				"pr": {
-					Desc: "Check out a pull request from Github (requires GH CLI)",
-					//Args:        complete.PredictFunc(lazyLoad(GitHubPRSuggestions)), FIXME
+					Desc:    "Check out a pull request from Github (requires GH CLI)",
+					Dynamic: lazyLoad(GitHubPRSuggestions("")),
 				},
 			},
 		}
