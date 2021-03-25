@@ -99,10 +99,9 @@ func refreshBranch() error {
 	if err != nil {
 		return err
 	}
-	if strings.Contains(strings.TrimSpace(string(msg)), "up to date") {
-		return nil
+	if strings.Contains(strings.TrimSpace(string(msg)), "Fast-forward") {
+		fmt.Println("Branch was fast-forwarded by bit")
 	}
-	fmt.Println("Branch was fast-forwarded by bit")
 	return nil
 }
 
