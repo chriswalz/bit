@@ -32,6 +32,7 @@
 - [X] single binary
 - [X] much more suggestions available! (Roughly 10x more)
 - [X] Install with homebrew & macports
+- [X] Interactive prompt with env variable: BIT_INTERACTIVE=true
 
 --- **Coming Soon** ---
 - bit anticipates when you'll need to type git status and will display it proactively
@@ -163,6 +164,9 @@ Thanks to [Gitless](https://gitless.com/), [git-extras](https://github.com/tj/gi
 - https://blog.csdn.net/a419240016/article/details/109178001
 
 ## Changelog
+v1.1
+- [X] enhancement: enable interactive prompt (keep bit running) with env variable: BIT_INTERACTIVE=true
+
 v1.0
 - [X] enhancement: significantly more autocompletions
 - [X] enhancement: use fuzzy search for branch suggestions

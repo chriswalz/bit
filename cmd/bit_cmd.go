@@ -23,30 +23,39 @@ var BitCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		suggestionTree, bitCmdMap := CreateSuggestionMap(cmd)
 
-		resp := SuggestionPrompt("> bit ", shellCommandCompleter(suggestionTree))
-		subCommand := resp
-		if subCommand == "" {
-			return
-		}
-		if strings.Index(resp, " ") > 0 {
-			subCommand = subCommand[0:strings.Index(resp, " ")]
-		}
-		parsedArgs, err := parseCommandLine(resp)
-		if err != nil {
-			log.Debug().Err(err).Send()
-			return
-		}
-		if bitCmdMap[subCommand] == nil {
-			yes := HijackGitCommandOccurred(parsedArgs, suggestionTree, cmd.Version)
-			if yes {
-				return
-			}
-			RunGitCommandWithArgs(parsedArgs)
-			return
+		repeat := os.Getenv("BIT_INTERACTIVE") == "TRUE"
+		repeatAmount := 1
+		if repeat {
+			repeatAmount = 5000
 		}
 
-		cmd.SetArgs(parsedArgs)
-		cmd.Execute()
+
+		for i :=  repeatAmount; i > 0; i-- {
+			resp := SuggestionPrompt("> bit ", shellCommandCompleter(suggestionTree))
+			subCommand := resp
+			if subCommand == "" {
+				return
+			}
+			if strings.Index(resp, " ") > 0 {
+				subCommand = subCommand[0:strings.Index(resp, " ")]
+			}
+			parsedArgs, err := parseCommandLine(resp)
+			if err != nil {
+				log.Debug().Err(err).Send()
+				continue
+			}
+			if bitCmdMap[subCommand] == nil {
+				yes := HijackGitCommandOccurred(parsedArgs, suggestionTree, cmd.Version)
+				if yes {
+					continue
+				}
+				RunGitCommandWithArgs(parsedArgs)
+				continue
+			}
+
+			cmd.SetArgs(parsedArgs)
+			cmd.Execute()
+		}
 	},
 }
 
