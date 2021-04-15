@@ -23,14 +23,13 @@ var BitCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		suggestionTree, bitCmdMap := CreateSuggestionMap(cmd)
 
-		repeat := os.Getenv("BIT_INTERACTIVE") == "TRUE"
+		repeat := strings.ToLower(os.Getenv("BIT_INTERACTIVE")) == "true"
 		repeatAmount := 1
 		if repeat {
 			repeatAmount = 5000
 		}
 
-
-		for i :=  repeatAmount; i > 0; i-- {
+		for i := repeatAmount; i > 0; i-- {
 			resp := SuggestionPrompt("> bit ", shellCommandCompleter(suggestionTree))
 			subCommand := resp
 			if subCommand == "" {
