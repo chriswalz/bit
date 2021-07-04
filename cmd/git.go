@@ -11,13 +11,36 @@ import (
 )
 
 func CloudBranchExists() bool {
-	msg, err := execCommand("git", "pull").CombinedOutput()
+	msg, err := execCommand("git", "diff", "@{u}").CombinedOutput()
 	if err != nil {
 		log.Debug().Err(err).Send()
 	}
 	// log.Println("msg:", string(msg))
 	// log.Println("err:", err)
-	return !strings.Contains(string(msg), "There is no tracking information for the current branch")
+	return !strings.Contains(string(msg), "fatal: no upstream configured for branch")
+}
+
+// CommitOnlyInCurrentBranch Useful for verifying that a commit is only in one branch so that it's not risky to amend it
+func CommitOnlyInCurrentBranch(branch, commitId string) bool {
+	msg, err := execCommand("git", "branch", "--contains", commitId).CombinedOutput()
+	if err != nil {
+		log.Debug().Err(err).Send()
+	}
+	branches := strings.Split(strings.TrimSpace(string(msg)), "\n")
+	if len(branches) != 1 {
+		return false
+	}
+	return branch == branches[0][2:]
+}
+
+func GetLastCommitId() string {
+	// git rev-parse HEAD
+	msg, err := execCommand("git", "rev-parse", "HEAD").CombinedOutput()
+	if err != nil {
+		log.Debug().Err(err).Send()
+	}
+	commitId := strings.TrimSpace(string(msg))
+	return commitId
 }
 
 func CurrentBranch() string {

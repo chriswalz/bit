@@ -51,7 +51,7 @@ func save(args []string) {
 
 	if msg == nil {
 		// if ahead of master
-		if IsAheadOfCurrent() || !CloudBranchExists() {
+		if (IsAheadOfCurrent() || !CloudBranchExists()) && CommitOnlyInCurrentBranch(CurrentBranch(), GetLastCommitId()) {
 			// amend if already ahead
 			extraArgs := []string{"-a", "--amend", "--no-edit"}
 			RunInTerminalWithColor("git", append(append([]string{"commit"}, args...), extraArgs...))
