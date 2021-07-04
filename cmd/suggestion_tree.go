@@ -85,6 +85,7 @@ func CreateSuggestionMap(cmd *cobra.Command) (*complete.CompTree, map[string]*co
 	}
 	st.Sub["submodule"] = &complete.CompTree{Desc: "Initialize, update or inspect submodules"}
 	st.Sub["switch"] = &complete.CompTree{Desc: "Switch branches", Dynamic: toAutoCLI(branchListSuggestions)}
+	st.Sub["sw"] = &complete.CompTree{Desc: "Switch branches", Dynamic: toAutoCLI(branchListSuggestions)}
 
 	for k, v := range descriptionMap {
 		if st.Sub[k] == nil {

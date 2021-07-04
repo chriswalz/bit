@@ -493,11 +493,11 @@ func fileExists(filename string) bool {
 }
 
 func isBranchCompletionCommand(command string) bool {
-	return command == "checkout" || command == "switch" || command == "co" || command == "pr" || command == "merge" || command == "rebase"
+	return command == "checkout" || command == "switch" || command == "co" || command == "pr" || command == "merge" || command == "rebase" || command == "sw"
 }
 
 func isBranchChangeCommand(command string) bool {
-	return command == "checkout" || command == "switch" || command == "co" || command == "pr"
+	return command == "checkout" || command == "switch" || command == "co" || command == "pr" || command == "sw"
 }
 
 func Find(slice []string, val string) int {
