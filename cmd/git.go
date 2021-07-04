@@ -11,13 +11,13 @@ import (
 )
 
 func CloudBranchExists() bool {
-	msg, err := execCommand("git", "pull").CombinedOutput()
+	msg, err := execCommand("git", "diff", "@{u}").CombinedOutput()
 	if err != nil {
 		log.Debug().Err(err).Send()
 	}
 	// log.Println("msg:", string(msg))
 	// log.Println("err:", err)
-	return !strings.Contains(string(msg), "There is no tracking information for the current branch")
+	return !strings.Contains(string(msg), "fatal: no upstream configured for branch")
 }
 
 func CurrentBranch() string {
