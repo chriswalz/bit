@@ -164,6 +164,9 @@ Thanks to [Gitless](https://gitless.com/), [git-extras](https://github.com/tj/gi
 - https://blog.csdn.net/a419240016/article/details/109178001
 
 ## Changelog
+v1.2
+- [X] enhancement: add `bit sw` as alias for `bit switch`
+- [X] fix: bit save will amend commits only when the commit doesn't exist in any other branch
 v1.1
 - [X] enhancement: enable interactive prompt (keep bit running) with env variable: BIT_INTERACTIVE=true
 
