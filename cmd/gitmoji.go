@@ -47,8 +47,14 @@ var gitmojiCmd = &cobra.Command{
 			return
 		}
 		emojiAndMsgWithoutEmojiDescription := strings.ReplaceAll(emojiAndMsg, g.(*Gitmoji).Description, g.(*Gitmoji).Emoji)
-		save([]string{"-m " + emojiAndMsgWithoutEmojiDescription})
+		saveWithEmojiInFront(emojiAndMsgWithoutEmojiDescription)
 	},
+}
+
+func saveWithEmojiInFront(emoji string) {
+	RunInTerminalWithColor("git", []string{"status", "-sb", "--untracked-files=no"})
+	resp := AskMultiLine("Please provide a description of your changes")
+	RunInTerminalWithColor("git", append(append([]string{"commit"}, "-am"), emoji+" "+resp))
 }
 
 func init() {
@@ -59,9 +65,9 @@ func GitmojiSuggestions() []complete.Suggestion {
 	var suggestions []complete.Suggestion
 	for _, gitmoji := range gitmojis {
 		suggestions = append(suggestions, complete.Suggestion{
-			Name: `"` + gitmoji.Description,
-			//Text: "\"" + gitmoji.Emoji + " " + gitmoji.Description,
-			//Description: "  " + gitmoji.Emoji + "  " ,
+			Name: gitmoji.Description,
+			// Text: gitmoji.Emoji + " " + gitmoji.Description,
+			// Description: "  " + gitmoji.Emoji + "  " ,
 		})
 	}
 	return suggestions
