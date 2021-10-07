@@ -48,6 +48,7 @@ func CreateSuggestionMap(cmd *cobra.Command) (*complete.CompTree, map[string]*co
 	st.Sub["add"].Dynamic = toAutoCLI(gitAddSuggestions)
 	st.Sub["checkout"].Dynamic = toAutoCLI(branchListSuggestions)
 	st.Sub["co"].Dynamic = toAutoCLI(branchListSuggestions)
+	st.Sub["info"] = &complete.CompTree{Desc: "Get general information about the status of your repository"}
 	st.Sub["log"].Dynamic = toAutoCLI(branchListSuggestions)
 	st.Sub["merge"].Dynamic = toAutoCLI(branchListSuggestions)
 	st.Sub["rebase"].Dynamic = toAutoCLI(branchListSuggestions)
