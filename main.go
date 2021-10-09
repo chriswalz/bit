@@ -17,10 +17,11 @@ package main
 
 import (
 	"fmt"
+	"os"
+
 	bitcmd "github.com/chriswalz/bit/cmd"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	"os"
 )
 
 // this should be overwritten at compile time
@@ -61,7 +62,7 @@ func main() {
 		}
 	}
 
-	bitcliCmds := []string{"save", "sync", "help", "info", "release", "update", "pr", "complete", "gitmoji"}
+	bitcliCmds := []string{"save", "sync", "help", "info", "release", "update", "pr", "complete", "gitmoji", "undo-commit"}
 	if len(argsWithoutProg) == 0 || bitcmd.Find(bitcliCmds, argsWithoutProg[0]) != -1 {
 		bitcli()
 	} else {
