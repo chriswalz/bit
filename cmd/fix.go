@@ -5,10 +5,15 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var fixCmd = &cobra.Command{
+	Use:   "fix sub-command",
+	Short: "For all the times you did something you really wish you didn't",
+	Args:  cobra.NoArgs,
+}
+
 var undo_commitCmd = &cobra.Command{
 	Use:   "undo-commit",
-	Short: "Undo your previous commit if it is not yet pushed to repository",
-	Args:  cobra.NoArgs,
+	Short: "soft undos last commit if not pushed already",
 	Run: func(cmd *cobra.Command, args []string) {
 		if IsAheadOfCurrent() {
 			err := execCommand("git", "reset", "--soft", "HEAD~1").Run()
@@ -17,8 +22,10 @@ var undo_commitCmd = &cobra.Command{
 			}
 		}
 	},
+	Args: cobra.NoArgs,
 }
 
 func init() {
-	BitCmd.AddCommand(undo_commitCmd)
+	BitCmd.AddCommand(fixCmd)
+	fixCmd.AddCommand(undo_commitCmd)
 }

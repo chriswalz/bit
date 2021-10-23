@@ -47,7 +47,11 @@ func CreateSuggestionMap(cmd *cobra.Command) (*complete.CompTree, map[string]*co
 	st.Flags["version"] = &complete.CompTree{Desc: "Print bit and git version"}
 	// add dynamic predictions and bit specific commands
 	st.Sub["add"].Dynamic = toAutoCLI(gitAddSuggestions)
-	st.Sub["undo-commit"] = &complete.CompTree{Desc: "Lets you undo your commit"}
+	st.Sub["fix"] = &complete.CompTree{
+		Args: map[string]*complete.CompTree{
+			"undo-commit": {Desc: "soft undos last commit if not pushed already"},
+		},
+	}
 	st.Sub["checkout"].Dynamic = toAutoCLI(branchListSuggestions)
 	st.Sub["co"].Dynamic = toAutoCLI(branchListSuggestions)
 	st.Sub["info"] = &complete.CompTree{Desc: "Get general information about the status of your repository"}
