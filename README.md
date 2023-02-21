@@ -253,7 +253,7 @@ To overwrite installation location
 
 `bit`, `bit checkout` & `bit switch` will show interactive prompts after you press ENTER
 
-### using `go` (Harder way to install)
+### using `go`
 *Caveats: GOPATH and GOBIN need to be set. Verify with `go env`. If they are not set, add this to your .bashrc or .bash_profile etc. AND open new terminal*
 ```shell script
 export GOPATH=$HOME/go
@@ -261,7 +261,7 @@ export GOBIN=$(go env GOPATH)/bin
 ```
 
 ```shell script
-GO111MODULE=on go get github.com/chriswalz/bit@latest;
+go install github.com/chriswalz/bit@latest;
 bit complete
 ```
 
