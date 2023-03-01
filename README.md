@@ -299,7 +299,7 @@ choco install bit-git
 
 #### using `zinit`
 ```shell script
-zinit ice lucit wait"0" as"program" from"gh-r" pick"bit"
+zinit ice lucid wait"0" as"program" from"gh-r" pick"bit"
 zinit light "chriswalz/bit"
 ```
 
